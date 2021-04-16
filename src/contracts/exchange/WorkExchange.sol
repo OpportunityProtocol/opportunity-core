@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/utils/escrow/RefundEscrow";
+import "@openzeppelin/contracts/utils/escrow/RefundEscrow.sol";
 
 contract WorkExchange is RefundEscrow {
     constructor(address payable beneficiary_) {

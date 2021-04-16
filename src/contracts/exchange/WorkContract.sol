@@ -2,7 +2,8 @@
 
 pragma solidity ^0.8.0;
 
-contract WorkState {
+import "./WorkRelationship.sol";
 
+contract WorkContract is WorkRelationship {
     constructor() {}
 }

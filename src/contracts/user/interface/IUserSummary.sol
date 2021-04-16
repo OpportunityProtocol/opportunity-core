@@ -15,8 +15,5 @@ interface IUserSummary {
         mapping(address => uint) taskEvaluation;
     }
 
-    function getUserProfile() external view returns(uint);
-    function getUserExpertise() external view returns(uint);
-    function getUserReputation() external view returns(uint);
-    function getUserActivity() external view returns(uint);
+    function getUserProfile() external view returns(string[] memory, string memory, string memory, string memory);
 }

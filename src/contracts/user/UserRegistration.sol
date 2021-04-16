@@ -2,13 +2,29 @@
 
 pragma solidity ^0.8.0;
 
+import "./UserSummaryFactory.sol";
+
 contract UserRegistration {
 
-    //maps a civic address to a universal generated addr3ss
+    //maps a civic address to a universal generated address
     mapping(string => address) private _universalAddress;
     mapping(string => bool) private _hasUniversalAddress;
 
     constructor() {}
+
+    /**
+     * registerNewUser
+     * Registers a new user to the platform based on their civicID.
+     * @param _civicID
+     * @param _newUniversalAddress
+     */
+     function registerNewUser(string memory _civicID, address _newUniversalAddress) public returns(bool) {
+        bool hasAssignedUniversalAddressResult = assignUniversalAddress(_civicID, _newUniversalAddress);
+        require(hasAssignedUniversalAddressResult == false);
+
+        UserSummaryFactory factory = new UserSummaryFactory();
+        factory.createUserSummary(_civicID);
+     }
 
     /**
      * assignUniversalAddress
