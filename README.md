@@ -17,7 +17,7 @@ git clone
 make install
 ```
 
-## Install
+## Test
 ```sh
 Currently no testing setup.
 ```
