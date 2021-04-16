@@ -5,31 +5,21 @@ Smart contracts for Opportunity, a decentralized job market platform on the Ethe
 
 ![](header.png)
 
-## Installation
+## Install
 
-OS X & Linux:
-
-```sh
-git clone https://github.com/OpportunityProtocol/opportunity-core
-```
+Clone the current github repo and npm install.
 
 ```sh
-npm install
+git clone
 ```
-
-## Usage example
-
-A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
-
-_For more examples and usage, please refer to the [Wiki][wiki]._
-
-## Development setup
-
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
 
 ```sh
 make install
-npm test
+```
+
+## Install
+```sh
+Currently no testing setup.
 ```
 
 ## Release History
