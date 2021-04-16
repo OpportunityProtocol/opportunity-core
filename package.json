@@ -1,0 +1,22 @@
+{
+  "name": "opportunity-core",
+  "version": "1.0.0",
+  "description": "Opportunity Protocol backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpportunityProtocol/opportunity-core.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OpportunityProtocol/opportunity-core/issues"
+  },
+  "homepage": "https://github.com/OpportunityProtocol/opportunity-core#readme",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.0.0"
+  }
+}
