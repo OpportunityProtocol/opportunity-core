@@ -1,4 +1,4 @@
-# Product Name
+# Opportunity Core
 > Backend for the Opportunity Protocol including smart contracts that power the platform.
 
 Smart contracts for Opportunity, a decentralized job market platform on the Ethereum blockchain.
