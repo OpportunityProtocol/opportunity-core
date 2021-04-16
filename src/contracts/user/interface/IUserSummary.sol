@@ -7,7 +7,7 @@ interface IUserSummary {
         string[] skills;
         string profession;
         string digitalSignature;
-        string activityLevel;
+        uint8 activityLevel;
     }
 
     struct TaskGeneralDescription {
@@ -15,5 +15,6 @@ interface IUserSummary {
         mapping(address => uint) taskEvaluation;
     }
 
-    function getUserProfile() external view returns(string[] memory, string memory, string memory, string memory);
+    function getUserProfile() external view returns(string[] memory, string memory, string memory, uint8);
+    function signProfile() external;
 }

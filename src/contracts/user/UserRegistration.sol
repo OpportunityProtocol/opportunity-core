@@ -10,6 +10,8 @@ contract UserRegistration {
     mapping(string => address) private _universalAddress;
     mapping(string => bool) private _hasUniversalAddress;
 
+    event UserRegistered(string indexed civicID, string indexed universalAddress);
+
     constructor() {}
 
     /**
@@ -18,12 +20,12 @@ contract UserRegistration {
      * @param _civicID
      * @param _newUniversalAddress
      */
-     function registerNewUser(string memory _civicID, address _newUniversalAddress) public returns(bool) {
-        bool hasAssignedUniversalAddressResult = assignUniversalAddress(_civicID, _newUniversalAddress);
+     function registerNewUser(string memory civicID, address newUniversalAddress) public returns(bool) {
+        bool hasAssignedUniversalAddressResult = assignUniversalAddress(civicID, newUniversalAddress);
         require(hasAssignedUniversalAddressResult == false);
 
         UserSummaryFactory factory = new UserSummaryFactory();
-        factory.createUserSummary(_civicID);
+        factory.createUserSummary(civicID);
      }
 
     /**
@@ -32,14 +34,14 @@ contract UserRegistration {
      * @param _civicID
      * @param _newUniversalAddress
      */
-    function assignUniversalAddress(string memory _civicID, address _newUniversalAddress) public returns(bool) {
+    function assignUniversalAddress(string memory civicID, address newUniversalAddress) public returns(bool) {
         //require this address not to already have a universal address
-        require(_hasUniversalAddress[_civicID] == false);
+        require(_hasUniversalAddress[civicID] == false);
         //require there to not be a universal address at this index
         require(true == false);
 
         //assign the civic address to a new universal address
-        _universalAddress[_civicID] = _newUniversalAddress; 
+        _universalAddress[civicID] = newUniversalAddress; 
     }
 
     /**
@@ -48,7 +50,7 @@ contract UserRegistration {
      * @param _civicID
      * @return bool based on if a user has a universal address or not.
      */
-    function hasUniversalAddress(string memory _civicID) public view returns(bool) {
-        return _hasUniversalAddress[_civicID];
+    function hasUniversalAddress(string memory civicID) public view returns(bool) {
+        return _hasUniversalAddress[civicID];
     }
 }

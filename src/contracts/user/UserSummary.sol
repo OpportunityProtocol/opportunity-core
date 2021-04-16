@@ -6,19 +6,24 @@ import "./interface/IUserSummary.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract UserSummary is IUserSummary, Ownable {
-    string private _userUniversalAddress;
+    string private _civicID;
     uint private _userReputation;
     mapping(string => address) private _userTaskList;
 
     Profile private _userProfile;
     TaskGeneralDescription private _userTaskGeneralDescription;
 
-    constructor(string memory _civicID) {
-        _userUniversalAddress = _civicID;
+    constructor(string memory _civicIDIn) {
+        _civicID = _civicIDIn;
         _userReputation = 1;
+        _userProfile.skills = new string[](0);
+        _userProfile.profession = "";
+        _userProfile.activityLevel = 0;
     }
 
-    function getUserProfile() external view override returns(string[] memory, string memory, string memory, string memory) {
+    function getUserProfile() external view override returns(string[] memory, string memory, string memory, uint8) {
         return (_userProfile.skills, _userProfile.profession, _userProfile.digitalSignature, _userProfile.activityLevel);
     }
+
+    function signProfile() external override {}
 }
