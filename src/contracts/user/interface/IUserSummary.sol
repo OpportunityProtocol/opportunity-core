@@ -11,10 +11,10 @@ interface IUserSummary {
     }
 
     struct TaskGeneralDescription {
-        mapping(address => string) task;
-        mapping(address => uint) taskEvaluation;
+        uint256 taskCompleted;
     }
 
     function getUserProfile() external view returns(string[] memory, string memory, string memory, uint8);
     function signProfile() external;
+    function updateProfile(Profile memory updatedProfile) external;
 }
