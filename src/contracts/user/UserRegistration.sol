@@ -17,8 +17,8 @@ contract UserRegistration {
     /**
      * registerNewUser
      * Registers a new user to the platform based on their civicID.
-     * @param _civicID
-     * @param _newUniversalAddress
+     * @param civicID Hash returned from civic identity wallet
+     * @param newUniversalAddress Universal user address
      */
      function registerNewUser(string memory civicID, address newUniversalAddress) public returns(bool) {
         bool hasAssignedUniversalAddressResult = assignUniversalAddress(civicID, newUniversalAddress);
@@ -31,8 +31,8 @@ contract UserRegistration {
     /**
      * assignUniversalAddress
      * Maps a users civic id to the universal address for the platform.
-     * @param _civicID
-     * @param _newUniversalAddress
+     * @param civicID Hash returned from civic identity wallet
+     * @param newUniversalAddress Universal user address
      */
     function assignUniversalAddress(string memory civicID, address newUniversalAddress) public returns(bool) {
         //require this address not to already have a universal address
@@ -47,7 +47,7 @@ contract UserRegistration {
     /**
      * hasUniversalAddress
      * Returns Checks to see if a user has a universal address or not.
-     * @param _civicID
+     * @param civicID Hash returned from civic identity wallet
      * @return bool based on if a user has a universal address or not.
      */
     function hasUniversalAddress(string memory civicID) public view returns(bool) {

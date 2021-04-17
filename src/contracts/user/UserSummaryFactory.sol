@@ -6,13 +6,23 @@ import "./UserSummary.sol";
 
 contract UserSummaryFactory {
     event UserSummaryCreated(UserSummary indexed _userSummary, uint256 indexed index);
-    UserSummary[] private userSummaries;
-    
+    UserSummary[] private _userSummaries;
+
     constructor() {}
 
-    function createUserSummary(string memory indexed _civicID) external {
-        UserSummary userSummary = new UserSummary(_civicID);
-        emit UserSummaryCreated(userSummary, userSummaries.length);
-        userSummaries.push(userSummary);
+    /**
+     * Creates a user summary contract for each user based on their civic ID.
+     */
+    function createUserSummary(string memory civicID) external {
+        UserSummary userSummary = new UserSummary(civicID);
+        emit UserSummaryCreated(userSummary, _userSummaries.length);
+        _userSummaries.push(userSummary);
     }
+
+    /**
+     *
+     */
+     function getNumUserSummaries() public view returns (uint256) {
+         return _userSummaries.length;
+     }
 }
