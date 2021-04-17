@@ -22,6 +22,8 @@ interface IUserSummary {
 
     struct RequesterTaskGeneralDescription {
         uint256 taskAssigned;
+
+         // Mapping of WorkRelationship IDs to WorkExchanges.
         mapping(uint256 => address) relationshipExchanges;
     }
 
