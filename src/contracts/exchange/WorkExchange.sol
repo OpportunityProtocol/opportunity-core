@@ -2,44 +2,73 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "@openzeppelin/contracts/utils/escrow/RefundEscrow.sol";
+import "@openzeppelin/contracts/utils/escrow/RefundoEscrow.sol";
+import "./MultiPartyOwneable.sol";
 
 /**
- *
+ * The Work Exchange contract acts as an escrow for the stake from both parties
+ * as well as facilitates the exchange of contracts between to users.  A WorkExchange is created everytime a user enters into a new deal or
+ * contract.
  * Note: Created for every job acceptance.
  */
-contract WorkExchange is Ownable {
+contract WorkExchange is MultiPartyOwneableOwnable/*, TimeDepositProtocol*/ {
     using SafeMath for uint256;
 
-    RefundEscrow private escrow;
+    event WorkerSentSolution();
+    event RequesterSentPayment();
 
-    
+    RefundEscrow private _requesterEscrow;
+    RefundEscrow private _workerEscrow;
 
-    constructor(address payable beneficiary) {
-        escrow = new RefundEscrow(beneficiary);
+    constructor(address payable requesterBeneficiary, address payable workerBeneficiary) MultiPartyOwneableOwnable(workerBeneficiary) {
+        _requesterEscrow = new RefundEscrow(requesterBeneficiary);
+        _workerEscrow = new RefundEscrow(workerBeneficiary);
     }
 
     /**
      * Receives payments from customers
      */
-    function sendPayment(address payable payee) external payable onlyOwner {
-        escrow.withdraw(payee);
+    function sendPaymentAsRequester(address payable payee) external payable onlyOwner {
+        _requesterEscrow.withdraw(payee);
+        RequesterSentPayment();
+    }
+
+    /**
+     * Receives payments from customers
+     */
+    function sendPaymentAsWorker(address payable payee) external payable onlyOwner {
+        _workerEscrow.withdraw(payee);
+        WorkerSentSolution();
     }
 
     /**
      * Withdraw funds to wallet
      */
-    function withdraw() external onlyOwner {
-        escrow.beneficiaryWithdraw();
+    function withdrawAsRequester() external onlyOwner {
+        _requesterEscrow.beneficiaryWithdraw();
+    }
+
+    /**
+     * Withdraw funds to wallet
+     */
+    function withdrawAsWorker() external onlyOwner {
+        _workerEscrow.beneficiaryWithdraw();
     }
 
     /**
      * Checks balance available to withdraw
      * @return the balance
      */
-    function balance() external view onlyOwner returns (uint256) {
-        return escrow.depositsOf(escrow.beneficiary());
+    function balanceRequester() external view onlyOwner returns (uint256) {
+        return _requesterEscrow.depositsOf(_requesterEscrow.beneficiary());
+    }
+
+    /**
+     * Checks balance available to withdraw
+     * @return the balance
+     */
+    function balanceWorker() external view onlyOwner returns (uint256) {
+        return _workerEscrow.depositsOf(_workerEscrow.beneficiary());
     }
 }

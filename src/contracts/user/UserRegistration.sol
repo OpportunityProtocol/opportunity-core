@@ -8,9 +8,14 @@ contract UserRegistration {
 
     //maps a civic address to a universal generated address
     mapping(string => address) private _universalAddress;
+
+    // Mapping of civic id to universal address existing status
     mapping(string => bool) private _hasUniversalAddress;
 
-    event UserRegistered(string indexed civicID, string indexed universalAddress);
+    // Mapping of universal address to summary contract address
+    mapping(address => address) private _trueUserIdentifcation;
+
+    event UserRegistered(string indexed civicID, address indexed universalAddress);
 
     constructor() {}
 

@@ -10,8 +10,19 @@ interface IUserSummary {
         uint8 activityLevel;
     }
 
-    struct TaskGeneralDescription {
+    struct WorkerTaskGeneralDescription {
         uint256 taskCompleted;
+
+        // Mapping of industry ids to evaluations
+        mapping(string => uint256) industryEvaluation;
+
+        // Mapping of WorkRelationship IDs to WorkExchanges.
+        mapping(uint256 => address) relationshipExchanges;
+    }
+
+    struct RequesterTaskGeneralDescription {
+        uint256 taskAssigned;
+        mapping(uint256 => address) relationshipExchanges;
     }
 
     function getUserProfile() external view returns(string[] memory, string memory, string memory, uint8);

@@ -13,8 +13,8 @@ contract UserSummaryFactory {
     /**
      * Creates a user summary contract for each user based on their civic ID.
      */
-     function createUserSummary(string memory civicID) external {
-        UserSummary userSummary = new UserSummary(civicID);
+     function createUserSummary(string memory civicID, string memory signature) external {
+        UserSummary userSummary = new UserSummary(civicID, signature);
         emit UserSummaryCreated(userSummary, _userSummaries.length);
         _userSummaries.push(userSummary);
     }

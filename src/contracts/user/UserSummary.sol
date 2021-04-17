@@ -8,18 +8,28 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract UserSummary is IUserSummary, Ownable {
     string private _civicID;
     uint256 private _userReputation;
-    mapping(string => address) private _userTaskList;
 
     Profile private _userProfile;
-    TaskGeneralDescription private _userTaskGeneralDescription;
+    WorkerTaskGeneralDescription private _workerTaskGeneralDescription;
+    RequesterTaskGeneralDescription private _requesterTaskGeneralDescription;
 
-    constructor(string memory _civicIDIn) {
+    /**
+     *
+     */
+    function signProfile(string memory signature) external override onlyOwner {
+        _userProfile.digitalSignature = signature;
+    }
+
+    constructor(string memory _civicIDIn, string memory signature) {
         _civicID = _civicIDIn;
         _userReputation = 1;
         _userProfile.profession = "";
         _userProfile.activityLevel = 0;
 
-        _userTaskGeneralDescription.taskCompleted = 0;
+        _workerTaskGeneralDescription.taskCompleted = 0;
+        _requesterTaskGeneralDescription.taskAssigned = 0;
+
+        signProfile(signature);
     }
 
     /**
@@ -43,11 +53,6 @@ contract UserSummary is IUserSummary, Ownable {
             _userProfile.activityLevel
         );
     }
-
-    /**
-     *
-     */
-    function signProfile() external override {}
 
     /**
      *

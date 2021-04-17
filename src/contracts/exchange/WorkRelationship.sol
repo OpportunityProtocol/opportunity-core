@@ -8,6 +8,9 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "./interface/IWorkRelationshipERC721.sol";
 
 contract WorkRelationship is ERC721, ERC721Pausable, ERC721Burnable {
+
+    event WorkRelationshipMetadataChange();
+
     uint256 private _relationshipID;
     
     // Mapping from token ID to requesters
