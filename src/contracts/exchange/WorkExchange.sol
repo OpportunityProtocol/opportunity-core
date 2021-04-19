@@ -27,6 +27,10 @@ contract WorkExchange is MultiPartyOwneableOwnable, TimeLocked {
         _workerEscrow = new RefundEscrow(workerBeneficiary);
     }
 
+    function getContractAddress() public view returns(address) {
+        return address(this);
+    }
+
     /**
      * Receives payments from customers
      */
@@ -71,5 +75,9 @@ contract WorkExchange is MultiPartyOwneableOwnable, TimeLocked {
      */
     function balanceWorker() external view onlyOwner returns (uint256) {
         return _workerEscrow.depositsOf(_workerEscrow.beneficiary());
+    }
+
+    function disableWorkExchange() internal {
+        selfdestruct();
     }
 }

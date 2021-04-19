@@ -2,11 +2,12 @@
 
 pragma solidity ^0.8.0;
 
+import "../../libraries/Evaluation.sol";
+
 interface IUserSummary {
     struct Profile {
         string[] skills;
         string profession;
-        string digitalSignature;
         uint8 activityLevel;
     }
 
@@ -16,8 +17,8 @@ interface IUserSummary {
         // Mapping of industry ids to evaluations
         mapping(string => uint256) industryEvaluation;
 
-        // Mapping of WorkRelationship IDs to current WorkExchanges.
-        mapping(uint256 => address) relationshipExchanges;
+        // Mapping of WorkRelationship to status
+        mapping(address => string) relationshipExchanges;
     }
 
     struct RequesterTaskGeneralDescription {
@@ -27,7 +28,8 @@ interface IUserSummary {
         mapping(uint256 => address) relationshipExchanges;
     }
 
-    function getUserProfile() external view returns(string[] memory, string memory, string memory, uint8);
-    function signProfile(string memory signature) external;
+    function evaluateUser(Evaluation.EvaluationState memory evaluationState) external returns(bool);
+    function getUserProfile() external view returns(string[] memory, string memory, uint8);
+    function getContractAddress() external view returns(address);
     function updateProfile(Profile memory updatedProfile) external;
 }

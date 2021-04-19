@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "./interface/IUserSummary.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract UserSummary is IUserSummary, Ownable {
+contract UserSummary is IUserSummary {
     string private _civicID;
     uint256 private _userReputation;
 
@@ -13,14 +13,7 @@ contract UserSummary is IUserSummary, Ownable {
     WorkerTaskGeneralDescription private _workerTaskGeneralDescription;
     RequesterTaskGeneralDescription private _requesterTaskGeneralDescription;
 
-    /**
-     *
-     */
-    function signProfile(string memory signature) external override onlyOwner {
-        _userProfile.digitalSignature = signature;
-    }
-
-    constructor(string memory _civicIDIn, string memory signature) {
+    constructor(string memory _civicIDIn) {
         _civicID = _civicIDIn;
         _userReputation = 1;
         _userProfile.profession = "";
@@ -28,8 +21,6 @@ contract UserSummary is IUserSummary, Ownable {
 
         _workerTaskGeneralDescription.taskCompleted = 0;
         _requesterTaskGeneralDescription.taskAssigned = 0;
-
-        signProfile(signature);
     }
 
     /**
@@ -42,14 +33,12 @@ contract UserSummary is IUserSummary, Ownable {
         returns (
             string[] memory,
             string memory,
-            string memory,
             uint8
         )
     {
         return (
             _userProfile.skills,
             _userProfile.profession,
-            _userProfile.digitalSignature,
             _userProfile.activityLevel
         );
     }
@@ -58,4 +47,18 @@ contract UserSummary is IUserSummary, Ownable {
      *
      */
     function updateProfile(Profile memory updatedProfile) external override {}
+
+    /**
+     *
+     */
+    function evaluateUser(Evaluation.EvaluationState memory evaluationState) external override returns(bool) {
+
+    }
+
+    /**
+     *
+     */
+     function getContractAddress() public view override returns(address) {
+         return address(this);
+     }
 }

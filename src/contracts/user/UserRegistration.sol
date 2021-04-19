@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 
 import "./UserSummaryFactory.sol";
 
-contract UserRegistration {
+contract UserRegistration { //FU SUV
 
     //maps a civic address to a universal generated address
     mapping(string => address) private _universalAddress;
@@ -25,13 +25,22 @@ contract UserRegistration {
      * @param civicID Hash returned from civic identity wallet
      * @param newUniversalAddress Universal user address
      */
-     function registerNewUser(string memory civicID, address newUniversalAddress) public returns(bool) {
+     function registerNewUser(string memory civicID, address newUniversalAddress) external returns(bool) {
         bool hasAssignedUniversalAddressResult = assignUniversalAddress(civicID, newUniversalAddress);
         require(hasAssignedUniversalAddressResult == false);
 
         UserSummaryFactory factory = new UserSummaryFactory();
-        factory.createUserSummary(civicID);
+        address userSummaryContractAddress = factory.createUserSummary(civicID);
+
+        assignTrueUserIdentification(newUniversalAddress, userSummaryContractAddress);
      }
+
+    /**
+     * assignTrueUserIdentification
+     */
+    function assignTrueUserIdentification(address universalAddress, address summaryContractAddress) internal returns(bool) {
+        _trueUserIdentifcation[universalAddress] = summaryContractAddress;
+    }
 
     /**
      * assignUniversalAddress
@@ -39,7 +48,7 @@ contract UserRegistration {
      * @param civicID Hash returned from civic identity wallet
      * @param newUniversalAddress Universal user address
      */
-    function assignUniversalAddress(string memory civicID, address newUniversalAddress) public returns(bool) {
+    function assignUniversalAddress(string memory civicID, address newUniversalAddress) internal returns(bool) {
         //require this address not to already have a universal address
         require(_hasUniversalAddress[civicID] == false);
         //require there to not be a universal address at this index
@@ -55,7 +64,7 @@ contract UserRegistration {
      * @param civicID Hash returned from civic identity wallet
      * @return bool based on if a user has a universal address or not.
      */
-    function hasUniversalAddress(string memory civicID) public view returns(bool) {
+    function hasUniversalAddress(string memory civicID) internal view returns(bool) {
         return _hasUniversalAddress[civicID];
     }
 }
