@@ -3,7 +3,8 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "@openzeppelin/contracts/utils/escrow/RefundoEscrow.sol";
+import "@openzeppelin/contracts/utils/escrow/RefundEscrow.sol";
+import "../TimeLocked.sol";
 import "./MultiPartyOwneable.sol";
 
 /**
@@ -12,7 +13,7 @@ import "./MultiPartyOwneable.sol";
  * contract.
  * Note: Created for every job acceptance.
  */
-contract WorkExchange is MultiPartyOwneableOwnable/*, TimeDepositProtocol*/ {
+contract WorkExchange is MultiPartyOwneableOwnable, TimeLocked {
     using SafeMath for uint256;
 
     event WorkerSentSolution();
@@ -21,7 +22,7 @@ contract WorkExchange is MultiPartyOwneableOwnable/*, TimeDepositProtocol*/ {
     RefundEscrow private _requesterEscrow;
     RefundEscrow private _workerEscrow;
 
-    constructor(address payable requesterBeneficiary, address payable workerBeneficiary) MultiPartyOwneableOwnable(workerBeneficiary) {
+    constructor(address payable requesterBeneficiary, address payable workerBeneficiary, bool isTimeLocked) MultiPartyOwneableOwnable(workerBeneficiary), TimeLockedDepositProtocol(isTimeLocked) {
         _requesterEscrow = new RefundEscrow(requesterBeneficiary);
         _workerEscrow = new RefundEscrow(workerBeneficiary);
     }
