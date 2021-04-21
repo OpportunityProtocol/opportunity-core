@@ -5,28 +5,41 @@ pragma solidity ^0.8.0;
 import "./WorkExchange.sol";
 import "../user/UserSummary.sol";
 import "../libraries/Evaluation.sol";
+import "../libraries/Market.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract WorkRelationship is Ownable {
+    event RelationshipCreated(string indexed _owner, Market.MarketUtil.MarketType indexed _marketType, address indexed _relationship);
+    event RelationshipDisabled(string indexed _owner, Market.MarketUtil.MarketType indexed _marketType, address indexed _relationship);
+
     // Status of the current contract
     string private _contractStatus;
-
     // Work evaluation
     string private _evaluation;
-
     // Task address
     address private _taskAddress;
-
     // Task solution pointer
     string private _taskPointer;
-
     // Address of the current worker
     address private _currentWorker;
-
+    // Address of current work exchange
     address private _currentWorkExchange;
+    // Type of market (default or created)
+    string private _marketType;
 
-    constructor() {
+    constructor(Market.MarketUtil.MarketType _marketType) {
         bool passesEvaluation = checkWorkerEvaluation(newWorker, evaluationState);
+        require(passesEvaluation == true);
+
+        RelationshipCreated(_owner, _marketType, address(this));
+    }
+
+    function getWorkerProfile() public view {
+        return UserSummary(_currentWorker).getUserProfile();
+    }
+    
+    function getRequesterProfile() public view {
+        return UserSummary(_owner).getUserProfile();
     }
 
     function createWorkExchange(address payable workerBeneficiary, bool isTimeLocked) external {
@@ -57,6 +70,7 @@ contract WorkRelationship is Ownable {
 
     function disableWorkRelationship() public onlyOwner {
         require(_contractStatus == Evaluation.WorkRelationshipState.COMPLETED || _contractStatus == Evaluation.WorkRelationshipState.COMPLETED);
+        RelationshipDisabled(_owner, _marketType, address(this));
         selfdestruct();
     }
 }
