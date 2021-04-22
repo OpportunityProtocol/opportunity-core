@@ -3,6 +3,7 @@
 pragma solidity ^0.8.0;
 
 import "./interface/IUserSummary.sol";
+import "../market/Market.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract UserSummary is IUserSummary {
@@ -10,6 +11,7 @@ contract UserSummary is IUserSummary {
     uint256 private _userReputation;
 
     Profile private _userProfile;
+    Market[] createdMarkets;
     WorkerTaskGeneralDescription private _workerTaskGeneralDescription;
     RequesterTaskGeneralDescription private _requesterTaskGeneralDescription;
 
@@ -23,30 +25,28 @@ contract UserSummary is IUserSummary {
         _requesterTaskGeneralDescription.taskAssigned = 0;
     }
 
-    /**
-     *
-     */
-    function getUserProfile()
-        external
-        view
-        override
-        returns (
-            string[] memory,
-            string memory,
-            uint8
-        )
-    {
-        return (
-            _userProfile.skills,
-            _userProfile.profession,
-            _userProfile.activityLevel
-        );
+    modifier onlyAuthenticatedUser(uniqueID) {
+        require(uniqueID == _civicID);
+        _;
     }
 
     /**
      *
      */
-    function updateProfile(Profile memory updatedProfile) external override {}
+    function getUserProfile() external view override returns (string[] memory, string memory, uint8) {
+        return (_userProfile.skills, _userProfile.profession, _userProfile.activityLevel);
+    }
+
+    function createMarket(address market) external {
+        createdMarkets.push(market);
+    }
+
+    /**
+     *
+     */
+    function updateProfile(Profile memory updatedProfile, string memory civicID) external override onlyAuthenticatedUser(civicID) {
+        _userProfile = updatedProfile;
+    }
 
     /**
      *

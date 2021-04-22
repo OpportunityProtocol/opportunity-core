@@ -18,17 +18,22 @@ contract WorkExchange is MultiPartyOwneableOwnable, TimeLocked {
 
     event WorkerSentSolution();
     event RequesterSentPayment();
+    event WorkExchangeStarted(address indexed requesterAddress, address indexed workerBeneficiary, address workExchangeAddress);
+    event WorkExchangeEnded();
 
     RefundEscrow private _requesterEscrow;
     RefundEscrow private _workerEscrow;
 
+    address private _workerAddress;
+    address private _requesterAddress;
+
     constructor(address payable requesterBeneficiary, address payable workerBeneficiary, bool isTimeLocked) MultiPartyOwneableOwnable(workerBeneficiary), TimeLockedDepositProtocol(isTimeLocked) {
         _requesterEscrow = new RefundEscrow(requesterBeneficiary);
         _workerEscrow = new RefundEscrow(workerBeneficiary);
-    }
 
-    function getContractAddress() public view returns(address) {
-        return address(this);
+        _requesterAddress = requesterBeneficiary;
+        _workerAddress = workerBeneficiary;
+        emit WorkExchangeStarted(requesterBeneficiary, workerBeneficiary, address(this));
     }
 
     /**
@@ -78,6 +83,7 @@ contract WorkExchange is MultiPartyOwneableOwnable, TimeLocked {
     }
 
     function disableWorkExchange() internal {
+        emit WorkExchangeEnded(_requesterAddress, _workerAddress, address(this));
         selfdestruct();
     }
 }

@@ -3,53 +3,55 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "../libraries/Evaluation.sol";
 import "../exchange/WorkRelationship.sol";
 import "./libraries/Market.sol";
 
-contract Market is Ownable {
+contract Market is Ownable, Controllable {
+event MarketCreated(address indexed marketAddress, string memory owner);
+event MarketDestroyed(address indexed marketAddress, string memory owner)
+event MarketObservingRelationship(address indexed marketAddress, string indexed memory marketName, address indexed workRelationship);
+event MarketUnObservingRelationship(address indexed marketAddress, string indexed memory marketName, address indexed workRelationship);
 
 string private _marketName;
 MarketUtil.MarketType _marketType;
 uint256 private _averageMarketReputation;
 uint256 private _averageMarketWeight;
 uint256 private _totalMarketLiquidity;
+uint256 private _requiredMarketReputation;
 
 address[] _workRelationships;
 
-constructor(string memory marketName) {
-    _marketName = marketName
+modifer onlyDefaultMarkets {
+
+}
+
+modifer onlyCustomMarkets {
+
+}
+
+constructor(string memory marketName, uint256 requiredReputation) {
+    _marketName = marketName;
+    _requiredReputation = requiredReputation;
+    _totalMarketLiquidty = 0;
+    emit MarketCreated(address(this), _owner);
 }
 
 function addRelationship(address _newRelationship) external {
     require(address != 0);
     _workRelationships.push(_newRelationship);
+    emit MarketObservingRelationship(address(this), _marketName, newRelationship)
 }
 
-function updateAverageReputation() private {
-    // Cycle through relationships
+function getWorkRelationships() view external {
+    return _workRelationships;
+}   
 
-    // Record user profiles
+function pauseMarket() external onlyOwner onlyController onlyDefaultMarkets {}
 
-    // Calculate average reputation
-}
-
-function updateAverageMarketWeight() private {
-    // Cycle through relationships
-
-    // Record user profiles
-
-    // Calculate average market weight
-}
-
-function updateTotalMarketLiquidity() private {
-    // Cycle through relationships
-
-    // Record user profiles
-
-    // Calculate average liquidity
-}
+function resumeMarket() external onlyOwner onlyController onlyDefaultMarkets {}
 
 function destroyMarket() internal onlyOwner {
-    selfdestruct()
-}
+    emit MarketDestroyed(address(this), _owner);
+    selfdestruct(); }
 }
