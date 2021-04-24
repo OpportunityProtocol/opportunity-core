@@ -41,7 +41,7 @@ contract WorkExchange is MultiPartyOwneableOwnable, TimeLocked {
      */
     function sendPaymentAsRequester(address payable payee) external payable onlyOwner {
         _requesterEscrow.withdraw(payee);
-        RequesterSentPayment();
+        emit RequesterSentPayment();
     }
 
     /**
@@ -49,7 +49,7 @@ contract WorkExchange is MultiPartyOwneableOwnable, TimeLocked {
      */
     function sendPaymentAsWorker(address payable payee) external payable onlyOwner {
         _workerEscrow.withdraw(payee);
-        WorkerSentSolution();
+        emit WorkerSentSolution();
     }
 
     /**

@@ -21,7 +21,8 @@ contract WorkRelationship is Ownable {
         bool passesEvaluation = checkWorkerEvaluation(newWorker, evaluationState);
         require(passesEvaluation == true);
 
-        WorkRelationshipCreated(_owner, _marketType, address(this));
+        updateTaskPointer("");
+        emit WorkRelationshipCreated(_owner, _marketType, address(this));
     }
 
     function createWorkExchange(address payable workerBeneficiary, bool isTimeLocked) external {
@@ -42,8 +43,12 @@ contract WorkRelationship is Ownable {
 
     function disableWorkRelationship() public onlyOwner {
         require(_contractStatus == Evaluation.WorkRelationshipState.COMPLETED || _contractStatus == Evaluation.WorkRelationshipState.COMPLETED);
-        WorkRelationshipEnded(_owner, _marketType, address(this));
+        emit WorkRelationshipEnded(_owner, _marketType, address(this));
         selfdestruct();
+    }
+
+    function updateTaskPointer(string newTaskPointerHash) pure external {
+        _taskPointer = newTaskPointerHash;
     }
 
     function gettaskPointer() view external returns(string) {
