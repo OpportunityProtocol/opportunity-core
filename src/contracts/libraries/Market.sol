@@ -7,4 +7,9 @@ library MarketUtil {
         DEFAULT,
         CREATED
     }
+
+    enum MarketStatus {
+        ACTIVE,
+        PAUSED
+    }
 }

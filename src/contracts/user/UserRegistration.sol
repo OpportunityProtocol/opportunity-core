@@ -4,19 +4,18 @@ pragma solidity ^0.8.0;
 
 import "./UserSummaryFactory.sol";
 
-contract UserRegistration { //FU SUV
+import "../control/Controllable.sol";
+
+contract UserRegistration is Controllable { //FU SUV
 
     //maps a unique authentication hash address to a universal generated address
     mapping(string => address) private _universalAddress;
-
-    // Mapping of UniqueHash to universal address existing status
-    mapping(string => bool) private _uniqueHashes;
 
     // Mapping of universal address to summary contract address
     mapping(address => address) private _trueIdentifcations;
 
     event UserRegistered(string indexed uniqueHash, address indexed universalAddress);
-    event UserAssignedTrueIdentification(string indexed trueIdentification, address indexed universalAddress);
+    event UserAssignedTrueIdentification(address indexed universalAddress);
 
     constructor() {}
 
@@ -36,11 +35,15 @@ contract UserRegistration { //FU SUV
         assignTrueUserIdentification(newUniversalAddress, userSummaryContractAddress);
      }
 
+     function getUniversalAddress(string memory uniqueHash) view external returns(address) {
+         return _universalAddress[uniqueHash];
+     }
+
     /**
      * assignTrueUserIdentification
      */
     function assignTrueUserIdentification(address universalAddress, address summaryContractAddress) internal returns(bool) {
-        emit assignTrueUserIdentification(universalAddress, summaryContractAddress);
+        emit UserAssignedTrueIdentification(universalAddress);
         _trueIdentifcations[universalAddress] = summaryContractAddress;
     }
 
@@ -52,7 +55,7 @@ contract UserRegistration { //FU SUV
      */
     function assignUniversalAddress(string memory uniqueHash, address newUniversalAddress) internal returns(bool) {
         //require this address not to already have a universal address
-        require(_hasUniversalAddress[uniqueHash] == false);
+        require(hasUniversalAddress(uniqueHash) == false);
         //require there to not be a universal address at this index
         require(true == false);
 
@@ -67,10 +70,10 @@ contract UserRegistration { //FU SUV
      * @return bool based on if a user has a universal address or not.
      */
     function hasUniversalAddress(string memory uniqueHash) internal view returns(bool) {
-        return _hasUniversalAddress[uniqueHash];
+        return hasUniversalAddress(uniqueHash);
     }
 
-    function getTrueIdentification(address universalAddress) public {
+    function getTrueIdentification(address universalAddress) external view returns(address) {
         return _trueIdentifcations[universalAddress];
     }
 

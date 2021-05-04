@@ -9,27 +9,24 @@ import "../libraries/Market.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract WorkRelationship is Ownable {
-    event WorkRelationshipCreated(string indexed _owner, Market.MarketUtil.MarketType indexed, address indexed _relationship);
-    event WorkRelationshipEnded(string indexed _owner, Market.MarketUtil.MarketType indexed _marketType, address indexed _relationship);
+    event WorkRelationshipCreated(address indexed _owner, address indexed relationship);
+    event WorkRelationshipEnded(address indexed owner, address indexed relationship);
 
     // Status of the current contract
-    string private _contractStatus;
+    Evaluation.WorkRelationshipState private _contractStatus;
     // Task solution pointer
-    string private _taskPointer;
+    string private _taskPointer = "";
 
-    constructor(string memory _taskPointer, Evaluation.EvaluationState) {
+    constructor(address payable newWorker, Evaluation.EvaluationState memory evaluationState, bool isTimeLocked) {
         bool passesEvaluation = checkWorkerEvaluation(newWorker, evaluationState);
         require(passesEvaluation == true);
 
-        updateTaskPointer("");
-        emit WorkRelationshipCreated(_owner, _marketType, address(this));
+        this.createWorkExchange(newWorker, isTimeLocked);
+        emit WorkRelationshipCreated(owner(), address(this));
     }
 
     function createWorkExchange(address payable workerBeneficiary, bool isTimeLocked) external {
-        bool passesEvaluation = checkWorkerEvaluation(newWorker, evaluationState);
-        require(passesEvaluation == true);
-
-        WorkExchange workExchange = new WorkExchange(_owner, workerBeneficiary, isTimeLocked);
+        WorkExchange workExchange = new WorkExchange(payable(owner()), workerBeneficiary, isTimeLocked);
     }
 
     function checkWorkerEvaluation(address workerUniversalAddress, Evaluation.EvaluationState memory evaluationState) internal returns(bool) {
@@ -37,21 +34,17 @@ contract WorkRelationship is Ownable {
         return passesEvaluation;
     }
 
-    function defaultWorker() private {
-        setCurrentWorker(address(0));
-    }
-
     function disableWorkRelationship() public onlyOwner {
         require(_contractStatus == Evaluation.WorkRelationshipState.COMPLETED || _contractStatus == Evaluation.WorkRelationshipState.COMPLETED);
-        emit WorkRelationshipEnded(_owner, _marketType, address(this));
-        selfdestruct();
+        emit WorkRelationshipEnded(owner(), address(this));
+        //selfdestruct();
     }
 
-    function updateTaskPointer(string newTaskPointerHash) pure external {
+    function updateTaskPointer(string memory newTaskPointerHash) external {
         _taskPointer = newTaskPointerHash;
     }
 
-    function gettaskPointer() view external returns(string) {
+    function getTaskPointer() view external returns(string memory) {
         return _taskPointer;
     }
 }

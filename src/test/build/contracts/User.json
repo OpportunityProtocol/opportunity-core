@@ -1,0 +1,547 @@
+{
+  "contractName": "User",
+  "abi": [],
+  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol\":\"User\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol\":{\"keccak256\":\"0x3fc98303be9aee1317ca29e93af1ec2f88568c1e526ff23899d464544f060ad6\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://412e266b655dc10c2fa8f874abda2933ed02636c367ca09c16d5cd8a978d8c04\",\"dweb:/ipfs/QmaXjqt1PL8pYNss2VyZiX78L4HJxWGA6T7RXWvodKcyYG\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol\":{\"keccak256\":\"0xf6f53b1360419296f37489d8c13a44e39d4178ccccfa14622de3445fe7e19879\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0c5b2b5863f94d493b767babd8103d215e76423a999ad0ffc7c2432a653c868b\",\"dweb:/ipfs/QmZfU9BLvZWEaeZ8DZ84c3auojacifiYrUhKRchcyTZqy7\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220a32eb65442b28b6be8715303755a9f9bdad8f7a8123f47aab558411c22f2ffb964736f6c63430008000033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220a32eb65442b28b6be8715303755a9f9bdad8f7a8123f47aab558411c22f2ffb964736f6c63430008000033",
+  "immutableReferences": {},
+  "generatedSources": [],
+  "deployedGeneratedSources": [],
+  "sourceMap": "87:183:9:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "87:183:9:-:0;;;;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\nimport \"./StringUtils.sol\";\n\nlibrary User {\n       modifier onlyAuthenticatedUser(string storage uniqueID, string storage uniqueHash) {\n        require(StringUtils.equal(uniqueID, uniqueHash));\n        _;\n    }\n}",
+  "sourcePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol",
+  "ast": {
+    "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol",
+    "exportedSymbols": {
+      "StringUtils": [
+        955
+      ],
+      "User": [
+        975
+      ]
+    },
+    "id": 976,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 957,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:9"
+      },
+      {
+        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol",
+        "file": "./StringUtils.sol",
+        "id": 958,
+        "nodeType": "ImportDirective",
+        "scope": 976,
+        "sourceUnit": 956,
+        "src": "58:27:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "library",
+        "fullyImplemented": true,
+        "id": 975,
+        "linearizedBaseContracts": [
+          975
+        ],
+        "name": "User",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 973,
+              "nodeType": "Block",
+              "src": "192:76:9",
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "arguments": [
+                          {
+                            "id": 967,
+                            "name": "uniqueID",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 960,
+                            "src": "228:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_string_storage_ptr",
+                              "typeString": "string storage pointer"
+                            }
+                          },
+                          {
+                            "id": 968,
+                            "name": "uniqueHash",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 962,
+                            "src": "238:10:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_string_storage_ptr",
+                              "typeString": "string storage pointer"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_string_storage_ptr",
+                              "typeString": "string storage pointer"
+                            },
+                            {
+                              "typeIdentifier": "t_string_storage_ptr",
+                              "typeString": "string storage pointer"
+                            }
+                          ],
+                          "expression": {
+                            "id": 965,
+                            "name": "StringUtils",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 955,
+                            "src": "210:11:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_contract$_StringUtils_$955_$",
+                              "typeString": "type(library StringUtils)"
+                            }
+                          },
+                          "id": 966,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "equal",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 825,
+                          "src": "210:17:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_delegatecall_pure$_t_string_memory_ptr_$_t_string_memory_ptr_$returns$_t_bool_$",
+                            "typeString": "function (string memory,string memory) pure returns (bool)"
+                          }
+                        },
+                        "id": 969,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "210:39:9",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 964,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
+                      "referencedDeclaration": 4294967278,
+                      "src": "202:7:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 970,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "202:48:9",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 971,
+                  "nodeType": "ExpressionStatement",
+                  "src": "202:48:9"
+                },
+                {
+                  "id": 972,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "260:1:9"
+                }
+              ]
+            },
+            "id": 974,
+            "name": "onlyAuthenticatedUser",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 963,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 960,
+                  "mutability": "mutable",
+                  "name": "uniqueID",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 974,
+                  "src": "140:23:9",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 959,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "140:6:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 962,
+                  "mutability": "mutable",
+                  "name": "uniqueHash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 974,
+                  "src": "165:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 961,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "165:6:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "139:52:9"
+            },
+            "src": "109:159:9",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 976,
+        "src": "87:183:9"
+      }
+    ],
+    "src": "33:237:9"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol",
+    "exportedSymbols": {
+      "StringUtils": [
+        955
+      ],
+      "User": [
+        975
+      ]
+    },
+    "id": 976,
+    "license": "MIT",
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 957,
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "33:23:9"
+      },
+      {
+        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol",
+        "file": "./StringUtils.sol",
+        "id": 958,
+        "nodeType": "ImportDirective",
+        "scope": 976,
+        "sourceUnit": 956,
+        "src": "58:27:9",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "library",
+        "fullyImplemented": true,
+        "id": 975,
+        "linearizedBaseContracts": [
+          975
+        ],
+        "name": "User",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 973,
+              "nodeType": "Block",
+              "src": "192:76:9",
+              "statements": [
+                {
+                  "expression": {
+                    "arguments": [
+                      {
+                        "arguments": [
+                          {
+                            "id": 967,
+                            "name": "uniqueID",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 960,
+                            "src": "228:8:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_string_storage_ptr",
+                              "typeString": "string storage pointer"
+                            }
+                          },
+                          {
+                            "id": 968,
+                            "name": "uniqueHash",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 962,
+                            "src": "238:10:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_string_storage_ptr",
+                              "typeString": "string storage pointer"
+                            }
+                          }
+                        ],
+                        "expression": {
+                          "argumentTypes": [
+                            {
+                              "typeIdentifier": "t_string_storage_ptr",
+                              "typeString": "string storage pointer"
+                            },
+                            {
+                              "typeIdentifier": "t_string_storage_ptr",
+                              "typeString": "string storage pointer"
+                            }
+                          ],
+                          "expression": {
+                            "id": 965,
+                            "name": "StringUtils",
+                            "nodeType": "Identifier",
+                            "overloadedDeclarations": [],
+                            "referencedDeclaration": 955,
+                            "src": "210:11:9",
+                            "typeDescriptions": {
+                              "typeIdentifier": "t_type$_t_contract$_StringUtils_$955_$",
+                              "typeString": "type(library StringUtils)"
+                            }
+                          },
+                          "id": 966,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "memberName": "equal",
+                          "nodeType": "MemberAccess",
+                          "referencedDeclaration": 825,
+                          "src": "210:17:9",
+                          "typeDescriptions": {
+                            "typeIdentifier": "t_function_delegatecall_pure$_t_string_memory_ptr_$_t_string_memory_ptr_$returns$_t_bool_$",
+                            "typeString": "function (string memory,string memory) pure returns (bool)"
+                          }
+                        },
+                        "id": 969,
+                        "isConstant": false,
+                        "isLValue": false,
+                        "isPure": false,
+                        "kind": "functionCall",
+                        "lValueRequested": false,
+                        "names": [],
+                        "nodeType": "FunctionCall",
+                        "src": "210:39:9",
+                        "tryCall": false,
+                        "typeDescriptions": {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      }
+                    ],
+                    "expression": {
+                      "argumentTypes": [
+                        {
+                          "typeIdentifier": "t_bool",
+                          "typeString": "bool"
+                        }
+                      ],
+                      "id": 964,
+                      "name": "require",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [
+                        4294967278,
+                        4294967278
+                      ],
+                      "referencedDeclaration": 4294967278,
+                      "src": "202:7:9",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
+                        "typeString": "function (bool) pure"
+                      }
+                    },
+                    "id": 970,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "kind": "functionCall",
+                    "lValueRequested": false,
+                    "names": [],
+                    "nodeType": "FunctionCall",
+                    "src": "202:48:9",
+                    "tryCall": false,
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_tuple$__$",
+                      "typeString": "tuple()"
+                    }
+                  },
+                  "id": 971,
+                  "nodeType": "ExpressionStatement",
+                  "src": "202:48:9"
+                },
+                {
+                  "id": 972,
+                  "nodeType": "PlaceholderStatement",
+                  "src": "260:1:9"
+                }
+              ]
+            },
+            "id": 974,
+            "name": "onlyAuthenticatedUser",
+            "nodeType": "ModifierDefinition",
+            "parameters": {
+              "id": 963,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 960,
+                  "mutability": "mutable",
+                  "name": "uniqueID",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 974,
+                  "src": "140:23:9",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 959,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "140:6:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 962,
+                  "mutability": "mutable",
+                  "name": "uniqueHash",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 974,
+                  "src": "165:25:9",
+                  "stateVariable": false,
+                  "storageLocation": "storage",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 961,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "165:6:9",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "139:52:9"
+            },
+            "src": "109:159:9",
+            "virtual": false,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 976,
+        "src": "87:183:9"
+      }
+    ],
+    "src": "33:237:9"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.8.0+commit.c7dfd78e.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.3.4",
+  "updatedAt": "2021-04-29T17:41:58.495Z",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  }
+}

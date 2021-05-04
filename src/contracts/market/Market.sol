@@ -6,50 +6,53 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "../libraries/Evaluation.sol";
 import "../exchange/WorkRelationship.sol";
-import "./libraries/Market.sol";
+import "../libraries/Market.sol";
+import "../control/Controllable.sol";
 
 contract Market is Ownable, Controllable, Pausable {
-event MarketCreated(address indexed marketAddress, string memory owner);
-event MarketDestroyed(address indexed marketAddress, string memory owner)
-event MarketObservingRelationship(address indexed marketAddress, string indexed memory marketName, address indexed workRelationship);
-event MarketUnObservingRelationship(address indexed marketAddress, string indexed memory marketName, address indexed workRelationship);
-event MarketPaused(address indexed marketAddress);
-event MarketResumed(address indexed marketAddress);
+event MarketCreated(address indexed marketAddress, address indexed owner, uint256 requiredReputation, uint256 requiredIndustryWeight);
+event MarketDestroyed(address indexed marketAddress, address indexed owner);
+event MarketObservingRelationship(address indexed marketAddress, string indexed marketName, address indexed workRelationship);
+event MarketUnObservingRelationship(address indexed marketAddress, string indexed marketName, address indexed workRelationship);
+event MarketPaused(address indexed marketAddress, string indexed marketName);
+event MarketResumed(address indexed marketAddress, string indexed marketName);
 
 string private _marketName;
-string private _marketType;
-MarketUtil.MarketType _marketType;
-uint256 private _requiredMarketReputation;
-uint256 private _requiredIndustyWeight;
+MarketUtil.MarketType private _marketType;
+uint256 private _requiredReputation;
+uint256 private _requiredIndustryWeight;
+MarketUtil.MarketStatus private _marketStatus;
 
-address[] _workRelationships;
+address[] private _workRelationships;
 
-constructor(string memory marketName, uint256 requiredReputation, uint256 requiredIndustryWeight) {
+constructor(string memory marketName, MarketUtil.MarketType marketType, uint256 requiredReputation, uint256 requiredIndustryWeight) {
     _marketName = marketName;
+    _marketType = marketType;
     _requiredReputation = requiredReputation;
     _requiredIndustryWeight = requiredIndustryWeight;
-    emit MarketCreated(address(this), _owner);
+    emit MarketCreated(address(this), owner(), requiredReputation, requiredIndustryWeight);
 }
 
-function addRelationship(address _newRelationship) external {
-    require(address != 0);
-    _workRelationships.push(_newRelationship);
-    emit MarketObservingRelationship(address(this), _marketName, newRelationship)
+function addRelationship(address newRelationship) external {
+    require(newRelationship != address(0));
+    _workRelationships.push(newRelationship);
+    emit MarketObservingRelationship(address(this), _marketName, newRelationship);
 }
 
-function pauseMarket() external onlyOwner onlyGlobalController onlyDefaultMarkets onlyNotPausedState {
-    setPaused(true);
+function pauseMarket() external onlyOwner onlyGlobalController(msg.sender) onlyDefaultMarkets(_marketType) onlyNotPausedState(_marketStatus) {
+    _pause();
 }
 
-function resumeMarket() external onlyOwner onlyGlobalController onlyDefaultMarkets onlyPausedState {
-    setPaused(false);
+function resumeMarket() external onlyOwner onlyGlobalController(msg.sender) onlyDefaultMarkets(_marketType) onlyPausedState(_marketStatus) {
+    _unpause();
 }
 
-function getContractPausedState() returns(bool) {
-    return _isPaused();
+function getMarketState() public returns(bool) {
+    return paused();
 }
 
 function destroyMarket() internal onlyOwner {
-    emit MarketDestroyed(address(this), _owner);
-    selfdestruct(); }
+    emit MarketDestroyed(address(this), owner());
+    //selfdestruct(); 
+    }
 }

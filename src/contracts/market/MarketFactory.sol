@@ -3,6 +3,7 @@
 pragma solidity ^0.8.0;
 
 import "./Market.sol";
+import "../libraries/Market.sol";
 
 contract MarketFactory {
     event MarketCreated(Market indexed _market, uint256 indexed index, address _marketAddress);
@@ -13,13 +14,10 @@ contract MarketFactory {
     /**
      * Creates a user summary contract for each user based on their civic ID.
      */
-     function createMarket(string memory marketName) external returns(address) {
-        Market createdMarket = new Market(marketName);
-        emit MarketCreated(createdMarket, index, address(this));
+     function createMarket(string memory marketName, MarketUtil.MarketType marketType, uint256 requiredReputation, uint256 requiredIndustryWeight) external {
+        Market createdMarket = new Market(marketName, marketType, requiredReputation, requiredIndustryWeight);
         _createdMarkets.push(createdMarket);
-
-        address marketAddress = createdMarket.getContractAddress();
-        return marketAddress;
+        emit MarketCreated(createdMarket, _createdMarkets.length, address(this));
     }
 
     /**

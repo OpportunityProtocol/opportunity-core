@@ -15,19 +15,19 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * `onlyContractOwner` and `onlyContractWorker` which can be applied to your functions to restrict their use to
  * their respective owners.
  */
-abstract contract MultiPartyOwneableOwnable is Context {
-    address private _owner; //Requester
-    address private _worker; // Worker
+abstract contract MultiPartyOwneable is Context {
 
     event OwnershipTransferred(address indexed previousWorker, address indexed newWorker);
 
+    address private _owner; //Requester
+    address private _worker; // Worker
     /**
      * @dev Initializes the contract setting the deployer as the initial owner.
      */
-    constructor (address worker) {
+    constructor (address newWorker) {
         address msgSender = _msgSender();
         _owner = msgSender;
-        _worker = worker;
+        _worker = newWorker;
 
         emit OwnershipTransferred(address(0), _worker);
     }

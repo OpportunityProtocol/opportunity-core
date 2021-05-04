@@ -6,14 +6,15 @@ import "./interface/IUserSummary.sol";
 import "../market/Market.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+
 contract UserSummary is IUserSummary {
-    event UserSummaryUpdate(address indexed userAddress, string uniqueHash);
+    event UserSummaryUpdate(string uniqueHash);
 
     string private _uniqueHash;
     uint256 private _userReputation;
 
     Profile private _userProfile;
-    Market[] createdMarkets;
+    address[] private createdMarkets;
     WorkerTaskGeneralDescription private _workerTaskGeneralDescription;
     RequesterTaskGeneralDescription private _requesterTaskGeneralDescription;
 
@@ -25,15 +26,16 @@ contract UserSummary is IUserSummary {
         _requesterTaskGeneralDescription.taskAssigned = 0;
     }
 
-    modifier onlyAuthenticatedUser(uniqueID) {
-        require(uniqueID == _uniqueHash);
-        _;
-    }
-
+   /**
+     *
+     */
     function getUserProfile() external view override returns (string[] memory, string memory, uint8) {
         return (_userProfile.skills, _userProfile.profession, _userProfile.activityLevel);
     }
 
+   /**
+     *
+     */
     function createMarket(address market) external {
         createdMarkets.push(market);
         emit UserSummaryUpdate(_uniqueHash);
@@ -42,15 +44,20 @@ contract UserSummary is IUserSummary {
     /**
      *
      */
-    function updateProfile(Profile memory updatedProfile, string memory uniqueHash) external override onlyAuthenticatedUser(uniqueHash) {
+    function updateProfile(Profile memory updatedProfile, string memory uniqueHash) external override onlyAuthenticatedUser(uniqueHash, _uniqueHash) {
         _userProfile = updatedProfile;
         emit UserSummaryUpdate(_uniqueHash);
+    }
+
+   /**
+     *
+     */
+    function getContractAddress() public view returns(address) {
+        return address(this);
     }
 
     /**
      *
      */
-    function evaluateUser(Evaluation.EvaluationState memory evaluationState) external override returns(bool) {
-
-    }
+    function evaluateUser(Evaluation.EvaluationState memory evaluationState) external override returns(bool) {}
 }

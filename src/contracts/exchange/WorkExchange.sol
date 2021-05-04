@@ -13,13 +13,13 @@ import "./MultiPartyOwneable.sol";
  * contract.
  * Note: Created for every job acceptance.
  */
-contract WorkExchange is MultiPartyOwneableOwnable, TimeLocked {
+contract WorkExchange is MultiPartyOwneable/*, TimeLocked*/ {
     using SafeMath for uint256;
 
     event WorkerSentSolution();
     event RequesterSentPayment();
     event WorkExchangeStarted(address indexed requesterAddress, address indexed workerBeneficiary, address workExchangeAddress);
-    event WorkExchangeEnded();
+    event WorkExchangeEnded(address indexed requesterAddress, address indexed workerBeneficiary, address workExchangeAddress);
 
     RefundEscrow private _requesterEscrow;
     RefundEscrow private _workerEscrow;
@@ -27,7 +27,7 @@ contract WorkExchange is MultiPartyOwneableOwnable, TimeLocked {
     address private _workerAddress;
     address private _requesterAddress;
 
-    constructor(address payable requesterBeneficiary, address payable workerBeneficiary, bool isTimeLocked) MultiPartyOwneableOwnable(workerBeneficiary), TimeLockedDepositProtocol(isTimeLocked) {
+    constructor(address payable requesterBeneficiary, address payable workerBeneficiary, bool isTimeLocked) MultiPartyOwneable(workerBeneficiary)/*, TimeLockedDepositProtocol(isTimeLocked)*/ {
         _requesterEscrow = new RefundEscrow(requesterBeneficiary);
         _workerEscrow = new RefundEscrow(workerBeneficiary);
 
@@ -84,6 +84,6 @@ contract WorkExchange is MultiPartyOwneableOwnable, TimeLocked {
 
     function disableWorkExchange() internal {
         emit WorkExchangeEnded(_requesterAddress, _workerAddress, address(this));
-        selfdestruct();
+        //selfdestruct();
     }
 }
