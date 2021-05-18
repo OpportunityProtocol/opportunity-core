@@ -7,32 +7,32 @@
       "type": "constructor"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/control/Controllable.sol\":\"Controllable\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/control/Controllable.sol\":{\"keccak256\":\"0xc02426ae1f8b4cbeaf325644bfea7c9ba9305924de0f42be3a31135599b7a958\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://cd3088e97490df425df286ffdf009e345678b7a7e8260730fada08c057a4534a\",\"dweb:/ipfs/Qmb639RYXLNurPQep3X7QaN6G4s42mH8PBi1Pw4ZERtoRd\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/Market.sol\":{\"keccak256\":\"0xcea2ba77e8c43f338744bf80fb7f9ee7974147ede3d4c3e27d3bd3075cd4cd5f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://801d87fc4f5f668b9742ad4cc825179094a8fa0aa7155a1996dacc1256039ef5\",\"dweb:/ipfs/QmWZcWWexrn5SMZaC2ppzNiT8yji22YEHudyqTAir3b5iw\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550603f80605d6000396000f3fe6080604052600080fdfea264697066735822122037aa162eb3cbfd6f8acfa7c8f0aaed99e1c180261f54631b0b95f235204a7dd464736f6c63430008000033",
-  "deployedBytecode": "0x6080604052600080fdfea264697066735822122037aa162eb3cbfd6f8acfa7c8f0aaed99e1c180261f54631b0b95f235204a7dd464736f6c63430008000033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/control/Controllable.sol\":\"Controllable\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/control/Controllable.sol\":{\"keccak256\":\"0x2b616e0eae728ab0b2733946afc99c001a24aff86cabee94471ffc958da33b8e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://9e9f8be8287296be60a9b46589b4b1fbf35fb0af50e6c4d107be19358fe4a93d\",\"dweb:/ipfs/QmVXyxkpJT6JDCZPRWzZ2yzmuBEgMvWqQCrMgV7FazdAde\"]},\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol\":{\"keccak256\":\"0x353918e0f71cbe7e131a3fd49986393588497e042b8aa0eea26ebea905ece310\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be10f8229d7e9184d1831fde2ed369de0232fa19a1f06cb662aa4942f7661918\",\"dweb:/ipfs/QmPbX7YYB3RFn38RxRXETNiuupmvG657TdfN3P2a3hb3yJ\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50336000806101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff160217905550603f80605d6000396000f3fe6080604052600080fdfea2646970667358221220509702b161f8bf2c525674ce38ed76cf629e564f1693a4c869031daaca64a31d64736f6c63430008000033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220509702b161f8bf2c525674ce38ed76cf629e564f1693a4c869031daaca64a31d64736f6c63430008000033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "93:878:2:-:0;;;161:62;;;;;;;;;;205:10;185:17;;:30;;;;;;;;;;;;;;;;;;93:878;;;;;;",
-  "deployedSourceMap": "93:878:2:-:0;;;;;",
-  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\nimport \"../libraries/Market.sol\";\n\ncontract Controllable {\n    address private _globalController;\n\n    constructor() {\n        _globalController = msg.sender;\n     }\n\n     modifier onlyGlobalController(address requester) {\n         require(requester == _globalController);\n         _;\n     }\n\n     modifier onlyDefaultMarkets(MarketUtil.MarketType marketType) {\n         require(marketType == MarketUtil.MarketType.DEFAULT);\n        _;\n     }\n\n     modifier onlyCustomMarkets(MarketUtil.MarketType marketType) {\n          require(marketType == MarketUtil.MarketType.CREATED);\n         _;\n     }\n\n     modifier onlyNotPausedState(MarketUtil.MarketStatus marketStatus) {\n         require(marketStatus != MarketUtil.MarketStatus.PAUSED);\n         _;\n     }\n\n      modifier onlyPausedState(MarketUtil.MarketStatus marketStatus) {\n         require(marketStatus == MarketUtil.MarketStatus.ACTIVE);\n         _;\n     }\n\n}",
-  "sourcePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/control/Controllable.sol",
+  "sourceMap": "96:870:2:-:0;;;164:62;;;;;;;;;;208:10;188:17;;:30;;;;;;;;;;;;;;;;;;96:870;;;;;;",
+  "deployedSourceMap": "96:870:2:-:0;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\nimport \"../libraries/MarketLib.sol\";\n\ncontract Controllable {\n    address private _globalController;\n\n    constructor() {\n        _globalController = msg.sender;\n     }\n\n     modifier onlyGlobalController(address requester) {\n         require(requester == _globalController);\n         _;\n     }\n\n     modifier onlyDefaultMarkets(MarketLib.MarketType marketType) {\n         require(marketType == MarketLib.MarketType.DEFAULT);\n        _;\n     }\n\n     modifier onlyCustomMarkets(MarketLib.MarketType marketType) {\n          require(marketType == MarketLib.MarketType.CREATED);\n         _;\n     }\n\n     modifier onlyNotPausedState(MarketLib.MarketStatus marketStatus) {\n         require(marketStatus != MarketLib.MarketStatus.PAUSED);\n         _;\n     }\n\n      modifier onlyPausedState(MarketLib.MarketStatus marketStatus) {\n         require(marketStatus == MarketLib.MarketStatus.ACTIVE);\n         _;\n     }\n\n}",
+  "sourcePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/control/Controllable.sol",
   "ast": {
-    "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/control/Controllable.sol",
+    "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/control/Controllable.sol",
     "exportedSymbols": {
       "Controllable": [
-        210
+        176
       ],
-      "MarketUtil": [
-        845
+      "MarketLib": [
+        769
       ]
     },
-    "id": 211,
+    "id": 177,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 125,
+        "id": 91,
         "literals": [
           "solidity",
           "^",
@@ -43,13 +43,13 @@
         "src": "33:23:2"
       },
       {
-        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/Market.sol",
-        "file": "../libraries/Market.sol",
-        "id": 126,
+        "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol",
+        "file": "../libraries/MarketLib.sol",
+        "id": 92,
         "nodeType": "ImportDirective",
-        "scope": 211,
-        "sourceUnit": 846,
-        "src": "58:33:2",
+        "scope": 177,
+        "sourceUnit": 770,
+        "src": "58:36:2",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -59,21 +59,21 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 210,
+        "id": 176,
         "linearizedBaseContracts": [
-          210
+          176
         ],
         "name": "Controllable",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 128,
+            "id": 94,
             "mutability": "mutable",
             "name": "_globalController",
             "nodeType": "VariableDeclaration",
-            "scope": 210,
-            "src": "121:33:2",
+            "scope": 176,
+            "src": "124:33:2",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -81,10 +81,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 127,
+              "id": 93,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "121:7:2",
+              "src": "124:7:2",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -95,24 +95,24 @@
           },
           {
             "body": {
-              "id": 136,
+              "id": 102,
               "nodeType": "Block",
-              "src": "175:48:2",
+              "src": "178:48:2",
               "statements": [
                 {
                   "expression": {
-                    "id": 134,
+                    "id": 100,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 131,
+                      "id": 97,
                       "name": "_globalController",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 128,
-                      "src": "185:17:2",
+                      "referencedDeclaration": 94,
+                      "src": "188:17:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
                         "typeString": "address"
@@ -122,71 +122,71 @@
                     "operator": "=",
                     "rightHandSide": {
                       "expression": {
-                        "id": 132,
+                        "id": 98,
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 4294967281,
-                        "src": "205:3:2",
+                        "src": "208:3:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
                           "typeString": "msg"
                         }
                       },
-                      "id": 133,
+                      "id": 99,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "sender",
                       "nodeType": "MemberAccess",
-                      "src": "205:10:2",
+                      "src": "208:10:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
                         "typeString": "address"
                       }
                     },
-                    "src": "185:30:2",
+                    "src": "188:30:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "id": 135,
+                  "id": 101,
                   "nodeType": "ExpressionStatement",
-                  "src": "185:30:2"
+                  "src": "188:30:2"
                 }
               ]
             },
-            "id": 137,
+            "id": 103,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 129,
+              "id": 95,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "172:2:2"
+              "src": "175:2:2"
             },
             "returnParameters": {
-              "id": 130,
+              "id": 96,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "175:0:2"
+              "src": "178:0:2"
             },
-            "scope": 210,
-            "src": "161:62:2",
+            "scope": 176,
+            "src": "164:62:2",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 148,
+              "id": 114,
               "nodeType": "Block",
-              "src": "279:70:2",
+              "src": "282:70:2",
               "statements": [
                 {
                   "expression": {
@@ -196,18 +196,18 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 144,
+                        "id": 110,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 142,
+                          "id": 108,
                           "name": "requester",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 139,
-                          "src": "298:9:2",
+                          "referencedDeclaration": 105,
+                          "src": "301:9:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -216,18 +216,18 @@
                         "nodeType": "BinaryOperation",
                         "operator": "==",
                         "rightExpression": {
-                          "id": 143,
+                          "id": 109,
                           "name": "_globalController",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 128,
-                          "src": "311:17:2",
+                          "referencedDeclaration": 94,
+                          "src": "314:17:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
                           }
                         },
-                        "src": "298:30:2",
+                        "src": "301:30:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -241,7 +241,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 141,
+                      "id": 107,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -249,13 +249,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "290:7:2",
+                      "src": "293:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 145,
+                    "id": 111,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -263,39 +263,39 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "290:39:2",
+                    "src": "293:39:2",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 146,
+                  "id": 112,
                   "nodeType": "ExpressionStatement",
-                  "src": "290:39:2"
+                  "src": "293:39:2"
                 },
                 {
-                  "id": 147,
+                  "id": 113,
                   "nodeType": "PlaceholderStatement",
-                  "src": "340:1:2"
+                  "src": "343:1:2"
                 }
               ]
             },
-            "id": 149,
+            "id": 115,
             "name": "onlyGlobalController",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 140,
+              "id": 106,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 139,
+                  "id": 105,
                   "mutability": "mutable",
                   "name": "requester",
                   "nodeType": "VariableDeclaration",
-                  "scope": 149,
-                  "src": "260:17:2",
+                  "scope": 115,
+                  "src": "263:17:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -303,10 +303,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 138,
+                    "id": 104,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "260:7:2",
+                    "src": "263:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -316,41 +316,41 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "259:19:2"
+              "src": "262:19:2"
             },
-            "src": "230:119:2",
+            "src": "233:119:2",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 163,
+              "id": 129,
               "nodeType": "Block",
-              "src": "418:82:2",
+              "src": "420:81:2",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketType_$841",
-                          "typeString": "enum MarketUtil.MarketType"
+                          "typeIdentifier": "t_enum$_MarketType_$765",
+                          "typeString": "enum MarketLib.MarketType"
                         },
-                        "id": 159,
+                        "id": 125,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 155,
+                          "id": 121,
                           "name": "marketType",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 152,
-                          "src": "437:10:2",
+                          "referencedDeclaration": 118,
+                          "src": "439:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$841",
-                            "typeString": "enum MarketUtil.MarketType"
+                            "typeIdentifier": "t_enum$_MarketType_$765",
+                            "typeString": "enum MarketLib.MarketType"
                           }
                         },
                         "nodeType": "BinaryOperation",
@@ -358,45 +358,45 @@
                         "rightExpression": {
                           "expression": {
                             "expression": {
-                              "id": 156,
-                              "name": "MarketUtil",
+                              "id": 122,
+                              "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 845,
-                              "src": "451:10:2",
+                              "referencedDeclaration": 769,
+                              "src": "453:9:2",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketUtil_$845_$",
-                                "typeString": "type(library MarketUtil)"
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$769_$",
+                                "typeString": "type(library MarketLib)"
                               }
                             },
-                            "id": 157,
+                            "id": 123,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "MarketType",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 841,
-                            "src": "451:21:2",
+                            "referencedDeclaration": 765,
+                            "src": "453:20:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketType_$841_$",
-                              "typeString": "type(enum MarketUtil.MarketType)"
+                              "typeIdentifier": "t_type$_t_enum$_MarketType_$765_$",
+                              "typeString": "type(enum MarketLib.MarketType)"
                             }
                           },
-                          "id": 158,
+                          "id": 124,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "memberName": "DEFAULT",
                           "nodeType": "MemberAccess",
-                          "src": "451:29:2",
+                          "src": "453:28:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$841",
-                            "typeString": "enum MarketUtil.MarketType"
+                            "typeIdentifier": "t_enum$_MarketType_$765",
+                            "typeString": "enum MarketLib.MarketType"
                           }
                         },
-                        "src": "437:43:2",
+                        "src": "439:42:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -410,7 +410,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 154,
+                      "id": 120,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -418,13 +418,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "429:7:2",
+                      "src": "431:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 160,
+                    "id": 126,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -432,100 +432,100 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "429:52:2",
+                    "src": "431:51:2",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 161,
+                  "id": 127,
                   "nodeType": "ExpressionStatement",
-                  "src": "429:52:2"
+                  "src": "431:51:2"
                 },
                 {
-                  "id": 162,
+                  "id": 128,
                   "nodeType": "PlaceholderStatement",
-                  "src": "491:1:2"
+                  "src": "492:1:2"
                 }
               ]
             },
-            "id": 164,
+            "id": 130,
             "name": "onlyDefaultMarkets",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 153,
+              "id": 119,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 152,
+                  "id": 118,
                   "mutability": "mutable",
                   "name": "marketType",
                   "nodeType": "VariableDeclaration",
-                  "scope": 164,
-                  "src": "384:32:2",
+                  "scope": 130,
+                  "src": "387:31:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketType_$841",
-                    "typeString": "enum MarketUtil.MarketType"
+                    "typeIdentifier": "t_enum$_MarketType_$765",
+                    "typeString": "enum MarketLib.MarketType"
                   },
                   "typeName": {
-                    "id": 151,
+                    "id": 117,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 150,
-                      "name": "MarketUtil.MarketType",
+                      "id": 116,
+                      "name": "MarketLib.MarketType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 841,
-                      "src": "384:21:2"
+                      "referencedDeclaration": 765,
+                      "src": "387:20:2"
                     },
-                    "referencedDeclaration": 841,
-                    "src": "384:21:2",
+                    "referencedDeclaration": 765,
+                    "src": "387:20:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketType_$841",
-                      "typeString": "enum MarketUtil.MarketType"
+                      "typeIdentifier": "t_enum$_MarketType_$765",
+                      "typeString": "enum MarketLib.MarketType"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "383:34:2"
+              "src": "386:33:2"
             },
-            "src": "356:144:2",
+            "src": "359:142:2",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 178,
+              "id": 144,
               "nodeType": "Block",
-              "src": "568:84:2",
+              "src": "568:83:2",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketType_$841",
-                          "typeString": "enum MarketUtil.MarketType"
+                          "typeIdentifier": "t_enum$_MarketType_$765",
+                          "typeString": "enum MarketLib.MarketType"
                         },
-                        "id": 174,
+                        "id": 140,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 170,
+                          "id": 136,
                           "name": "marketType",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 167,
+                          "referencedDeclaration": 133,
                           "src": "588:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$841",
-                            "typeString": "enum MarketUtil.MarketType"
+                            "typeIdentifier": "t_enum$_MarketType_$765",
+                            "typeString": "enum MarketLib.MarketType"
                           }
                         },
                         "nodeType": "BinaryOperation",
@@ -533,45 +533,45 @@
                         "rightExpression": {
                           "expression": {
                             "expression": {
-                              "id": 171,
-                              "name": "MarketUtil",
+                              "id": 137,
+                              "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 845,
-                              "src": "602:10:2",
+                              "referencedDeclaration": 769,
+                              "src": "602:9:2",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketUtil_$845_$",
-                                "typeString": "type(library MarketUtil)"
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$769_$",
+                                "typeString": "type(library MarketLib)"
                               }
                             },
-                            "id": 172,
+                            "id": 138,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "MarketType",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 841,
-                            "src": "602:21:2",
+                            "referencedDeclaration": 765,
+                            "src": "602:20:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketType_$841_$",
-                              "typeString": "type(enum MarketUtil.MarketType)"
+                              "typeIdentifier": "t_type$_t_enum$_MarketType_$765_$",
+                              "typeString": "type(enum MarketLib.MarketType)"
                             }
                           },
-                          "id": 173,
+                          "id": 139,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "memberName": "CREATED",
                           "nodeType": "MemberAccess",
-                          "src": "602:29:2",
+                          "src": "602:28:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$841",
-                            "typeString": "enum MarketUtil.MarketType"
+                            "typeIdentifier": "t_enum$_MarketType_$765",
+                            "typeString": "enum MarketLib.MarketType"
                           }
                         },
-                        "src": "588:43:2",
+                        "src": "588:42:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -585,7 +585,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 169,
+                      "id": 135,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -599,7 +599,7 @@
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 175,
+                    "id": 141,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -607,100 +607,100 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "580:52:2",
+                    "src": "580:51:2",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 176,
+                  "id": 142,
                   "nodeType": "ExpressionStatement",
-                  "src": "580:52:2"
+                  "src": "580:51:2"
                 },
                 {
-                  "id": 177,
+                  "id": 143,
                   "nodeType": "PlaceholderStatement",
-                  "src": "643:1:2"
+                  "src": "642:1:2"
                 }
               ]
             },
-            "id": 179,
+            "id": 145,
             "name": "onlyCustomMarkets",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 168,
+              "id": 134,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 167,
+                  "id": 133,
                   "mutability": "mutable",
                   "name": "marketType",
                   "nodeType": "VariableDeclaration",
-                  "scope": 179,
-                  "src": "534:32:2",
+                  "scope": 145,
+                  "src": "535:31:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketType_$841",
-                    "typeString": "enum MarketUtil.MarketType"
+                    "typeIdentifier": "t_enum$_MarketType_$765",
+                    "typeString": "enum MarketLib.MarketType"
                   },
                   "typeName": {
-                    "id": 166,
+                    "id": 132,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 165,
-                      "name": "MarketUtil.MarketType",
+                      "id": 131,
+                      "name": "MarketLib.MarketType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 841,
-                      "src": "534:21:2"
+                      "referencedDeclaration": 765,
+                      "src": "535:20:2"
                     },
-                    "referencedDeclaration": 841,
-                    "src": "534:21:2",
+                    "referencedDeclaration": 765,
+                    "src": "535:20:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketType_$841",
-                      "typeString": "enum MarketUtil.MarketType"
+                      "typeIdentifier": "t_enum$_MarketType_$765",
+                      "typeString": "enum MarketLib.MarketType"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "533:34:2"
+              "src": "534:33:2"
             },
-            "src": "507:145:2",
+            "src": "508:143:2",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 193,
+              "id": 159,
               "nodeType": "Block",
-              "src": "725:86:2",
+              "src": "723:85:2",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketStatus_$844",
-                          "typeString": "enum MarketUtil.MarketStatus"
+                          "typeIdentifier": "t_enum$_MarketStatus_$768",
+                          "typeString": "enum MarketLib.MarketStatus"
                         },
-                        "id": 189,
+                        "id": 155,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 185,
+                          "id": 151,
                           "name": "marketStatus",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 182,
-                          "src": "744:12:2",
+                          "referencedDeclaration": 148,
+                          "src": "742:12:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$844",
-                            "typeString": "enum MarketUtil.MarketStatus"
+                            "typeIdentifier": "t_enum$_MarketStatus_$768",
+                            "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
                         "nodeType": "BinaryOperation",
@@ -708,45 +708,45 @@
                         "rightExpression": {
                           "expression": {
                             "expression": {
-                              "id": 186,
-                              "name": "MarketUtil",
+                              "id": 152,
+                              "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 845,
-                              "src": "760:10:2",
+                              "referencedDeclaration": 769,
+                              "src": "758:9:2",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketUtil_$845_$",
-                                "typeString": "type(library MarketUtil)"
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$769_$",
+                                "typeString": "type(library MarketLib)"
                               }
                             },
-                            "id": 187,
+                            "id": 153,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "MarketStatus",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 844,
-                            "src": "760:23:2",
+                            "referencedDeclaration": 768,
+                            "src": "758:22:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$844_$",
-                              "typeString": "type(enum MarketUtil.MarketStatus)"
+                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$768_$",
+                              "typeString": "type(enum MarketLib.MarketStatus)"
                             }
                           },
-                          "id": 188,
+                          "id": 154,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "memberName": "PAUSED",
                           "nodeType": "MemberAccess",
-                          "src": "760:30:2",
+                          "src": "758:29:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$844",
-                            "typeString": "enum MarketUtil.MarketStatus"
+                            "typeIdentifier": "t_enum$_MarketStatus_$768",
+                            "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
-                        "src": "744:46:2",
+                        "src": "742:45:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -760,7 +760,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 184,
+                      "id": 150,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -768,13 +768,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "736:7:2",
+                      "src": "734:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 190,
+                    "id": 156,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -782,100 +782,100 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "736:55:2",
+                    "src": "734:54:2",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 191,
+                  "id": 157,
                   "nodeType": "ExpressionStatement",
-                  "src": "736:55:2"
+                  "src": "734:54:2"
                 },
                 {
-                  "id": 192,
+                  "id": 158,
                   "nodeType": "PlaceholderStatement",
-                  "src": "802:1:2"
+                  "src": "799:1:2"
                 }
               ]
             },
-            "id": 194,
+            "id": 160,
             "name": "onlyNotPausedState",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 183,
+              "id": 149,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 182,
+                  "id": 148,
                   "mutability": "mutable",
                   "name": "marketStatus",
                   "nodeType": "VariableDeclaration",
-                  "scope": 194,
-                  "src": "687:36:2",
+                  "scope": 160,
+                  "src": "686:35:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketStatus_$844",
-                    "typeString": "enum MarketUtil.MarketStatus"
+                    "typeIdentifier": "t_enum$_MarketStatus_$768",
+                    "typeString": "enum MarketLib.MarketStatus"
                   },
                   "typeName": {
-                    "id": 181,
+                    "id": 147,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 180,
-                      "name": "MarketUtil.MarketStatus",
+                      "id": 146,
+                      "name": "MarketLib.MarketStatus",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 844,
-                      "src": "687:23:2"
+                      "referencedDeclaration": 768,
+                      "src": "686:22:2"
                     },
-                    "referencedDeclaration": 844,
-                    "src": "687:23:2",
+                    "referencedDeclaration": 768,
+                    "src": "686:22:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketStatus_$844",
-                      "typeString": "enum MarketUtil.MarketStatus"
+                      "typeIdentifier": "t_enum$_MarketStatus_$768",
+                      "typeString": "enum MarketLib.MarketStatus"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "686:38:2"
+              "src": "685:37:2"
             },
-            "src": "659:152:2",
+            "src": "658:150:2",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 208,
+              "id": 174,
               "nodeType": "Block",
-              "src": "882:86:2",
+              "src": "878:85:2",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketStatus_$844",
-                          "typeString": "enum MarketUtil.MarketStatus"
+                          "typeIdentifier": "t_enum$_MarketStatus_$768",
+                          "typeString": "enum MarketLib.MarketStatus"
                         },
-                        "id": 204,
+                        "id": 170,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 200,
+                          "id": 166,
                           "name": "marketStatus",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 197,
-                          "src": "901:12:2",
+                          "referencedDeclaration": 163,
+                          "src": "897:12:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$844",
-                            "typeString": "enum MarketUtil.MarketStatus"
+                            "typeIdentifier": "t_enum$_MarketStatus_$768",
+                            "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
                         "nodeType": "BinaryOperation",
@@ -883,45 +883,45 @@
                         "rightExpression": {
                           "expression": {
                             "expression": {
-                              "id": 201,
-                              "name": "MarketUtil",
+                              "id": 167,
+                              "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 845,
-                              "src": "917:10:2",
+                              "referencedDeclaration": 769,
+                              "src": "913:9:2",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketUtil_$845_$",
-                                "typeString": "type(library MarketUtil)"
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$769_$",
+                                "typeString": "type(library MarketLib)"
                               }
                             },
-                            "id": 202,
+                            "id": 168,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "MarketStatus",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 844,
-                            "src": "917:23:2",
+                            "referencedDeclaration": 768,
+                            "src": "913:22:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$844_$",
-                              "typeString": "type(enum MarketUtil.MarketStatus)"
+                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$768_$",
+                              "typeString": "type(enum MarketLib.MarketStatus)"
                             }
                           },
-                          "id": 203,
+                          "id": 169,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "memberName": "ACTIVE",
                           "nodeType": "MemberAccess",
-                          "src": "917:30:2",
+                          "src": "913:29:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$844",
-                            "typeString": "enum MarketUtil.MarketStatus"
+                            "typeIdentifier": "t_enum$_MarketStatus_$768",
+                            "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
-                        "src": "901:46:2",
+                        "src": "897:45:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -935,7 +935,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 199,
+                      "id": 165,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -943,13 +943,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "893:7:2",
+                      "src": "889:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 205,
+                    "id": 171,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -957,94 +957,94 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "893:55:2",
+                    "src": "889:54:2",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 206,
+                  "id": 172,
                   "nodeType": "ExpressionStatement",
-                  "src": "893:55:2"
+                  "src": "889:54:2"
                 },
                 {
-                  "id": 207,
+                  "id": 173,
                   "nodeType": "PlaceholderStatement",
-                  "src": "959:1:2"
+                  "src": "954:1:2"
                 }
               ]
             },
-            "id": 209,
+            "id": 175,
             "name": "onlyPausedState",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 198,
+              "id": 164,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 197,
+                  "id": 163,
                   "mutability": "mutable",
                   "name": "marketStatus",
                   "nodeType": "VariableDeclaration",
-                  "scope": 209,
-                  "src": "844:36:2",
+                  "scope": 175,
+                  "src": "841:35:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketStatus_$844",
-                    "typeString": "enum MarketUtil.MarketStatus"
+                    "typeIdentifier": "t_enum$_MarketStatus_$768",
+                    "typeString": "enum MarketLib.MarketStatus"
                   },
                   "typeName": {
-                    "id": 196,
+                    "id": 162,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 195,
-                      "name": "MarketUtil.MarketStatus",
+                      "id": 161,
+                      "name": "MarketLib.MarketStatus",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 844,
-                      "src": "844:23:2"
+                      "referencedDeclaration": 768,
+                      "src": "841:22:2"
                     },
-                    "referencedDeclaration": 844,
-                    "src": "844:23:2",
+                    "referencedDeclaration": 768,
+                    "src": "841:22:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketStatus_$844",
-                      "typeString": "enum MarketUtil.MarketStatus"
+                      "typeIdentifier": "t_enum$_MarketStatus_$768",
+                      "typeString": "enum MarketLib.MarketStatus"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "843:38:2"
+              "src": "840:37:2"
             },
-            "src": "819:149:2",
+            "src": "816:147:2",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 211,
-        "src": "93:878:2"
+        "scope": 177,
+        "src": "96:870:2"
       }
     ],
-    "src": "33:938:2"
+    "src": "33:933:2"
   },
   "legacyAST": {
-    "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/control/Controllable.sol",
+    "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/control/Controllable.sol",
     "exportedSymbols": {
       "Controllable": [
-        210
+        176
       ],
-      "MarketUtil": [
-        845
+      "MarketLib": [
+        769
       ]
     },
-    "id": 211,
+    "id": 177,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 125,
+        "id": 91,
         "literals": [
           "solidity",
           "^",
@@ -1055,13 +1055,13 @@
         "src": "33:23:2"
       },
       {
-        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/Market.sol",
-        "file": "../libraries/Market.sol",
-        "id": 126,
+        "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol",
+        "file": "../libraries/MarketLib.sol",
+        "id": 92,
         "nodeType": "ImportDirective",
-        "scope": 211,
-        "sourceUnit": 846,
-        "src": "58:33:2",
+        "scope": 177,
+        "sourceUnit": 770,
+        "src": "58:36:2",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -1071,21 +1071,21 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 210,
+        "id": 176,
         "linearizedBaseContracts": [
-          210
+          176
         ],
         "name": "Controllable",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": false,
-            "id": 128,
+            "id": 94,
             "mutability": "mutable",
             "name": "_globalController",
             "nodeType": "VariableDeclaration",
-            "scope": 210,
-            "src": "121:33:2",
+            "scope": 176,
+            "src": "124:33:2",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1093,10 +1093,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 127,
+              "id": 93,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "121:7:2",
+              "src": "124:7:2",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1107,24 +1107,24 @@
           },
           {
             "body": {
-              "id": 136,
+              "id": 102,
               "nodeType": "Block",
-              "src": "175:48:2",
+              "src": "178:48:2",
               "statements": [
                 {
                   "expression": {
-                    "id": 134,
+                    "id": 100,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 131,
+                      "id": 97,
                       "name": "_globalController",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 128,
-                      "src": "185:17:2",
+                      "referencedDeclaration": 94,
+                      "src": "188:17:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
                         "typeString": "address"
@@ -1134,71 +1134,71 @@
                     "operator": "=",
                     "rightHandSide": {
                       "expression": {
-                        "id": 132,
+                        "id": 98,
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
                         "referencedDeclaration": 4294967281,
-                        "src": "205:3:2",
+                        "src": "208:3:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
                           "typeString": "msg"
                         }
                       },
-                      "id": 133,
+                      "id": 99,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "sender",
                       "nodeType": "MemberAccess",
-                      "src": "205:10:2",
+                      "src": "208:10:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
                         "typeString": "address"
                       }
                     },
-                    "src": "185:30:2",
+                    "src": "188:30:2",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "id": 135,
+                  "id": 101,
                   "nodeType": "ExpressionStatement",
-                  "src": "185:30:2"
+                  "src": "188:30:2"
                 }
               ]
             },
-            "id": 137,
+            "id": 103,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 129,
+              "id": 95,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "172:2:2"
+              "src": "175:2:2"
             },
             "returnParameters": {
-              "id": 130,
+              "id": 96,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "175:0:2"
+              "src": "178:0:2"
             },
-            "scope": 210,
-            "src": "161:62:2",
+            "scope": 176,
+            "src": "164:62:2",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 148,
+              "id": 114,
               "nodeType": "Block",
-              "src": "279:70:2",
+              "src": "282:70:2",
               "statements": [
                 {
                   "expression": {
@@ -1208,18 +1208,18 @@
                           "typeIdentifier": "t_address",
                           "typeString": "address"
                         },
-                        "id": 144,
+                        "id": 110,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 142,
+                          "id": 108,
                           "name": "requester",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 139,
-                          "src": "298:9:2",
+                          "referencedDeclaration": 105,
+                          "src": "301:9:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
@@ -1228,18 +1228,18 @@
                         "nodeType": "BinaryOperation",
                         "operator": "==",
                         "rightExpression": {
-                          "id": 143,
+                          "id": 109,
                           "name": "_globalController",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 128,
-                          "src": "311:17:2",
+                          "referencedDeclaration": 94,
+                          "src": "314:17:2",
                           "typeDescriptions": {
                             "typeIdentifier": "t_address",
                             "typeString": "address"
                           }
                         },
-                        "src": "298:30:2",
+                        "src": "301:30:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1253,7 +1253,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 141,
+                      "id": 107,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1261,13 +1261,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "290:7:2",
+                      "src": "293:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 145,
+                    "id": 111,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1275,39 +1275,39 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "290:39:2",
+                    "src": "293:39:2",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 146,
+                  "id": 112,
                   "nodeType": "ExpressionStatement",
-                  "src": "290:39:2"
+                  "src": "293:39:2"
                 },
                 {
-                  "id": 147,
+                  "id": 113,
                   "nodeType": "PlaceholderStatement",
-                  "src": "340:1:2"
+                  "src": "343:1:2"
                 }
               ]
             },
-            "id": 149,
+            "id": 115,
             "name": "onlyGlobalController",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 140,
+              "id": 106,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 139,
+                  "id": 105,
                   "mutability": "mutable",
                   "name": "requester",
                   "nodeType": "VariableDeclaration",
-                  "scope": 149,
-                  "src": "260:17:2",
+                  "scope": 115,
+                  "src": "263:17:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1315,10 +1315,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 138,
+                    "id": 104,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "260:7:2",
+                    "src": "263:7:2",
                     "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -1328,41 +1328,41 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "259:19:2"
+              "src": "262:19:2"
             },
-            "src": "230:119:2",
+            "src": "233:119:2",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 163,
+              "id": 129,
               "nodeType": "Block",
-              "src": "418:82:2",
+              "src": "420:81:2",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketType_$841",
-                          "typeString": "enum MarketUtil.MarketType"
+                          "typeIdentifier": "t_enum$_MarketType_$765",
+                          "typeString": "enum MarketLib.MarketType"
                         },
-                        "id": 159,
+                        "id": 125,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 155,
+                          "id": 121,
                           "name": "marketType",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 152,
-                          "src": "437:10:2",
+                          "referencedDeclaration": 118,
+                          "src": "439:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$841",
-                            "typeString": "enum MarketUtil.MarketType"
+                            "typeIdentifier": "t_enum$_MarketType_$765",
+                            "typeString": "enum MarketLib.MarketType"
                           }
                         },
                         "nodeType": "BinaryOperation",
@@ -1370,45 +1370,45 @@
                         "rightExpression": {
                           "expression": {
                             "expression": {
-                              "id": 156,
-                              "name": "MarketUtil",
+                              "id": 122,
+                              "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 845,
-                              "src": "451:10:2",
+                              "referencedDeclaration": 769,
+                              "src": "453:9:2",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketUtil_$845_$",
-                                "typeString": "type(library MarketUtil)"
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$769_$",
+                                "typeString": "type(library MarketLib)"
                               }
                             },
-                            "id": 157,
+                            "id": 123,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "MarketType",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 841,
-                            "src": "451:21:2",
+                            "referencedDeclaration": 765,
+                            "src": "453:20:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketType_$841_$",
-                              "typeString": "type(enum MarketUtil.MarketType)"
+                              "typeIdentifier": "t_type$_t_enum$_MarketType_$765_$",
+                              "typeString": "type(enum MarketLib.MarketType)"
                             }
                           },
-                          "id": 158,
+                          "id": 124,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "memberName": "DEFAULT",
                           "nodeType": "MemberAccess",
-                          "src": "451:29:2",
+                          "src": "453:28:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$841",
-                            "typeString": "enum MarketUtil.MarketType"
+                            "typeIdentifier": "t_enum$_MarketType_$765",
+                            "typeString": "enum MarketLib.MarketType"
                           }
                         },
-                        "src": "437:43:2",
+                        "src": "439:42:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1422,7 +1422,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 154,
+                      "id": 120,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1430,13 +1430,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "429:7:2",
+                      "src": "431:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 160,
+                    "id": 126,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1444,100 +1444,100 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "429:52:2",
+                    "src": "431:51:2",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 161,
+                  "id": 127,
                   "nodeType": "ExpressionStatement",
-                  "src": "429:52:2"
+                  "src": "431:51:2"
                 },
                 {
-                  "id": 162,
+                  "id": 128,
                   "nodeType": "PlaceholderStatement",
-                  "src": "491:1:2"
+                  "src": "492:1:2"
                 }
               ]
             },
-            "id": 164,
+            "id": 130,
             "name": "onlyDefaultMarkets",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 153,
+              "id": 119,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 152,
+                  "id": 118,
                   "mutability": "mutable",
                   "name": "marketType",
                   "nodeType": "VariableDeclaration",
-                  "scope": 164,
-                  "src": "384:32:2",
+                  "scope": 130,
+                  "src": "387:31:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketType_$841",
-                    "typeString": "enum MarketUtil.MarketType"
+                    "typeIdentifier": "t_enum$_MarketType_$765",
+                    "typeString": "enum MarketLib.MarketType"
                   },
                   "typeName": {
-                    "id": 151,
+                    "id": 117,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 150,
-                      "name": "MarketUtil.MarketType",
+                      "id": 116,
+                      "name": "MarketLib.MarketType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 841,
-                      "src": "384:21:2"
+                      "referencedDeclaration": 765,
+                      "src": "387:20:2"
                     },
-                    "referencedDeclaration": 841,
-                    "src": "384:21:2",
+                    "referencedDeclaration": 765,
+                    "src": "387:20:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketType_$841",
-                      "typeString": "enum MarketUtil.MarketType"
+                      "typeIdentifier": "t_enum$_MarketType_$765",
+                      "typeString": "enum MarketLib.MarketType"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "383:34:2"
+              "src": "386:33:2"
             },
-            "src": "356:144:2",
+            "src": "359:142:2",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 178,
+              "id": 144,
               "nodeType": "Block",
-              "src": "568:84:2",
+              "src": "568:83:2",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketType_$841",
-                          "typeString": "enum MarketUtil.MarketType"
+                          "typeIdentifier": "t_enum$_MarketType_$765",
+                          "typeString": "enum MarketLib.MarketType"
                         },
-                        "id": 174,
+                        "id": 140,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 170,
+                          "id": 136,
                           "name": "marketType",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 167,
+                          "referencedDeclaration": 133,
                           "src": "588:10:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$841",
-                            "typeString": "enum MarketUtil.MarketType"
+                            "typeIdentifier": "t_enum$_MarketType_$765",
+                            "typeString": "enum MarketLib.MarketType"
                           }
                         },
                         "nodeType": "BinaryOperation",
@@ -1545,45 +1545,45 @@
                         "rightExpression": {
                           "expression": {
                             "expression": {
-                              "id": 171,
-                              "name": "MarketUtil",
+                              "id": 137,
+                              "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 845,
-                              "src": "602:10:2",
+                              "referencedDeclaration": 769,
+                              "src": "602:9:2",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketUtil_$845_$",
-                                "typeString": "type(library MarketUtil)"
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$769_$",
+                                "typeString": "type(library MarketLib)"
                               }
                             },
-                            "id": 172,
+                            "id": 138,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "MarketType",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 841,
-                            "src": "602:21:2",
+                            "referencedDeclaration": 765,
+                            "src": "602:20:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketType_$841_$",
-                              "typeString": "type(enum MarketUtil.MarketType)"
+                              "typeIdentifier": "t_type$_t_enum$_MarketType_$765_$",
+                              "typeString": "type(enum MarketLib.MarketType)"
                             }
                           },
-                          "id": 173,
+                          "id": 139,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "memberName": "CREATED",
                           "nodeType": "MemberAccess",
-                          "src": "602:29:2",
+                          "src": "602:28:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$841",
-                            "typeString": "enum MarketUtil.MarketType"
+                            "typeIdentifier": "t_enum$_MarketType_$765",
+                            "typeString": "enum MarketLib.MarketType"
                           }
                         },
-                        "src": "588:43:2",
+                        "src": "588:42:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1597,7 +1597,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 169,
+                      "id": 135,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1611,7 +1611,7 @@
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 175,
+                    "id": 141,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1619,100 +1619,100 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "580:52:2",
+                    "src": "580:51:2",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 176,
+                  "id": 142,
                   "nodeType": "ExpressionStatement",
-                  "src": "580:52:2"
+                  "src": "580:51:2"
                 },
                 {
-                  "id": 177,
+                  "id": 143,
                   "nodeType": "PlaceholderStatement",
-                  "src": "643:1:2"
+                  "src": "642:1:2"
                 }
               ]
             },
-            "id": 179,
+            "id": 145,
             "name": "onlyCustomMarkets",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 168,
+              "id": 134,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 167,
+                  "id": 133,
                   "mutability": "mutable",
                   "name": "marketType",
                   "nodeType": "VariableDeclaration",
-                  "scope": 179,
-                  "src": "534:32:2",
+                  "scope": 145,
+                  "src": "535:31:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketType_$841",
-                    "typeString": "enum MarketUtil.MarketType"
+                    "typeIdentifier": "t_enum$_MarketType_$765",
+                    "typeString": "enum MarketLib.MarketType"
                   },
                   "typeName": {
-                    "id": 166,
+                    "id": 132,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 165,
-                      "name": "MarketUtil.MarketType",
+                      "id": 131,
+                      "name": "MarketLib.MarketType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 841,
-                      "src": "534:21:2"
+                      "referencedDeclaration": 765,
+                      "src": "535:20:2"
                     },
-                    "referencedDeclaration": 841,
-                    "src": "534:21:2",
+                    "referencedDeclaration": 765,
+                    "src": "535:20:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketType_$841",
-                      "typeString": "enum MarketUtil.MarketType"
+                      "typeIdentifier": "t_enum$_MarketType_$765",
+                      "typeString": "enum MarketLib.MarketType"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "533:34:2"
+              "src": "534:33:2"
             },
-            "src": "507:145:2",
+            "src": "508:143:2",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 193,
+              "id": 159,
               "nodeType": "Block",
-              "src": "725:86:2",
+              "src": "723:85:2",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketStatus_$844",
-                          "typeString": "enum MarketUtil.MarketStatus"
+                          "typeIdentifier": "t_enum$_MarketStatus_$768",
+                          "typeString": "enum MarketLib.MarketStatus"
                         },
-                        "id": 189,
+                        "id": 155,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 185,
+                          "id": 151,
                           "name": "marketStatus",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 182,
-                          "src": "744:12:2",
+                          "referencedDeclaration": 148,
+                          "src": "742:12:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$844",
-                            "typeString": "enum MarketUtil.MarketStatus"
+                            "typeIdentifier": "t_enum$_MarketStatus_$768",
+                            "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
                         "nodeType": "BinaryOperation",
@@ -1720,45 +1720,45 @@
                         "rightExpression": {
                           "expression": {
                             "expression": {
-                              "id": 186,
-                              "name": "MarketUtil",
+                              "id": 152,
+                              "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 845,
-                              "src": "760:10:2",
+                              "referencedDeclaration": 769,
+                              "src": "758:9:2",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketUtil_$845_$",
-                                "typeString": "type(library MarketUtil)"
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$769_$",
+                                "typeString": "type(library MarketLib)"
                               }
                             },
-                            "id": 187,
+                            "id": 153,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "MarketStatus",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 844,
-                            "src": "760:23:2",
+                            "referencedDeclaration": 768,
+                            "src": "758:22:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$844_$",
-                              "typeString": "type(enum MarketUtil.MarketStatus)"
+                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$768_$",
+                              "typeString": "type(enum MarketLib.MarketStatus)"
                             }
                           },
-                          "id": 188,
+                          "id": 154,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "memberName": "PAUSED",
                           "nodeType": "MemberAccess",
-                          "src": "760:30:2",
+                          "src": "758:29:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$844",
-                            "typeString": "enum MarketUtil.MarketStatus"
+                            "typeIdentifier": "t_enum$_MarketStatus_$768",
+                            "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
-                        "src": "744:46:2",
+                        "src": "742:45:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1772,7 +1772,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 184,
+                      "id": 150,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1780,13 +1780,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "736:7:2",
+                      "src": "734:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 190,
+                    "id": 156,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1794,100 +1794,100 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "736:55:2",
+                    "src": "734:54:2",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 191,
+                  "id": 157,
                   "nodeType": "ExpressionStatement",
-                  "src": "736:55:2"
+                  "src": "734:54:2"
                 },
                 {
-                  "id": 192,
+                  "id": 158,
                   "nodeType": "PlaceholderStatement",
-                  "src": "802:1:2"
+                  "src": "799:1:2"
                 }
               ]
             },
-            "id": 194,
+            "id": 160,
             "name": "onlyNotPausedState",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 183,
+              "id": 149,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 182,
+                  "id": 148,
                   "mutability": "mutable",
                   "name": "marketStatus",
                   "nodeType": "VariableDeclaration",
-                  "scope": 194,
-                  "src": "687:36:2",
+                  "scope": 160,
+                  "src": "686:35:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketStatus_$844",
-                    "typeString": "enum MarketUtil.MarketStatus"
+                    "typeIdentifier": "t_enum$_MarketStatus_$768",
+                    "typeString": "enum MarketLib.MarketStatus"
                   },
                   "typeName": {
-                    "id": 181,
+                    "id": 147,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 180,
-                      "name": "MarketUtil.MarketStatus",
+                      "id": 146,
+                      "name": "MarketLib.MarketStatus",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 844,
-                      "src": "687:23:2"
+                      "referencedDeclaration": 768,
+                      "src": "686:22:2"
                     },
-                    "referencedDeclaration": 844,
-                    "src": "687:23:2",
+                    "referencedDeclaration": 768,
+                    "src": "686:22:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketStatus_$844",
-                      "typeString": "enum MarketUtil.MarketStatus"
+                      "typeIdentifier": "t_enum$_MarketStatus_$768",
+                      "typeString": "enum MarketLib.MarketStatus"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "686:38:2"
+              "src": "685:37:2"
             },
-            "src": "659:152:2",
+            "src": "658:150:2",
             "virtual": false,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 208,
+              "id": 174,
               "nodeType": "Block",
-              "src": "882:86:2",
+              "src": "878:85:2",
               "statements": [
                 {
                   "expression": {
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketStatus_$844",
-                          "typeString": "enum MarketUtil.MarketStatus"
+                          "typeIdentifier": "t_enum$_MarketStatus_$768",
+                          "typeString": "enum MarketLib.MarketStatus"
                         },
-                        "id": 204,
+                        "id": 170,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
                         "lValueRequested": false,
                         "leftExpression": {
-                          "id": 200,
+                          "id": 166,
                           "name": "marketStatus",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 197,
-                          "src": "901:12:2",
+                          "referencedDeclaration": 163,
+                          "src": "897:12:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$844",
-                            "typeString": "enum MarketUtil.MarketStatus"
+                            "typeIdentifier": "t_enum$_MarketStatus_$768",
+                            "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
                         "nodeType": "BinaryOperation",
@@ -1895,45 +1895,45 @@
                         "rightExpression": {
                           "expression": {
                             "expression": {
-                              "id": 201,
-                              "name": "MarketUtil",
+                              "id": 167,
+                              "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 845,
-                              "src": "917:10:2",
+                              "referencedDeclaration": 769,
+                              "src": "913:9:2",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketUtil_$845_$",
-                                "typeString": "type(library MarketUtil)"
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$769_$",
+                                "typeString": "type(library MarketLib)"
                               }
                             },
-                            "id": 202,
+                            "id": 168,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
                             "lValueRequested": false,
                             "memberName": "MarketStatus",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 844,
-                            "src": "917:23:2",
+                            "referencedDeclaration": 768,
+                            "src": "913:22:2",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$844_$",
-                              "typeString": "type(enum MarketUtil.MarketStatus)"
+                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$768_$",
+                              "typeString": "type(enum MarketLib.MarketStatus)"
                             }
                           },
-                          "id": 203,
+                          "id": 169,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
                           "lValueRequested": false,
                           "memberName": "ACTIVE",
                           "nodeType": "MemberAccess",
-                          "src": "917:30:2",
+                          "src": "913:29:2",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$844",
-                            "typeString": "enum MarketUtil.MarketStatus"
+                            "typeIdentifier": "t_enum$_MarketStatus_$768",
+                            "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
-                        "src": "901:46:2",
+                        "src": "897:45:2",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1947,7 +1947,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 199,
+                      "id": 165,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -1955,13 +1955,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "893:7:2",
+                      "src": "889:7:2",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 205,
+                    "id": 171,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1969,85 +1969,93 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "893:55:2",
+                    "src": "889:54:2",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 206,
+                  "id": 172,
                   "nodeType": "ExpressionStatement",
-                  "src": "893:55:2"
+                  "src": "889:54:2"
                 },
                 {
-                  "id": 207,
+                  "id": 173,
                   "nodeType": "PlaceholderStatement",
-                  "src": "959:1:2"
+                  "src": "954:1:2"
                 }
               ]
             },
-            "id": 209,
+            "id": 175,
             "name": "onlyPausedState",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 198,
+              "id": 164,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 197,
+                  "id": 163,
                   "mutability": "mutable",
                   "name": "marketStatus",
                   "nodeType": "VariableDeclaration",
-                  "scope": 209,
-                  "src": "844:36:2",
+                  "scope": 175,
+                  "src": "841:35:2",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketStatus_$844",
-                    "typeString": "enum MarketUtil.MarketStatus"
+                    "typeIdentifier": "t_enum$_MarketStatus_$768",
+                    "typeString": "enum MarketLib.MarketStatus"
                   },
                   "typeName": {
-                    "id": 196,
+                    "id": 162,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 195,
-                      "name": "MarketUtil.MarketStatus",
+                      "id": 161,
+                      "name": "MarketLib.MarketStatus",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 844,
-                      "src": "844:23:2"
+                      "referencedDeclaration": 768,
+                      "src": "841:22:2"
                     },
-                    "referencedDeclaration": 844,
-                    "src": "844:23:2",
+                    "referencedDeclaration": 768,
+                    "src": "841:22:2",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketStatus_$844",
-                      "typeString": "enum MarketUtil.MarketStatus"
+                      "typeIdentifier": "t_enum$_MarketStatus_$768",
+                      "typeString": "enum MarketLib.MarketStatus"
                     }
                   },
                   "visibility": "internal"
                 }
               ],
-              "src": "843:38:2"
+              "src": "840:37:2"
             },
-            "src": "819:149:2",
+            "src": "816:147:2",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 211,
-        "src": "93:878:2"
+        "scope": 177,
+        "src": "96:870:2"
       }
     ],
-    "src": "33:938:2"
+    "src": "33:933:2"
   },
   "compiler": {
     "name": "solc",
     "version": "0.8.0+commit.c7dfd78e.Emscripten.clang"
   },
-  "networks": {},
-  "schemaVersion": "3.3.4",
-  "updatedAt": "2021-04-28T01:58:47.282Z",
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0xB6f17481Bad938157B237c5352832838B72612CC",
+      "transactionHash": "0x677892d94d22ed6d53982a8404e0983dfc8ebe1b5f7576a264e99fcf6853657d"
+    }
+  },
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-05-18T01:40:26.882Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

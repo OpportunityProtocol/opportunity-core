@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-library MarketUtil {
+library MarketLib {
     enum MarketType { 
         DEFAULT,
         CREATED

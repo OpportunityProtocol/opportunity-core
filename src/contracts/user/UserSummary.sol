@@ -3,9 +3,6 @@
 pragma solidity ^0.8.0;
 
 import "./interface/IUserSummary.sol";
-import "../market/Market.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-
 
 contract UserSummary is IUserSummary {
     event UserSummaryUpdate(string uniqueHash);

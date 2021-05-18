@@ -6,31 +6,28 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "../libraries/Evaluation.sol";
 import "../exchange/WorkRelationship.sol";
-import "../libraries/Market.sol";
+import "../libraries/MarketLib.sol";
 import "../control/Controllable.sol";
 
 contract Market is Ownable, Controllable, Pausable {
-event MarketCreated(address indexed marketAddress, address indexed owner, uint256 requiredReputation, uint256 requiredIndustryWeight);
-event MarketDestroyed(address indexed marketAddress, address indexed owner);
 event MarketObservingRelationship(address indexed marketAddress, string indexed marketName, address indexed workRelationship);
 event MarketUnObservingRelationship(address indexed marketAddress, string indexed marketName, address indexed workRelationship);
 event MarketPaused(address indexed marketAddress, string indexed marketName);
 event MarketResumed(address indexed marketAddress, string indexed marketName);
 
-string private _marketName;
-MarketUtil.MarketType private _marketType;
-uint256 private _requiredReputation;
-uint256 private _requiredIndustryWeight;
-MarketUtil.MarketStatus private _marketStatus;
+string public _marketName;
+MarketLib.MarketType public _marketType;
+uint256 public _requiredReputation;
+uint256 public _requiredIndustryWeight;
+MarketLib.MarketStatus public _marketStatus;
 
 address[] private _workRelationships;
 
-constructor(string memory marketName, MarketUtil.MarketType marketType, uint256 requiredReputation, uint256 requiredIndustryWeight) {
+constructor(string memory marketName, MarketLib.MarketType marketType) {
     _marketName = marketName;
     _marketType = marketType;
-    _requiredReputation = requiredReputation;
-    _requiredIndustryWeight = requiredIndustryWeight;
-    emit MarketCreated(address(this), owner(), requiredReputation, requiredIndustryWeight);
+   // _requiredReputation = requiredReputation;
+   // _requiredIndustryWeight = requiredIndustryWeight;
 }
 
 function addRelationship(address newRelationship) external {
@@ -47,12 +44,11 @@ function resumeMarket() external onlyOwner onlyGlobalController(msg.sender) only
     _unpause();
 }
 
-function getMarketState() public returns(bool) {
-    return paused();
-}
+function getMarketState() public view returns(bool) { return paused(); }
+
+function getWorkRelationships() external view returns(address[] memory) { return _workRelationships; }
 
 function destroyMarket() internal onlyOwner {
-    emit MarketDestroyed(address(this), owner());
     //selfdestruct(); 
-    }
+}
 }

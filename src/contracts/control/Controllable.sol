@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "../libraries/Market.sol";
+import "../libraries/MarketLib.sol";
 
 contract Controllable {
     address private _globalController;
@@ -16,23 +16,23 @@ contract Controllable {
          _;
      }
 
-     modifier onlyDefaultMarkets(MarketUtil.MarketType marketType) {
-         require(marketType == MarketUtil.MarketType.DEFAULT);
+     modifier onlyDefaultMarkets(MarketLib.MarketType marketType) {
+         require(marketType == MarketLib.MarketType.DEFAULT);
         _;
      }
 
-     modifier onlyCustomMarkets(MarketUtil.MarketType marketType) {
-          require(marketType == MarketUtil.MarketType.CREATED);
+     modifier onlyCustomMarkets(MarketLib.MarketType marketType) {
+          require(marketType == MarketLib.MarketType.CREATED);
          _;
      }
 
-     modifier onlyNotPausedState(MarketUtil.MarketStatus marketStatus) {
-         require(marketStatus != MarketUtil.MarketStatus.PAUSED);
+     modifier onlyNotPausedState(MarketLib.MarketStatus marketStatus) {
+         require(marketStatus != MarketLib.MarketStatus.PAUSED);
          _;
      }
 
-      modifier onlyPausedState(MarketUtil.MarketStatus marketStatus) {
-         require(marketStatus == MarketUtil.MarketStatus.ACTIVE);
+      modifier onlyPausedState(MarketLib.MarketStatus marketStatus) {
+         require(marketStatus == MarketLib.MarketStatus.ACTIVE);
          _;
      }
 

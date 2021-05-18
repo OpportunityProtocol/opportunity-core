@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/escrow/RefundEscrow.sol";
-import "../TimeLocked.sol";
 import "./MultiPartyOwneable.sol";
 
 /**
@@ -13,7 +12,7 @@ import "./MultiPartyOwneable.sol";
  * contract.
  * Note: Created for every job acceptance.
  */
-contract WorkExchange is MultiPartyOwneable/*, TimeLocked*/ {
+contract WorkExchange is MultiPartyOwneable {
     using SafeMath for uint256;
 
     event WorkerSentSolution();

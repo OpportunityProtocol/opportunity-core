@@ -5,7 +5,6 @@ pragma solidity ^0.8.0;
 import "./WorkExchange.sol";
 import "../user/UserSummary.sol";
 import "../libraries/Evaluation.sol";
-import "../libraries/Market.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract WorkRelationship is Ownable {
@@ -13,11 +12,17 @@ contract WorkRelationship is Ownable {
     event WorkRelationshipEnded(address indexed owner, address indexed relationship);
 
     // Status of the current contract
-    Evaluation.WorkRelationshipState private _contractStatus;
+    Evaluation.WorkRelationshipState public _contractStatus;
+    address public _workExchangeAddress;
+    string public _contractTaskName;
     // Task solution pointer
     string private _taskPointer = "";
 
-    constructor(address payable newWorker, Evaluation.EvaluationState memory evaluationState, bool isTimeLocked) {
+    constructor(string memory taskName) {
+        _contractTaskName = taskName;
+    }
+
+    function assignNewWorker(address payable newWorker, Evaluation.EvaluationState memory evaluationState, bool isTimeLocked) external onlyOwner {
         bool passesEvaluation = checkWorkerEvaluation(newWorker, evaluationState);
         require(passesEvaluation == true);
 
@@ -25,8 +30,9 @@ contract WorkRelationship is Ownable {
         emit WorkRelationshipCreated(owner(), address(this));
     }
 
-    function createWorkExchange(address payable workerBeneficiary, bool isTimeLocked) external {
+    function createWorkExchange(address payable workerBeneficiary, bool isTimeLocked) external onlyOwner {
         WorkExchange workExchange = new WorkExchange(payable(owner()), workerBeneficiary, isTimeLocked);
+        _workExchangeAddress = address(workExchange);
     }
 
     function checkWorkerEvaluation(address workerUniversalAddress, Evaluation.EvaluationState memory evaluationState) internal returns(bool) {
@@ -40,7 +46,7 @@ contract WorkRelationship is Ownable {
         //selfdestruct();
     }
 
-    function updateTaskPointer(string memory newTaskPointerHash) external {
+    function updateTaskPointer(string memory newTaskPointerHash) external onlyOwner {
         _taskPointer = newTaskPointerHash;
     }
 
