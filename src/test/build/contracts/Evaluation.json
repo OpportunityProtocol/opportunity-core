@@ -1,15 +1,15 @@
 {
   "contractName": "Evaluation",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":\"Evaluation\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":{\"keccak256\":\"0xf2825b061136ece59f2f45b05dac7c0d1fd03b3a7bc267440ec78bc212bd36b8\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ebd01f95d61a48dc61d0edec2d17c4106631732059ad7ebd0f88a5b41bd4ab3e\",\"dweb:/ipfs/QmYtiK47cr8duutw5dshpgXp5ETVvUgphpEx7H4RZqhsJC\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220918dd9eb428e7243e25810bfc72d888c0f8c317abd187b1ab9739e215da8ffec64736f6c63430008000033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220918dd9eb428e7243e25810bfc72d888c0f8c317abd187b1ab9739e215da8ffec64736f6c63430008000033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":\"Evaluation\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":{\"keccak256\":\"0x776820da1dd3be1e3fa8fa8379e29fe9c132fcba75246579dc6b6ce091d5e268\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5091010fb1ded2819aa4d48b1fd615325e0ca2d30d394158709db432f7cbd45b\",\"dweb:/ipfs/QmXPUSwR74rMeDvUx4aNvYi6JKv992MvPkktNDSxTr7Ryt\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122054cdfd86c5d5473c4034aea8db09a3dfabd35f4dabcf22f3a49b12204451f45064736f6c63430008040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122054cdfd86c5d5473c4034aea8db09a3dfabd35f4dabcf22f3a49b12204451f45064736f6c63430008040033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "58:317:7:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "58:317:7:-:0;;;;;;;;",
-  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\nlibrary Evaluation {\n    struct EvaluationState {\n        string industry;\n        uint256 industrylevel;\n        uint256 reputation;\n    }\n\n    enum WorkRelationshipState { \n        UNCLAIMED,\n        PENDING,\n        PENDING_DISPUTE,\n        CANCELLED,\n        COMPLETED,\n        EVALUATING,\n        CLAIMED\n    }\n}",
+  "sourceMap": "57:317:7:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "57:317:7:-:0;;;;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.8.4;\n\nlibrary Evaluation {\n    struct EvaluationState {\n        string industry;\n        uint256 industrylevel;\n        uint256 reputation;\n    }\n\n    enum WorkRelationshipState { \n        UNCLAIMED,\n        PENDING,\n        PENDING_DISPUTE,\n        CANCELLED,\n        COMPLETED,\n        EVALUATING,\n        CLAIMED\n    }\n}",
   "sourcePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
   "ast": {
     "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
@@ -26,12 +26,11 @@
         "id": 744,
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".0"
+          ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:7"
+        "src": "33:22:7"
       },
       {
         "abstract": false,
@@ -44,6 +43,7 @@
           760
         ],
         "name": "Evaluation",
+        "nameLocation": "65:10:7",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
@@ -55,9 +55,10 @@
                 "id": 746,
                 "mutability": "mutable",
                 "name": "industry",
+                "nameLocation": "122:8:7",
                 "nodeType": "VariableDeclaration",
                 "scope": 751,
-                "src": "116:15:7",
+                "src": "115:15:7",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -68,7 +69,7 @@
                   "id": 745,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "116:6:7",
+                  "src": "115:6:7",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -81,9 +82,10 @@
                 "id": 748,
                 "mutability": "mutable",
                 "name": "industrylevel",
+                "nameLocation": "148:13:7",
                 "nodeType": "VariableDeclaration",
                 "scope": 751,
-                "src": "141:21:7",
+                "src": "140:21:7",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -94,7 +96,7 @@
                   "id": 747,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "141:7:7",
+                  "src": "140:7:7",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -107,9 +109,10 @@
                 "id": 750,
                 "mutability": "mutable",
                 "name": "reputation",
+                "nameLocation": "179:10:7",
                 "nodeType": "VariableDeclaration",
                 "scope": 751,
-                "src": "172:18:7",
+                "src": "171:18:7",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -120,7 +123,7 @@
                   "id": 749,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "172:7:7",
+                  "src": "171:7:7",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -130,9 +133,10 @@
               }
             ],
             "name": "EvaluationState",
+            "nameLocation": "89:15:7",
             "nodeType": "StructDefinition",
             "scope": 760,
-            "src": "83:114:7",
+            "src": "82:114:7",
             "visibility": "public"
           },
           {
@@ -142,56 +146,65 @@
               {
                 "id": 752,
                 "name": "UNCLAIMED",
+                "nameLocation": "240:9:7",
                 "nodeType": "EnumValue",
-                "src": "241:9:7"
+                "src": "240:9:7"
               },
               {
                 "id": 753,
                 "name": "PENDING",
+                "nameLocation": "259:7:7",
                 "nodeType": "EnumValue",
-                "src": "260:7:7"
+                "src": "259:7:7"
               },
               {
                 "id": 754,
                 "name": "PENDING_DISPUTE",
+                "nameLocation": "276:15:7",
                 "nodeType": "EnumValue",
-                "src": "277:15:7"
+                "src": "276:15:7"
               },
               {
                 "id": 755,
                 "name": "CANCELLED",
+                "nameLocation": "301:9:7",
                 "nodeType": "EnumValue",
-                "src": "302:9:7"
+                "src": "301:9:7"
               },
               {
                 "id": 756,
                 "name": "COMPLETED",
+                "nameLocation": "320:9:7",
                 "nodeType": "EnumValue",
-                "src": "321:9:7"
+                "src": "320:9:7"
               },
               {
                 "id": 757,
                 "name": "EVALUATING",
+                "nameLocation": "339:10:7",
                 "nodeType": "EnumValue",
-                "src": "340:10:7"
+                "src": "339:10:7"
               },
               {
                 "id": 758,
                 "name": "CLAIMED",
+                "nameLocation": "359:7:7",
                 "nodeType": "EnumValue",
-                "src": "360:7:7"
+                "src": "359:7:7"
               }
             ],
             "name": "WorkRelationshipState",
+            "nameLocation": "207:21:7",
             "nodeType": "EnumDefinition",
-            "src": "203:170:7"
+            "src": "202:170:7"
           }
         ],
         "scope": 761,
-        "src": "58:317:7"
+        "src": "57:317:7",
+        "usedErrors": []
       }
     ],
-    "src": "33:342:7"
+    "src": "33:341:7"
   },
   "legacyAST": {
     "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
@@ -208,12 +221,11 @@
         "id": 744,
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".0"
+          ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:7"
+        "src": "33:22:7"
       },
       {
         "abstract": false,
@@ -226,6 +238,7 @@
           760
         ],
         "name": "Evaluation",
+        "nameLocation": "65:10:7",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
@@ -237,9 +250,10 @@
                 "id": 746,
                 "mutability": "mutable",
                 "name": "industry",
+                "nameLocation": "122:8:7",
                 "nodeType": "VariableDeclaration",
                 "scope": 751,
-                "src": "116:15:7",
+                "src": "115:15:7",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -250,7 +264,7 @@
                   "id": 745,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "116:6:7",
+                  "src": "115:6:7",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -263,9 +277,10 @@
                 "id": 748,
                 "mutability": "mutable",
                 "name": "industrylevel",
+                "nameLocation": "148:13:7",
                 "nodeType": "VariableDeclaration",
                 "scope": 751,
-                "src": "141:21:7",
+                "src": "140:21:7",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -276,7 +291,7 @@
                   "id": 747,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "141:7:7",
+                  "src": "140:7:7",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -289,9 +304,10 @@
                 "id": 750,
                 "mutability": "mutable",
                 "name": "reputation",
+                "nameLocation": "179:10:7",
                 "nodeType": "VariableDeclaration",
                 "scope": 751,
-                "src": "172:18:7",
+                "src": "171:18:7",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -302,7 +318,7 @@
                   "id": 749,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
-                  "src": "172:7:7",
+                  "src": "171:7:7",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -312,9 +328,10 @@
               }
             ],
             "name": "EvaluationState",
+            "nameLocation": "89:15:7",
             "nodeType": "StructDefinition",
             "scope": 760,
-            "src": "83:114:7",
+            "src": "82:114:7",
             "visibility": "public"
           },
           {
@@ -324,71 +341,80 @@
               {
                 "id": 752,
                 "name": "UNCLAIMED",
+                "nameLocation": "240:9:7",
                 "nodeType": "EnumValue",
-                "src": "241:9:7"
+                "src": "240:9:7"
               },
               {
                 "id": 753,
                 "name": "PENDING",
+                "nameLocation": "259:7:7",
                 "nodeType": "EnumValue",
-                "src": "260:7:7"
+                "src": "259:7:7"
               },
               {
                 "id": 754,
                 "name": "PENDING_DISPUTE",
+                "nameLocation": "276:15:7",
                 "nodeType": "EnumValue",
-                "src": "277:15:7"
+                "src": "276:15:7"
               },
               {
                 "id": 755,
                 "name": "CANCELLED",
+                "nameLocation": "301:9:7",
                 "nodeType": "EnumValue",
-                "src": "302:9:7"
+                "src": "301:9:7"
               },
               {
                 "id": 756,
                 "name": "COMPLETED",
+                "nameLocation": "320:9:7",
                 "nodeType": "EnumValue",
-                "src": "321:9:7"
+                "src": "320:9:7"
               },
               {
                 "id": 757,
                 "name": "EVALUATING",
+                "nameLocation": "339:10:7",
                 "nodeType": "EnumValue",
-                "src": "340:10:7"
+                "src": "339:10:7"
               },
               {
                 "id": 758,
                 "name": "CLAIMED",
+                "nameLocation": "359:7:7",
                 "nodeType": "EnumValue",
-                "src": "360:7:7"
+                "src": "359:7:7"
               }
             ],
             "name": "WorkRelationshipState",
+            "nameLocation": "207:21:7",
             "nodeType": "EnumDefinition",
-            "src": "203:170:7"
+            "src": "202:170:7"
           }
         ],
         "scope": 761,
-        "src": "58:317:7"
+        "src": "57:317:7",
+        "usedErrors": []
       }
     ],
-    "src": "33:342:7"
+    "src": "33:341:7"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.8.0+commit.c7dfd78e.Emscripten.clang"
+    "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
   },
   "networks": {
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x60eAca50Db9eC0DCD530d65172Ec02E5D7784DC9",
-      "transactionHash": "0xe4268430cd19243b54160eaabf2b16f69448f7f1463205f6c3051341962d4427"
+      "address": "0xD8A978376f9549030874c08A754C6654c9de8cE4",
+      "transactionHash": "0xbf4999db66061d229d2cb6eec117d3406303ec634252fab2badf797d3db0eb57"
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-05-18T01:40:26.873Z",
+  "updatedAt": "2021-06-03T19:36:01.944Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

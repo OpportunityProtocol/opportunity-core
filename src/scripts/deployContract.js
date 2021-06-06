@@ -1,33 +1,56 @@
-const HDWalletProvider = require('truffle-hdwallet-provider');
+const fs = require("fs");
+const solc = require('solc')
 const Web3 = require('web3');
+const path = require('path')
+const { ethers } = require('ethers')
 
-const provider = new HDWalletProvider(
-	'mnemonic bird rat sink follow here dog but justice free service nation',
-	'127.0.0.1:8545'
-);
+// If you don't specify a //url//, Ethers connects to the default 
+// (i.e. ``http:/\/localhost:8545``)
+const provider = new ethers.providers.JsonRpcProvider();
 
-const web3 = new Web3(provider);
+// The provider also allows signing transactions to
+// send ether and pay to change state within the blockchain.
+// For this, we need the account signer...
+const signer = provider.getSigner()
 
-const compiledContract = require('../build/MyContractA.json');
+const wallet = new ethers.Wallet('02c0408f9e4ba98194f3986071eeccea049ebc967d4ddb831562af8cbad2a860', provider);
 
-(async () => {
-	const accounts = await web3.eth.getAccounts();
 
-	console.log(`Attempting to deploy from account: ${accounts[0]}`);
+(async function doWork() {
+	const COMPILED_MARKET_PATH = path.join(__dirname, '../../bin/src/contracts/market/')
+	const COMPILED_LIBRARIES_PATH = path.join(__dirname, '../../bin/src/contracts/libraries/')
+	
+	const contractSources = [
+		{
+			name: 'MarketFactory',
+			abi: COMPILED_MARKET_PATH + "MarketFactory.abi",
+			bytecode: COMPILED_MARKET_PATH + "MarketFactory.bin"
+		},
+		{
+			name: 'Evaluation',
+			abi: COMPILED_LIBRARIES_PATH + "Evaluation.abi",
+			bytecode: COMPILED_LIBRARIES_PATH + "Evaluation.bin"
+		},
+		{	
+			name: 'MarketLib',
+			abi: COMPILED_LIBRARIES_PATH + "MarketLib.abi",
+			bytecode: COMPILED_LIBRARIES_PATH + "MarketLib.bin"
+		},
+		{
+			name: 'StringUtils',
+			abi: COMPILED_LIBRARIES_PATH + "StringUtils.abi",
+			bytecode: COMPILED_LIBRARIES_PATH + "StringUtils.bin"
+		}
+	]
+	
+		let i = 0;
+		let abi = JSON.parse(fs.readFileSync(contractSources[i]['abi']));
+		let bytecode = '0x' + fs.readFileSync(contractSources[i]['bytecode']).toString();
+		const factory = new ethers.ContractFactory(abi, bytecode, wallet);
 
-	const deployedContract = await new web3.eth.Contract(compiledContract.abi)
-		.deploy({
-			data: '0x' + compiledContract.evm.bytecode.object,
-			arguments: [3, 5]
-		})
-		.send({
-			from: accounts[0],
-			gas: '2000000'
-		});
+		// If your contract requires constructor args, you can specify them here
+		const contract = await factory.deploy();
+}());
 
-	console.log(
-		`Contract deployed at address: ${deployedContract.options.address}`
-	);
 
-	provider.engine.stop();
-})();
+//compile - change data in servce - re install service - create market script - deploy 5 markets

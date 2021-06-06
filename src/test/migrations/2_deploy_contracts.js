@@ -35,7 +35,7 @@ module.exports = async function(deployer) {
   await deployer.link(StringUtils, UserSummary);
   await deployer.link(Evaluation, UserSummary);
   await deployer.link(User, UserSummary);
-  await deployer.deploy(UserSummary, '#jf84ht');
+ // await deployer.deploy(UserSummary, '#jf84ht');
   await deployer.link(StringUtils, UserSummaryFactory);
   await deployer.deploy(UserSummaryFactory);
   await deployer.link(StringUtils, UserRegistration);

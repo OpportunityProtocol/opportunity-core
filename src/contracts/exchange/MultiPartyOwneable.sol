@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 /**
@@ -15,7 +15,7 @@ import "@openzeppelin/contracts/utils/Context.sol";
  * `onlyContractOwner` and `onlyContractWorker` which can be applied to your functions to restrict their use to
  * their respective owners.
  */
-abstract contract MultiPartyOwneable is Context {
+contract MultiPartyOwneable is Context {
 
     event OwnershipTransferred(address indexed previousWorker, address indexed newWorker);
 

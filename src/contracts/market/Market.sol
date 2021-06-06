@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
@@ -10,7 +10,7 @@ import "../libraries/MarketLib.sol";
 import "../control/Controllable.sol";
 
 contract Market is Ownable, Controllable, Pausable {
-event MarketObservingRelationship(address indexed marketAddress, string indexed marketName, address indexed workRelationship);
+event MarketObservingRelationship(address indexed marketAddress, string indexed marketName, address indexed workRelationship, uint256 relationshipIndex);
 event MarketUnObservingRelationship(address indexed marketAddress, string indexed marketName, address indexed workRelationship);
 event MarketPaused(address indexed marketAddress, string indexed marketName);
 event MarketResumed(address indexed marketAddress, string indexed marketName);
@@ -32,8 +32,14 @@ constructor(string memory marketName, MarketLib.MarketType marketType) {
 
 function addRelationship(address newRelationship) external {
     require(newRelationship != address(0));
+    uint256 relationshipIndex = _workRelationships.length + 1;
     _workRelationships.push(newRelationship);
-    emit MarketObservingRelationship(address(this), _marketName, newRelationship);
+    emit MarketObservingRelationship(address(this), _marketName, newRelationship, relationshipIndex);
+}
+
+function removeRelationship(address relationship, uint256 index) external {
+    delete _workRelationships[index];
+    emit MarketUnObservingRelationship(address(this), _marketName, relationship);
 }
 
 function pauseMarket() external onlyOwner onlyGlobalController(msg.sender) onlyDefaultMarkets(_marketType) onlyNotPausedState(_marketStatus) {

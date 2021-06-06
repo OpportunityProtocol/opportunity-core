@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/escrow/RefundEscrow.sol";
@@ -25,6 +25,8 @@ contract WorkExchange is MultiPartyOwneable {
 
     address private _workerAddress;
     address private _requesterAddress;
+
+    string private _taskSolutionPointer = "";
 
     constructor(address payable requesterBeneficiary, address payable workerBeneficiary, bool isTimeLocked) MultiPartyOwneable(workerBeneficiary)/*, TimeLockedDepositProtocol(isTimeLocked)*/ {
         _requesterEscrow = new RefundEscrow(requesterBeneficiary);
@@ -84,5 +86,13 @@ contract WorkExchange is MultiPartyOwneable {
     function disableWorkExchange() internal {
         emit WorkExchangeEnded(_requesterAddress, _workerAddress, address(this));
         //selfdestruct();
+    }
+
+    function updateTaskSolutionPointer(string memory newTaskPointerHash) onlyWorker external {
+        _taskSolutionPointer = newTaskPointerHash;
+    }
+
+    function getTaskSolutionPointer() view external onlyOwner returns(string memory)  {
+        return _taskSolutionPointer;
     }
 }

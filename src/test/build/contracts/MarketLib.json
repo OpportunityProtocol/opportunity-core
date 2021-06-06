@@ -1,15 +1,15 @@
 {
   "contractName": "MarketLib",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol\":\"MarketLib\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol\":{\"keccak256\":\"0x353918e0f71cbe7e131a3fd49986393588497e042b8aa0eea26ebea905ece310\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://be10f8229d7e9184d1831fde2ed369de0232fa19a1f06cb662aa4942f7661918\",\"dweb:/ipfs/QmPbX7YYB3RFn38RxRXETNiuupmvG657TdfN3P2a3hb3yJ\"]}},\"version\":1}",
-  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122073c50611b7ce0ab1393c457a3839d1e34e240b7c23783b5c6d8475a18eef1f1664736f6c63430008000033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea264697066735822122073c50611b7ce0ab1393c457a3839d1e34e240b7c23783b5c6d8475a18eef1f1664736f6c63430008000033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol\":\"MarketLib\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol\":{\"keccak256\":\"0xd98943143bc37abae6b8cd62ec0eae2217e7047c6870955f408b9ef54c1b4669\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c1a3878e94eb8a9c99f1684a3f420d201e1f3634031977dcf1bf1516a67e5537\",\"dweb:/ipfs/QmRP3k7qA9u6wphSSqyxuaRoQvsDVZrqGeSb2gcnSpUPSN\"]}},\"version\":1}",
+  "bytecode": "0x60566050600b82828239805160001a6073146043577f4e487b7100000000000000000000000000000000000000000000000000000000600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220545539a143939ed873397c24a9c235e063a9fb10c12d29c068b171345547a05264736f6c63430008040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea2646970667358221220545539a143939ed873397c24a9c235e063a9fb10c12d29c068b171345547a05264736f6c63430008040033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "58:145:8:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "58:145:8:-:0;;;;;;;;",
-  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity ^0.8.0;\n\nlibrary MarketLib {\n    enum MarketType { \n        DEFAULT,\n        CREATED\n    }\n\n    enum MarketStatus {\n        ACTIVE,\n        PAUSED\n    }\n}",
+  "sourceMap": "57:145:8:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "57:145:8:-:0;;;;;;;;",
+  "source": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.8.4;\n\nlibrary MarketLib {\n    enum MarketType { \n        DEFAULT,\n        CREATED\n    }\n\n    enum MarketStatus {\n        ACTIVE,\n        PAUSED\n    }\n}",
   "sourcePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol",
   "ast": {
     "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol",
@@ -26,12 +26,11 @@
         "id": 762,
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".0"
+          ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:8"
+        "src": "33:22:8"
       },
       {
         "abstract": false,
@@ -44,6 +43,7 @@
           769
         ],
         "name": "MarketLib",
+        "nameLocation": "65:9:8",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
@@ -53,19 +53,22 @@
               {
                 "id": 763,
                 "name": "DEFAULT",
+                "nameLocation": "108:7:8",
                 "nodeType": "EnumValue",
-                "src": "109:7:8"
+                "src": "108:7:8"
               },
               {
                 "id": 764,
                 "name": "CREATED",
+                "nameLocation": "125:7:8",
                 "nodeType": "EnumValue",
-                "src": "126:7:8"
+                "src": "125:7:8"
               }
             ],
             "name": "MarketType",
+            "nameLocation": "86:10:8",
             "nodeType": "EnumDefinition",
-            "src": "82:57:8"
+            "src": "81:57:8"
           },
           {
             "canonicalName": "MarketLib.MarketStatus",
@@ -74,26 +77,30 @@
               {
                 "id": 766,
                 "name": "ACTIVE",
+                "nameLocation": "172:6:8",
                 "nodeType": "EnumValue",
-                "src": "173:6:8"
+                "src": "172:6:8"
               },
               {
                 "id": 767,
                 "name": "PAUSED",
+                "nameLocation": "188:6:8",
                 "nodeType": "EnumValue",
-                "src": "189:6:8"
+                "src": "188:6:8"
               }
             ],
             "name": "MarketStatus",
+            "nameLocation": "149:12:8",
             "nodeType": "EnumDefinition",
-            "src": "145:56:8"
+            "src": "144:56:8"
           }
         ],
         "scope": 770,
-        "src": "58:145:8"
+        "src": "57:145:8",
+        "usedErrors": []
       }
     ],
-    "src": "33:170:8"
+    "src": "33:169:8"
   },
   "legacyAST": {
     "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol",
@@ -110,12 +117,11 @@
         "id": 762,
         "literals": [
           "solidity",
-          "^",
           "0.8",
-          ".0"
+          ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:23:8"
+        "src": "33:22:8"
       },
       {
         "abstract": false,
@@ -128,6 +134,7 @@
           769
         ],
         "name": "MarketLib",
+        "nameLocation": "65:9:8",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
@@ -137,19 +144,22 @@
               {
                 "id": 763,
                 "name": "DEFAULT",
+                "nameLocation": "108:7:8",
                 "nodeType": "EnumValue",
-                "src": "109:7:8"
+                "src": "108:7:8"
               },
               {
                 "id": 764,
                 "name": "CREATED",
+                "nameLocation": "125:7:8",
                 "nodeType": "EnumValue",
-                "src": "126:7:8"
+                "src": "125:7:8"
               }
             ],
             "name": "MarketType",
+            "nameLocation": "86:10:8",
             "nodeType": "EnumDefinition",
-            "src": "82:57:8"
+            "src": "81:57:8"
           },
           {
             "canonicalName": "MarketLib.MarketStatus",
@@ -158,41 +168,45 @@
               {
                 "id": 766,
                 "name": "ACTIVE",
+                "nameLocation": "172:6:8",
                 "nodeType": "EnumValue",
-                "src": "173:6:8"
+                "src": "172:6:8"
               },
               {
                 "id": 767,
                 "name": "PAUSED",
+                "nameLocation": "188:6:8",
                 "nodeType": "EnumValue",
-                "src": "189:6:8"
+                "src": "188:6:8"
               }
             ],
             "name": "MarketStatus",
+            "nameLocation": "149:12:8",
             "nodeType": "EnumDefinition",
-            "src": "145:56:8"
+            "src": "144:56:8"
           }
         ],
         "scope": 770,
-        "src": "58:145:8"
+        "src": "57:145:8",
+        "usedErrors": []
       }
     ],
-    "src": "33:170:8"
+    "src": "33:169:8"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.8.0+commit.c7dfd78e.Emscripten.clang"
+    "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
   },
   "networks": {
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x704AC31DBF50A9533f3b92Ec04A025C97e49A771",
-      "transactionHash": "0x3ca9ce8f1edb87d42ea209040858628de3e1f2addf5dc75cef0397ad14800330"
+      "address": "0xe7275f9D399961ACd12AFB549DA5dbBB52c88de7",
+      "transactionHash": "0x21ec5a911397077bc94e6a926aa99f31cfcbfd2c839040c2906bedcf6b384399"
     }
   },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-05-18T01:40:26.873Z",
+  "updatedAt": "2021-06-03T19:36:01.942Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
