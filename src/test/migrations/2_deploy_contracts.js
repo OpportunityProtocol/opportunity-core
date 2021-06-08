@@ -24,6 +24,7 @@ const Controllable = artifacts.require('../../contracts/control/Controllable');
 //const WorkExchange = artifacts.require('../../contracts/exchange/WorkExchange.sol');
 const MultiPartyOwneable = artifacts.require('../../contracts/exchange/MultiPartyOwneable.sol');
 
+const Dai = artifacts.require('../../contracts/test/Dai.sol')
 module.exports = async function(deployer) {
   const uniqueHash = '#jf84ht'
   await deployer.deploy(StringUtils);
@@ -50,4 +51,6 @@ module.exports = async function(deployer) {
   //await deployer.deploy(WorkRelationship);
   //await deployer.deploy(WorkExchange);
   //await deployer.deploy(MultiPartyOwneable);
+
+  await deployer.deploy(Dai);
 };
