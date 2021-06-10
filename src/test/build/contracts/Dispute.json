@@ -103,9 +103,9 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_submitter\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_aggressor\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_relationship\",\"type\":\"address\"}],\"name\":\"DisputeCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_submitter\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_aggressor\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_relationship\",\"type\":\"address\"}],\"name\":\"DisputeResolved\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"submitter\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"aggressor\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"relationship\",\"type\":\"address\"}],\"name\":\"createDispute\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"submitter\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"aggressor\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"relationship\",\"type\":\"address\"}],\"name\":\"endDispute\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/dispute/Dispute.sol\":\"Dispute\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/dispute/Dispute.sol\":{\"keccak256\":\"0x546ff96ffd9dd2e3abe9c67222d9cf084752ca603712a94d2ca0a662c63980fc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fc6c5afd42371ad328e1e78570610e29cbc5c485c8349b45e13fc0831fdadba9\",\"dweb:/ipfs/Qma5XQJohtx7oBDkCLKX1guT96rvD6HCPaJd5GKxUicGjA\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/exchange/MultiPartyOwneable.sol\":{\"keccak256\":\"0xae91560b54c79549b35c7dd900655ed92748b6651576ba40ca04d690fa7b5aab\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dca3b73a729debbb1a3dda0df4b9b6c1d06db9aedfad8e4a928a07919d0484a0\",\"dweb:/ipfs/Qme5AUzxVaPLhwD6apk4SU5aBB3sSq39y7yGAx9j4o8QML\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/exchange/WorkExchange.sol\":{\"keccak256\":\"0x0902ad3e9a7307f1fd7e2605009e0bab9e00db6a3135e2a4f97d45ec9f08a024\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ebd8f0ff1b043a5a84fcd5d10d5bd069a4a54a4f2e6fe9ad2085c382b685cd67\",\"dweb:/ipfs/QmQdAm846Xp893JnBPPRLjmpbmMNi3NQXHgCa7g1FrNQBa\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/exchange/WorkRelationship.sol\":{\"keccak256\":\"0xc51c4b740efda66c9e79ba20fd189ee29b1f841193a53b63a4db4c82f7658136\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://af7ad80cd4deecab21fc687642f0737d1160de44062e4527d7b291c44ff20d94\",\"dweb:/ipfs/QmRasbjviD1PZxDh7ouXTvfnqorXJXZ8LLvagDWriGQXRt\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/Evaluation.sol\":{\"keccak256\":\"0x776820da1dd3be1e3fa8fa8379e29fe9c132fcba75246579dc6b6ce091d5e268\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5091010fb1ded2819aa4d48b1fd615325e0ca2d30d394158709db432f7cbd45b\",\"dweb:/ipfs/QmXPUSwR74rMeDvUx4aNvYi6JKv992MvPkktNDSxTr7Ryt\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol\":{\"keccak256\":\"0x7e3d896a7e6f8cc505d19a1f41aec827ac2e82050bd272ab5c32561a1bd8959b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://86a515d66ec0452b28f3bc55cfe92294d418c2489afbd0bc2ee8a35e697ac5d7\",\"dweb:/ipfs/QmTcJ1oG2U2gMmvoUWWnktkozv4gHMpLxLHMamhASn7w8B\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol\":{\"keccak256\":\"0x45b965dfb7b76618f5228e6ef1ccdf1bfa20373ec740697cc3c75a112dd7c942\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a74f56fcb710db442138f98655992f2dbff7b0c411632e3a1606d079260f0720\",\"dweb:/ipfs/QmTeT8GajQEKmuoaNGumM9Tbshw4fyTAUra43zdVbAKkN1\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/UserSummary.sol\":{\"keccak256\":\"0x0c390217b76d3f7b410314b6623bb5879364bc342d5847d245b9ae84552b169f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://69774b32b0f20251bf8a66f75fcd2212e1810a919287e6bce1326cf5f1ad51a1\",\"dweb:/ipfs/QmctHajthsPAZugisJodw3iypyPHCRRKvzyYGk3r7dK7YR\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/interface/IUserSummary.sol\":{\"keccak256\":\"0x84e23ece348e8629ec1fa47f28d3e9385627caa27f5aec2c7b968d0eafebbc91\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5cdf8022282b8249a1aab05d7fdb0dce90e44da389f01a98718380c9a24b5f2f\",\"dweb:/ipfs/QmcBbeRU19hUTbsTZzdE8NdU1QrzahMgY48aeMUcRBMsjQ\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x1cae4f85f114ff17b90414f5da67365b1d00337abb5bce9bf944eb78a2c0673c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d5ff16b336ce8f906478d5f2eecc6435e00833bdc0b92f6b209cf9e92cb5b2b7\",\"dweb:/ipfs/QmRD1rAZEqQ73C33cdA3QoUyBDMEWnNKNMc6PNkAZWHeQQ\"]},\"@openzeppelin/contracts/utils/Address.sol\":{\"keccak256\":\"0x069b2631bb5b5193a58ccf7a06266c7361bd2c20095667af4402817605627f45\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6a4c96fafff76deda5697c3c5c98cade6e6e1b178254544c106bf360c079ce4e\",\"dweb:/ipfs/QmXmxubE3jnatFgZuN8ay1VV6hZ8WRmhvUjNpeVjki15HX\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xf930d2df426bfcfc1f7415be724f04081c96f4fb9ec8d0e3a521c07692dface0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fc2bfdea0d2562c76fb3c4cf70a86c6ba25c5a30e8f8515c95aafdf8383f8395\",\"dweb:/ipfs/QmTbFya18786ckJfLYUoWau9jBTKfmWnWm5XSViWvB7PXN\"]},\"@openzeppelin/contracts/utils/escrow/ConditionalEscrow.sol\":{\"keccak256\":\"0x0bf0f9c9bfdea4be5d7dc3f1fccf177de0a5e7da51f96bfe5923af8ad1961a39\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://475920b50f6082a8d87a140cc5528bfc98c1f3efb8e2c367f93a1e482cea24a6\",\"dweb:/ipfs/QmVEUrKPdy3vgPjjzsikKLETUBFRo6uKbrgn2zeaJt7Mcu\"]},\"@openzeppelin/contracts/utils/escrow/Escrow.sol\":{\"keccak256\":\"0xb2c66acf7d749744db1c038889794253757d471a113290e4bb1a600246166943\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://60668976b064a434caef3ede6dce89744f2d18cc8ede8610706579fe4a03fba0\",\"dweb:/ipfs/QmPUnpLdjFgGrNhuMjvBz7Grn2gMrRWisAYPrn8YZVn99k\"]},\"@openzeppelin/contracts/utils/escrow/RefundEscrow.sol\":{\"keccak256\":\"0xc4f3f7ac87e9debc037109ec57e4a2ca54fce83a76fbc10564a53b9ab1d63858\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e451867af8f28ceed99f440f14819a8cf0fdaadb1e438272aff451ec7ce3b8f3\",\"dweb:/ipfs/QmebxoF1a7deWTjzyg82bygFzrQHFMFZnQxenShv2zB6AC\"]},\"@openzeppelin/contracts/utils/math/SafeMath.sol\":{\"keccak256\":\"0x2526b7c6a366fc211bbc176078ab02b83833e7682abcc5b3bed9d700b34e2a3e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5f9529d3d365e8415155cee11394e0f7c0de2152b601b7e77508fce16cb4a509\",\"dweb:/ipfs/QmVhbcLVsAzvqfjsdLwy25XMjgVJm7Z3w2JCNiNbZF2GHT\"]}},\"version\":1}",
-  "bytecode": "0x608060405234801561001057600080fd5b50610242806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c80634b29f5841461003b578063d54462e214610057575b600080fd5b61005560048036038101906100509190610174565b610073565b005b610071600480360381019061006c9190610174565b6100e9565b005b8073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fef5004fbc727a394eb47673cbdd28b705c06c6ad39410b806484757c2d1fd35460405160405180910390a4505050565b8073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fcf0e0bbcefb39042e5649899e2165be4139caf7059547be7faf2cecf03fc753b60405160405180910390a4505050565b60008135905061016e816101f5565b92915050565b60008060006060848603121561018957600080fd5b60006101978682870161015f565b93505060206101a88682870161015f565b92505060406101b98682870161015f565b9150509250925092565b60006101ce826101d5565b9050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6101fe816101c3565b811461020957600080fd5b5056fea26469706673582212208bd374b8ab931bf5c39fb3cf47978441472554f128add4cbb5684c7e3d44396b64736f6c63430008040033",
-  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100365760003560e01c80634b29f5841461003b578063d54462e214610057575b600080fd5b61005560048036038101906100509190610174565b610073565b005b610071600480360381019061006c9190610174565b6100e9565b005b8073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fef5004fbc727a394eb47673cbdd28b705c06c6ad39410b806484757c2d1fd35460405160405180910390a4505050565b8073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fcf0e0bbcefb39042e5649899e2165be4139caf7059547be7faf2cecf03fc753b60405160405180910390a4505050565b60008135905061016e816101f5565b92915050565b60008060006060848603121561018957600080fd5b60006101978682870161015f565b93505060206101a88682870161015f565b92505060406101b98682870161015f565b9150509250925092565b60006101ce826101d5565b9050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6101fe816101c3565b811461020957600080fd5b5056fea26469706673582212208bd374b8ab931bf5c39fb3cf47978441472554f128add4cbb5684c7e3d44396b64736f6c63430008040033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.4+commit.c7e474f2\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_submitter\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_aggressor\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_relationship\",\"type\":\"address\"}],\"name\":\"DisputeCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_submitter\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_aggressor\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"_relationship\",\"type\":\"address\"}],\"name\":\"DisputeResolved\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"submitter\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"aggressor\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"relationship\",\"type\":\"address\"}],\"name\":\"createDispute\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"submitter\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"aggressor\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"relationship\",\"type\":\"address\"}],\"name\":\"endDispute\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/dispute/Dispute.sol\":\"Dispute\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/dispute/Dispute.sol\":{\"keccak256\":\"0x546ff96ffd9dd2e3abe9c67222d9cf084752ca603712a94d2ca0a662c63980fc\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fc6c5afd42371ad328e1e78570610e29cbc5c485c8349b45e13fc0831fdadba9\",\"dweb:/ipfs/Qma5XQJohtx7oBDkCLKX1guT96rvD6HCPaJd5GKxUicGjA\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/exchange/MultiPartyOwneable.sol\":{\"keccak256\":\"0xae91560b54c79549b35c7dd900655ed92748b6651576ba40ca04d690fa7b5aab\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://dca3b73a729debbb1a3dda0df4b9b6c1d06db9aedfad8e4a928a07919d0484a0\",\"dweb:/ipfs/Qme5AUzxVaPLhwD6apk4SU5aBB3sSq39y7yGAx9j4o8QML\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/exchange/WorkExchange.sol\":{\"keccak256\":\"0x4f202c437f448adfbb10ce654b8f4f9f75a65af2a99034114880b44468c9cc33\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://670cc9a3c3f0f76b207607af1e41fafacdb7b6a4f099d3b79b07be2c87224422\",\"dweb:/ipfs/QmZVcPzN2z3Q3TuAdcsVETMXZSPCDiHsZNfmgnMLHfAN5S\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/exchange/WorkRelationship.sol\":{\"keccak256\":\"0xdbd976768c32672435954c01a8d8ceea49cb07ee7c945b8fa69db61908e923c2\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b65d9e36ee0b16f9d621966355cfd8e48c6b61822416434beadeffc8e443ac18\",\"dweb:/ipfs/QmZVfrffaP4HvN5N7xQxpL6UYXnSYj4y3g3gaL4hXjo6AV\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/Evaluation.sol\":{\"keccak256\":\"0x776820da1dd3be1e3fa8fa8379e29fe9c132fcba75246579dc6b6ce091d5e268\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5091010fb1ded2819aa4d48b1fd615325e0ca2d30d394158709db432f7cbd45b\",\"dweb:/ipfs/QmXPUSwR74rMeDvUx4aNvYi6JKv992MvPkktNDSxTr7Ryt\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol\":{\"keccak256\":\"0x7e3d896a7e6f8cc505d19a1f41aec827ac2e82050bd272ab5c32561a1bd8959b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://86a515d66ec0452b28f3bc55cfe92294d418c2489afbd0bc2ee8a35e697ac5d7\",\"dweb:/ipfs/QmTcJ1oG2U2gMmvoUWWnktkozv4gHMpLxLHMamhASn7w8B\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol\":{\"keccak256\":\"0x45b965dfb7b76618f5228e6ef1ccdf1bfa20373ec740697cc3c75a112dd7c942\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://a74f56fcb710db442138f98655992f2dbff7b0c411632e3a1606d079260f0720\",\"dweb:/ipfs/QmTeT8GajQEKmuoaNGumM9Tbshw4fyTAUra43zdVbAKkN1\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/UserSummary.sol\":{\"keccak256\":\"0x0c390217b76d3f7b410314b6623bb5879364bc342d5847d245b9ae84552b169f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://69774b32b0f20251bf8a66f75fcd2212e1810a919287e6bce1326cf5f1ad51a1\",\"dweb:/ipfs/QmctHajthsPAZugisJodw3iypyPHCRRKvzyYGk3r7dK7YR\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/interface/IUserSummary.sol\":{\"keccak256\":\"0x84e23ece348e8629ec1fa47f28d3e9385627caa27f5aec2c7b968d0eafebbc91\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5cdf8022282b8249a1aab05d7fdb0dce90e44da389f01a98718380c9a24b5f2f\",\"dweb:/ipfs/QmcBbeRU19hUTbsTZzdE8NdU1QrzahMgY48aeMUcRBMsjQ\"]},\"@openzeppelin/contracts/access/Ownable.sol\":{\"keccak256\":\"0x1cae4f85f114ff17b90414f5da67365b1d00337abb5bce9bf944eb78a2c0673c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://d5ff16b336ce8f906478d5f2eecc6435e00833bdc0b92f6b209cf9e92cb5b2b7\",\"dweb:/ipfs/QmRD1rAZEqQ73C33cdA3QoUyBDMEWnNKNMc6PNkAZWHeQQ\"]},\"@openzeppelin/contracts/utils/Address.sol\":{\"keccak256\":\"0x069b2631bb5b5193a58ccf7a06266c7361bd2c20095667af4402817605627f45\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6a4c96fafff76deda5697c3c5c98cade6e6e1b178254544c106bf360c079ce4e\",\"dweb:/ipfs/QmXmxubE3jnatFgZuN8ay1VV6hZ8WRmhvUjNpeVjki15HX\"]},\"@openzeppelin/contracts/utils/Context.sol\":{\"keccak256\":\"0xf930d2df426bfcfc1f7415be724f04081c96f4fb9ec8d0e3a521c07692dface0\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fc2bfdea0d2562c76fb3c4cf70a86c6ba25c5a30e8f8515c95aafdf8383f8395\",\"dweb:/ipfs/QmTbFya18786ckJfLYUoWau9jBTKfmWnWm5XSViWvB7PXN\"]},\"@openzeppelin/contracts/utils/escrow/ConditionalEscrow.sol\":{\"keccak256\":\"0x0bf0f9c9bfdea4be5d7dc3f1fccf177de0a5e7da51f96bfe5923af8ad1961a39\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://475920b50f6082a8d87a140cc5528bfc98c1f3efb8e2c367f93a1e482cea24a6\",\"dweb:/ipfs/QmVEUrKPdy3vgPjjzsikKLETUBFRo6uKbrgn2zeaJt7Mcu\"]},\"@openzeppelin/contracts/utils/escrow/Escrow.sol\":{\"keccak256\":\"0xb2c66acf7d749744db1c038889794253757d471a113290e4bb1a600246166943\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://60668976b064a434caef3ede6dce89744f2d18cc8ede8610706579fe4a03fba0\",\"dweb:/ipfs/QmPUnpLdjFgGrNhuMjvBz7Grn2gMrRWisAYPrn8YZVn99k\"]},\"@openzeppelin/contracts/utils/escrow/RefundEscrow.sol\":{\"keccak256\":\"0xc4f3f7ac87e9debc037109ec57e4a2ca54fce83a76fbc10564a53b9ab1d63858\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e451867af8f28ceed99f440f14819a8cf0fdaadb1e438272aff451ec7ce3b8f3\",\"dweb:/ipfs/QmebxoF1a7deWTjzyg82bygFzrQHFMFZnQxenShv2zB6AC\"]},\"@openzeppelin/contracts/utils/math/SafeMath.sol\":{\"keccak256\":\"0x2526b7c6a366fc211bbc176078ab02b83833e7682abcc5b3bed9d700b34e2a3e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://5f9529d3d365e8415155cee11394e0f7c0de2152b601b7e77508fce16cb4a509\",\"dweb:/ipfs/QmVhbcLVsAzvqfjsdLwy25XMjgVJm7Z3w2JCNiNbZF2GHT\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610242806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c80634b29f5841461003b578063d54462e214610057575b600080fd5b61005560048036038101906100509190610174565b610073565b005b610071600480360381019061006c9190610174565b6100e9565b005b8073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fef5004fbc727a394eb47673cbdd28b705c06c6ad39410b806484757c2d1fd35460405160405180910390a4505050565b8073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fcf0e0bbcefb39042e5649899e2165be4139caf7059547be7faf2cecf03fc753b60405160405180910390a4505050565b60008135905061016e816101f5565b92915050565b60008060006060848603121561018957600080fd5b60006101978682870161015f565b93505060206101a88682870161015f565b92505060406101b98682870161015f565b9150509250925092565b60006101ce826101d5565b9050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6101fe816101c3565b811461020957600080fd5b5056fea26469706673582212208e65e45cda1eef71da6584f6f76a9d14d291db93709d5219f0b09bec0a4a4b1e64736f6c63430008040033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100365760003560e01c80634b29f5841461003b578063d54462e214610057575b600080fd5b61005560048036038101906100509190610174565b610073565b005b610071600480360381019061006c9190610174565b6100e9565b005b8073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fef5004fbc727a394eb47673cbdd28b705c06c6ad39410b806484757c2d1fd35460405160405180910390a4505050565b8073ffffffffffffffffffffffffffffffffffffffff168273ffffffffffffffffffffffffffffffffffffffff168473ffffffffffffffffffffffffffffffffffffffff167fcf0e0bbcefb39042e5649899e2165be4139caf7059547be7faf2cecf03fc753b60405160405180910390a4505050565b60008135905061016e816101f5565b92915050565b60008060006060848603121561018957600080fd5b60006101978682870161015f565b93505060206101a88682870161015f565b92505060406101b98682870161015f565b9150509250925092565b60006101ce826101d5565b9050919050565b600073ffffffffffffffffffffffffffffffffffffffff82169050919050565b6101fe816101c3565b811461020957600080fd5b5056fea26469706673582212208e65e45cda1eef71da6584f6f76a9d14d291db93709d5219f0b09bec0a4a4b1e64736f6c63430008040033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [
@@ -768,52 +768,52 @@
     "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/dispute/Dispute.sol",
     "exportedSymbols": {
       "Address": [
-        2864
+        2886
       ],
       "ConditionalEscrow": [
-        2922
+        2944
       ],
       "Context": [
-        2887
+        2909
       ],
       "Dispute": [
         232
       ],
       "Escrow": [
-        3022
+        3044
       ],
       "Evaluation": [
-        774
+        796
       ],
       "IUserSummary": [
-        2366
+        2388
       ],
       "MultiPartyOwneable": [
         363
       ],
       "Ownable": [
-        2476
+        2498
       ],
       "RefundEscrow": [
-        3201
+        3223
       ],
       "SafeMath": [
-        3513
+        3535
       ],
       "StringUtils": [
-        1024
+        1046
       ],
       "User": [
-        1044
+        1066
       ],
       "UserSummary": [
-        2226
+        2248
       ],
       "WorkExchange": [
-        581
+        590
       ],
       "WorkRelationship": [
-        756
+        778
       ]
     },
     "id": 233,
@@ -837,7 +837,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 233,
-        "sourceUnit": 757,
+        "sourceUnit": 779,
         "src": "57:42:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1512,52 +1512,52 @@
     "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/dispute/Dispute.sol",
     "exportedSymbols": {
       "Address": [
-        2864
+        2886
       ],
       "ConditionalEscrow": [
-        2922
+        2944
       ],
       "Context": [
-        2887
+        2909
       ],
       "Dispute": [
         232
       ],
       "Escrow": [
-        3022
+        3044
       ],
       "Evaluation": [
-        774
+        796
       ],
       "IUserSummary": [
-        2366
+        2388
       ],
       "MultiPartyOwneable": [
         363
       ],
       "Ownable": [
-        2476
+        2498
       ],
       "RefundEscrow": [
-        3201
+        3223
       ],
       "SafeMath": [
-        3513
+        3535
       ],
       "StringUtils": [
-        1024
+        1046
       ],
       "User": [
-        1044
+        1066
       ],
       "UserSummary": [
-        2226
+        2248
       ],
       "WorkExchange": [
-        581
+        590
       ],
       "WorkRelationship": [
-        756
+        778
       ]
     },
     "id": 233,
@@ -1581,7 +1581,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 233,
-        "sourceUnit": 757,
+        "sourceUnit": 779,
         "src": "57:42:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -2256,17 +2256,9 @@
     "name": "solc",
     "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
   },
-  "networks": {
-    "5777": {
-      "events": {},
-      "links": {},
-      "address": "0xF14440C05Ec5D484AEBDe3AC73709133434df450",
-      "transactionHash": "0x9597b80420a0c6065c2e5b10234ab01d2a04bf8fa58af89fe41b6639e4302377"
-    }
-  },
+  "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-06-08T15:27:12.299Z",
-  "networkType": "ethereum",
+  "updatedAt": "2021-06-09T23:30:16.437Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

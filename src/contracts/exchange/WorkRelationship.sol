@@ -14,22 +14,25 @@ contract WorkRelationship is Ownable {
     Evaluation.WorkRelationshipState public _contractStatus;
     address public _workExchangeAddress;
     string public _taskMetadataPointer = "";
+    string private _taskSolutionPointer = "";
+    address public workerAddress;
+
+    modifier onlyWorker() {
+        require(msg.sender == workerAddress);
+        _;
+    }
+    
 
     constructor(address marketAddress) {
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
         emit WorkRelationshipCreated(owner(), address(this), marketAddress);
     }
 
-    function assignNewWorker(address payable newWorker, Evaluation.EvaluationState memory evaluationState, bool isTimeLocked) external onlyOwner {
+    function assignNewWorker(address newWorker, Evaluation.EvaluationState memory evaluationState) external onlyOwner {
         bool passesEvaluation = checkWorkerEvaluation(newWorker, evaluationState);
         require(passesEvaluation == true);
 
-        this.createWorkExchange(newWorker, isTimeLocked);
-    }
-
-    function createWorkExchange(address payable workerBeneficiary, bool isTimeLocked) external onlyOwner {
-        WorkExchange workExchange = new WorkExchange(payable(owner()), workerBeneficiary, isTimeLocked);
-        _workExchangeAddress = address(workExchange);
+        _workExchangeAddress = newWorker;
     }
 
     function checkWorkerEvaluation(address workerUniversalAddress, Evaluation.EvaluationState memory evaluationState) internal returns(bool) {
@@ -37,13 +40,20 @@ contract WorkRelationship is Ownable {
         return passesEvaluation;
     }
 
-    function disableWorkRelationship() public onlyOwner {
+    function disableWorkRelationship() external onlyOwner {
         require(_contractStatus == Evaluation.WorkRelationshipState.COMPLETED);
         emit WorkRelationshipEnded(owner(), address(this));
-        //selfdestruct();
     }
 
-     function updateTaskMetadataPointer(string memory newTaskPointerHash) onlyOwner external {
+    function updateTaskMetadataPointer(string memory newTaskPointerHash) onlyOwner external {
         _taskMetadataPointer = newTaskPointerHash;
+    }
+
+    function updateTaskSolutionPointer(string memory newTaskPointerHash) onlyWorker external {
+        _taskSolutionPointer = newTaskPointerHash;
+    }
+
+    function getTaskSolutionPointer() view external onlyOwner returns(string memory)  {
+        return _taskSolutionPointer;
     }
 }

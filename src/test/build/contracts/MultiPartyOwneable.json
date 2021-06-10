@@ -1667,7 +1667,7 @@
     "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/exchange/MultiPartyOwneable.sol",
     "exportedSymbols": {
       "Context": [
-        2887
+        2909
       ],
       "MultiPartyOwneable": [
         363
@@ -1694,7 +1694,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 364,
-        "sourceUnit": 2888,
+        "sourceUnit": 2910,
         "src": "57:51:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1707,7 +1707,7 @@
               "id": 237,
               "name": "Context",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 2887,
+              "referencedDeclaration": 2909,
               "src": "791:7:4"
             },
             "id": 238,
@@ -1727,7 +1727,7 @@
         "id": 363,
         "linearizedBaseContracts": [
           363,
-          2887
+          2909
         ],
         "name": "MultiPartyOwneable",
         "nameLocation": "769:18:4",
@@ -1911,7 +1911,7 @@
                       "name": "_msgSender",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2875,
+                      "referencedDeclaration": 2897,
                       "src": "1135:10:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -2434,7 +2434,7 @@
                             "name": "_msgSender",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2875,
+                            "referencedDeclaration": 2897,
                             "src": "1730:10:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -3194,7 +3194,7 @@
     "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/exchange/MultiPartyOwneable.sol",
     "exportedSymbols": {
       "Context": [
-        2887
+        2909
       ],
       "MultiPartyOwneable": [
         363
@@ -3221,7 +3221,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 364,
-        "sourceUnit": 2888,
+        "sourceUnit": 2910,
         "src": "57:51:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -3234,7 +3234,7 @@
               "id": 237,
               "name": "Context",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 2887,
+              "referencedDeclaration": 2909,
               "src": "791:7:4"
             },
             "id": 238,
@@ -3254,7 +3254,7 @@
         "id": 363,
         "linearizedBaseContracts": [
           363,
-          2887
+          2909
         ],
         "name": "MultiPartyOwneable",
         "nameLocation": "769:18:4",
@@ -3438,7 +3438,7 @@
                       "name": "_msgSender",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2875,
+                      "referencedDeclaration": 2897,
                       "src": "1135:10:4",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -3961,7 +3961,7 @@
                             "name": "_msgSender",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 2875,
+                            "referencedDeclaration": 2897,
                             "src": "1730:10:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_function_internal_view$__$returns$_t_address_$",
@@ -4723,8 +4723,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-06-08T15:27:12.310Z",
-  "networkType": "ethereum",
+  "updatedAt": "2021-06-09T23:30:16.438Z",
   "devdoc": {
     "details": "Contract module which provides a basic access control mechanism, where there is a requester (an owner) and a worker (another owner) that can be granted exclusive access to specific functions. By default, the requester account will be the one that deploys the contract.  This can never be changed, however the ownership of the second owner (the worker) can later be changed with transferOwnership. This module is used through inheritance. It will make available the modifier `onlyContractOwner` and `onlyContractWorker` which can be applied to your functions to restrict their use to their respective owners.",
     "kind": "dev",
