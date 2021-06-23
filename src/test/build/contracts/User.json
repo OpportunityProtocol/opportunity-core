@@ -7,43 +7,43 @@
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
-  "sourceMap": "86:183:10:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
-  "deployedSourceMap": "86:183:10:-:0;;;;;;;;",
+  "sourceMap": "86:183:7:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "86:183:7:-:0;;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.8.4;\n\nimport \"./StringUtils.sol\";\n\nlibrary User {\n       modifier onlyAuthenticatedUser(string storage uniqueID, string storage uniqueHash) {\n        require(StringUtils.equal(uniqueID, uniqueHash));\n        _;\n    }\n}",
   "sourcePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol",
   "ast": {
     "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol",
     "exportedSymbols": {
       "StringUtils": [
-        1046
+        613
       ],
       "User": [
-        1066
+        633
       ]
     },
-    "id": 1067,
+    "id": 634,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1048,
+        "id": 615,
         "literals": [
           "solidity",
           "0.8",
           ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:22:10"
+        "src": "33:22:7"
       },
       {
         "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol",
         "file": "./StringUtils.sol",
-        "id": 1049,
+        "id": 616,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 1067,
-        "sourceUnit": 1047,
-        "src": "57:27:10",
+        "scope": 634,
+        "sourceUnit": 614,
+        "src": "57:27:7",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -53,19 +53,19 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 1066,
+        "id": 633,
         "linearizedBaseContracts": [
-          1066
+          633
         ],
         "name": "User",
-        "nameLocation": "94:4:10",
+        "nameLocation": "94:4:7",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 1064,
+              "id": 631,
               "nodeType": "Block",
-              "src": "191:76:10",
+              "src": "191:76:7",
               "statements": [
                 {
                   "expression": {
@@ -73,24 +73,24 @@
                       {
                         "arguments": [
                           {
-                            "id": 1058,
+                            "id": 625,
                             "name": "uniqueID",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1051,
-                            "src": "227:8:10",
+                            "referencedDeclaration": 618,
+                            "src": "227:8:7",
                             "typeDescriptions": {
                               "typeIdentifier": "t_string_storage_ptr",
                               "typeString": "string storage pointer"
                             }
                           },
                           {
-                            "id": 1059,
+                            "id": 626,
                             "name": "uniqueHash",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1053,
-                            "src": "237:10:10",
+                            "referencedDeclaration": 620,
+                            "src": "237:10:7",
                             "typeDescriptions": {
                               "typeIdentifier": "t_string_storage_ptr",
                               "typeString": "string storage pointer"
@@ -109,32 +109,32 @@
                             }
                           ],
                           "expression": {
-                            "id": 1056,
+                            "id": 623,
                             "name": "StringUtils",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1046,
-                            "src": "209:11:10",
+                            "referencedDeclaration": 613,
+                            "src": "209:11:7",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_StringUtils_$1046_$",
+                              "typeIdentifier": "t_type$_t_contract$_StringUtils_$613_$",
                               "typeString": "type(library StringUtils)"
                             }
                           },
-                          "id": 1057,
+                          "id": 624,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "equal",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 916,
-                          "src": "209:17:10",
+                          "referencedDeclaration": 483,
+                          "src": "209:17:7",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_string_memory_ptr_$_t_string_memory_ptr_$returns$_t_bool_$",
                             "typeString": "function (string memory,string memory) pure returns (bool)"
                           }
                         },
-                        "id": 1060,
+                        "id": 627,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -142,7 +142,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "209:39:10",
+                        "src": "209:39:7",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -157,7 +157,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 1055,
+                      "id": 622,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -165,13 +165,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "201:7:10",
+                      "src": "201:7:7",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 1061,
+                    "id": 628,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -179,41 +179,41 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "201:48:10",
+                    "src": "201:48:7",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1062,
+                  "id": 629,
                   "nodeType": "ExpressionStatement",
-                  "src": "201:48:10"
+                  "src": "201:48:7"
                 },
                 {
-                  "id": 1063,
+                  "id": 630,
                   "nodeType": "PlaceholderStatement",
-                  "src": "259:1:10"
+                  "src": "259:1:7"
                 }
               ]
             },
-            "id": 1065,
+            "id": 632,
             "name": "onlyAuthenticatedUser",
-            "nameLocation": "117:21:10",
+            "nameLocation": "117:21:7",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 1054,
+              "id": 621,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1051,
+                  "id": 618,
                   "mutability": "mutable",
                   "name": "uniqueID",
-                  "nameLocation": "154:8:10",
+                  "nameLocation": "154:8:7",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1065,
-                  "src": "139:23:10",
+                  "scope": 632,
+                  "src": "139:23:7",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
@@ -221,10 +221,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1050,
+                    "id": 617,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "139:6:10",
+                    "src": "139:6:7",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -234,13 +234,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 1053,
+                  "id": 620,
                   "mutability": "mutable",
                   "name": "uniqueHash",
-                  "nameLocation": "179:10:10",
+                  "nameLocation": "179:10:7",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1065,
-                  "src": "164:25:10",
+                  "scope": 632,
+                  "src": "164:25:7",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
@@ -248,10 +248,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1052,
+                    "id": 619,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "164:6:10",
+                    "src": "164:6:7",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -260,53 +260,53 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "138:52:10"
+              "src": "138:52:7"
             },
-            "src": "108:159:10",
+            "src": "108:159:7",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 1067,
-        "src": "86:183:10",
+        "scope": 634,
+        "src": "86:183:7",
         "usedErrors": []
       }
     ],
-    "src": "33:236:10"
+    "src": "33:236:7"
   },
   "legacyAST": {
     "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol",
     "exportedSymbols": {
       "StringUtils": [
-        1046
+        613
       ],
       "User": [
-        1066
+        633
       ]
     },
-    "id": 1067,
+    "id": 634,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1048,
+        "id": 615,
         "literals": [
           "solidity",
           "0.8",
           ".4"
         ],
         "nodeType": "PragmaDirective",
-        "src": "33:22:10"
+        "src": "33:22:7"
       },
       {
         "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol",
         "file": "./StringUtils.sol",
-        "id": 1049,
+        "id": 616,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 1067,
-        "sourceUnit": 1047,
-        "src": "57:27:10",
+        "scope": 634,
+        "sourceUnit": 614,
+        "src": "57:27:7",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -316,19 +316,19 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 1066,
+        "id": 633,
         "linearizedBaseContracts": [
-          1066
+          633
         ],
         "name": "User",
-        "nameLocation": "94:4:10",
+        "nameLocation": "94:4:7",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "body": {
-              "id": 1064,
+              "id": 631,
               "nodeType": "Block",
-              "src": "191:76:10",
+              "src": "191:76:7",
               "statements": [
                 {
                   "expression": {
@@ -336,24 +336,24 @@
                       {
                         "arguments": [
                           {
-                            "id": 1058,
+                            "id": 625,
                             "name": "uniqueID",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1051,
-                            "src": "227:8:10",
+                            "referencedDeclaration": 618,
+                            "src": "227:8:7",
                             "typeDescriptions": {
                               "typeIdentifier": "t_string_storage_ptr",
                               "typeString": "string storage pointer"
                             }
                           },
                           {
-                            "id": 1059,
+                            "id": 626,
                             "name": "uniqueHash",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1053,
-                            "src": "237:10:10",
+                            "referencedDeclaration": 620,
+                            "src": "237:10:7",
                             "typeDescriptions": {
                               "typeIdentifier": "t_string_storage_ptr",
                               "typeString": "string storage pointer"
@@ -372,32 +372,32 @@
                             }
                           ],
                           "expression": {
-                            "id": 1056,
+                            "id": 623,
                             "name": "StringUtils",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1046,
-                            "src": "209:11:10",
+                            "referencedDeclaration": 613,
+                            "src": "209:11:7",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_contract$_StringUtils_$1046_$",
+                              "typeIdentifier": "t_type$_t_contract$_StringUtils_$613_$",
                               "typeString": "type(library StringUtils)"
                             }
                           },
-                          "id": 1057,
+                          "id": 624,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "equal",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 916,
-                          "src": "209:17:10",
+                          "referencedDeclaration": 483,
+                          "src": "209:17:7",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_pure$_t_string_memory_ptr_$_t_string_memory_ptr_$returns$_t_bool_$",
                             "typeString": "function (string memory,string memory) pure returns (bool)"
                           }
                         },
-                        "id": 1060,
+                        "id": 627,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -405,7 +405,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "209:39:10",
+                        "src": "209:39:7",
                         "tryCall": false,
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -420,7 +420,7 @@
                           "typeString": "bool"
                         }
                       ],
-                      "id": 1055,
+                      "id": 622,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -428,13 +428,13 @@
                         4294967278
                       ],
                       "referencedDeclaration": 4294967278,
-                      "src": "201:7:10",
+                      "src": "201:7:7",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$returns$__$",
                         "typeString": "function (bool) pure"
                       }
                     },
-                    "id": 1061,
+                    "id": 628,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -442,41 +442,41 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "201:48:10",
+                    "src": "201:48:7",
                     "tryCall": false,
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 1062,
+                  "id": 629,
                   "nodeType": "ExpressionStatement",
-                  "src": "201:48:10"
+                  "src": "201:48:7"
                 },
                 {
-                  "id": 1063,
+                  "id": 630,
                   "nodeType": "PlaceholderStatement",
-                  "src": "259:1:10"
+                  "src": "259:1:7"
                 }
               ]
             },
-            "id": 1065,
+            "id": 632,
             "name": "onlyAuthenticatedUser",
-            "nameLocation": "117:21:10",
+            "nameLocation": "117:21:7",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 1054,
+              "id": 621,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 1051,
+                  "id": 618,
                   "mutability": "mutable",
                   "name": "uniqueID",
-                  "nameLocation": "154:8:10",
+                  "nameLocation": "154:8:7",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1065,
-                  "src": "139:23:10",
+                  "scope": 632,
+                  "src": "139:23:7",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
@@ -484,10 +484,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1050,
+                    "id": 617,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "139:6:10",
+                    "src": "139:6:7",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -497,13 +497,13 @@
                 },
                 {
                   "constant": false,
-                  "id": 1053,
+                  "id": 620,
                   "mutability": "mutable",
                   "name": "uniqueHash",
-                  "nameLocation": "179:10:10",
+                  "nameLocation": "179:10:7",
                   "nodeType": "VariableDeclaration",
-                  "scope": 1065,
-                  "src": "164:25:10",
+                  "scope": 632,
+                  "src": "164:25:7",
                   "stateVariable": false,
                   "storageLocation": "storage",
                   "typeDescriptions": {
@@ -511,10 +511,10 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 1052,
+                    "id": 619,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
-                    "src": "164:6:10",
+                    "src": "164:6:7",
                     "typeDescriptions": {
                       "typeIdentifier": "t_string_storage_ptr",
                       "typeString": "string"
@@ -523,27 +523,35 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "138:52:10"
+              "src": "138:52:7"
             },
-            "src": "108:159:10",
+            "src": "108:159:7",
             "virtual": false,
             "visibility": "internal"
           }
         ],
-        "scope": 1067,
-        "src": "86:183:10",
+        "scope": 634,
+        "src": "86:183:7",
         "usedErrors": []
       }
     ],
-    "src": "33:236:10"
+    "src": "33:236:7"
   },
   "compiler": {
     "name": "solc",
     "version": "0.8.4+commit.c7e474f2.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0x0e71a5DB2DD033738E31f7DfD75E48f4DbB42387",
+      "transactionHash": "0x5802c7b51323b72bd5000b09fddbe7d415ec08e2bcc76eb7200f47a1e76be169"
+    }
+  },
   "schemaVersion": "3.4.1",
-  "updatedAt": "2021-06-09T23:30:16.463Z",
+  "updatedAt": "2021-06-23T02:55:44.815Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {},

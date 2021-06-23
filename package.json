@@ -4,7 +4,8 @@
   "description": "Opportunity Protocol backend",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gsn-with-ganache": "run-with-testrpc --networkId 5777 --chainId 5777 'gsn start'"
   },
   "repository": {
     "type": "git",
@@ -18,10 +19,13 @@
   "homepage": "https://github.com/OpportunityProtocol/opportunity-core#readme",
   "dependencies": {
     "@opengsn/provider": "^2.2.2",
-    "@openzeppelin/contracts": "^4.0.0",
+    "@openzeppelin/contracts": "^4.1.0",
     "@truffle/hdwallet-provider": "^1.4.0",
     "ethers": "^5.2.0",
     "fs-extra": "^10.0.0",
+    "ganache-cli": "^6.12.2",
+    "gsn": "0.0.1",
+    "run-with-testrpc": "^0.3.1",
     "truffle": "^4.1.14",
     "truffle-hdwallet-provider": "^1.0.17",
     "typescript": "^4.2.4"

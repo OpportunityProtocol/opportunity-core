@@ -19,6 +19,7 @@ const Dispute = artifacts.require('../../contracts/dispute/Dispute.sol');
 const Controllable = artifacts.require('../../contracts/control/Controllable');
 
 const WorkRelationship = artifacts.require('../../contracts/exchange/WorkRelationship.sol');
+
 module.exports = async function(deployer) {
   const uniqueHash = '#jf84ht'
   await deployer.deploy(StringUtils);
@@ -36,6 +37,7 @@ module.exports = async function(deployer) {
   await deployer.deploy(UserRegistration);
 
   await deployer.deploy(MarketFactory);
+  await deployer.deploy(Market, '0x', 0)
 
   await deployer.deploy(Dispute);
   await deployer.deploy(Controllable);
