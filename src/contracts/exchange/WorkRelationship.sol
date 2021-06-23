@@ -2,58 +2,95 @@
 
 pragma solidity 0.8.4;
 
-import "./WorkExchange.sol";
 import "../user/UserSummary.sol";
 import "../libraries/Evaluation.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract WorkRelationship is Ownable {
-    event WorkRelationshipCreated(address indexed _owner, address indexed relationship, address indexed marketAddress);
-    event WorkRelationshipEnded(address indexed owner, address indexed relationship);
+contract WorkRelationship {
 
-    Evaluation.WorkRelationshipState public _contractStatus;
     address public _workExchangeAddress;
+    address public _workerAddress;
+    address private _owner;
+
     string public _taskMetadataPointer = "";
     string private _taskSolutionPointer = "";
-    address public workerAddress;
+
+    Evaluation.WorkRelationshipState public _contractStatus;
 
     modifier onlyWorker() {
-        require(msg.sender == workerAddress);
+        require(
+            msg.sender == _workerAddress,
+            "WorkRelationship: caller is not the worker"
+        );
         _;
     }
-    
 
-    constructor(address marketAddress) {
-        _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
-        emit WorkRelationshipCreated(owner(), address(this), marketAddress);
+    /**
+     * @dev Throws if called by any account other than the owner.
+     */
+    modifier onlyOwner() {
+        require(
+            owner() == msg.sender,
+            "WorkRelationship: caller is not the owner"
+        );
+        _;
     }
 
-    function assignNewWorker(address newWorker, Evaluation.EvaluationState memory evaluationState) external onlyOwner {
-        bool passesEvaluation = checkWorkerEvaluation(newWorker, evaluationState);
+    constructor(address jobRequester, string memory taskMetadataPointer) public payable {
+        require(jobRequester != address(0));
+        _owner = jobRequester;
+        _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
+        _taskMetadataPointer = taskMetadataPointer;
+    }
+
+    /**
+     * @dev Returns the address of the current owner.
+     */
+    function owner() public view returns (address) {
+        return _owner;
+    }
+
+    function assignNewWorker(
+        address newWorker,
+        Evaluation.EvaluationState memory evaluationState
+    ) external onlyOwner {
+        bool passesEvaluation =
+            checkWorkerEvaluation(newWorker, evaluationState);
         require(passesEvaluation == true);
 
-        _workExchangeAddress = newWorker;
+        _workerAddress = newWorker;
     }
 
-    function checkWorkerEvaluation(address workerUniversalAddress, Evaluation.EvaluationState memory evaluationState) internal returns(bool) {
-        bool passesEvaluation = UserSummary(workerUniversalAddress).evaluateUser(evaluationState);
+    function checkWorkerEvaluation(
+        address workerUniversalAddress,
+        Evaluation.EvaluationState memory evaluationState
+    ) internal returns (bool) {
+        bool passesEvaluation =
+            UserSummary(workerUniversalAddress).evaluateUser(evaluationState);
         return passesEvaluation;
     }
 
-    function disableWorkRelationship() external onlyOwner {
-        require(_contractStatus == Evaluation.WorkRelationshipState.COMPLETED);
-        emit WorkRelationshipEnded(owner(), address(this));
-    }
-
-    function updateTaskMetadataPointer(string memory newTaskPointerHash) onlyOwner external {
+    function updateTaskMetadataPointer(string memory newTaskPointerHash)
+        external
+        onlyOwner
+    {
         _taskMetadataPointer = newTaskPointerHash;
     }
 
-    function updateTaskSolutionPointer(string memory newTaskPointerHash) onlyWorker external {
+    function updateTaskSolutionPointer(string memory newTaskPointerHash)
+        external
+        onlyWorker
+    {
         _taskSolutionPointer = newTaskPointerHash;
     }
 
-    function getTaskSolutionPointer() view external onlyOwner returns(string memory)  {
+    function getTaskSolutionPointer()
+        external
+        view
+        onlyOwner
+        returns (string memory)
+    {
         return _taskSolutionPointer;
     }
+
+    withdraw
 }
