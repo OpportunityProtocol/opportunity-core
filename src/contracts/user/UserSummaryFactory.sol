@@ -5,7 +5,7 @@ pragma solidity 0.8.4;
 import "./UserSummary.sol";
 
 contract UserSummaryFactory {
-    event UserSummaryCreated(UserSummary indexed _userSummary, uint256 indexed index);
+    event UserSummaryCreated(UserSummary indexed _userSummary, uint256 indexed index, address indexed universalAddress);
     UserSummary[] private _userSummaries;
 
     constructor() {}
@@ -13,13 +13,12 @@ contract UserSummaryFactory {
     /**
      * Creates a user summary contract for each user based on their civic ID.
      */
-     function createUserSummary(string memory uniqueHash) external returns(address) {
-        UserSummary userSummary = new UserSummary(uniqueHash);
-        emit UserSummaryCreated(userSummary, _userSummaries.length);
+     function createUserSummary(address universalAddress) external returns(address) {
+        UserSummary userSummary = new UserSummary(universalAddress);
         _userSummaries.push(userSummary);
 
-        address userSummaryAddress = userSummary.getContractAddress();
-        return userSummaryAddress;
+        emit UserSummaryCreated(userSummary, _userSummaries.length, universalAddress);
+        return address(userSummary);
     }
 
     /**

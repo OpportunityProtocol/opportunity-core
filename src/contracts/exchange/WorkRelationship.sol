@@ -4,10 +4,9 @@ pragma solidity 0.8.4;
 
 import "../user/UserSummary.sol";
 import "../libraries/Evaluation.sol";
+import "../reputation/Tip.sol";
 
 contract WorkRelationship {
-
-    address public _workExchangeAddress;
     address public _workerAddress;
     address private _owner;
 
@@ -18,7 +17,7 @@ contract WorkRelationship {
 
     modifier onlyWorker() {
         require(
-            msg.sender == _workerAddress,
+            worker() == msg.sender,
             "WorkRelationship: caller is not the worker"
         );
         _;
@@ -35,11 +34,17 @@ contract WorkRelationship {
         _;
     }
 
-    constructor(address jobRequester, string memory taskMetadataPointer) public payable {
+    constructor(address jobRequester, string memory taskMetadataPointer)
+        public
+    {
         require(jobRequester != address(0));
         _owner = jobRequester;
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
         _taskMetadataPointer = taskMetadataPointer;
+    }
+
+    function worker() public view returns (address) {
+        return _workerAddress;
     }
 
     /**
@@ -49,23 +54,33 @@ contract WorkRelationship {
         return _owner;
     }
 
-    function assignNewWorker(
-        address newWorker,
-        Evaluation.EvaluationState memory evaluationState
-    ) external onlyOwner {
-        bool passesEvaluation =
-            checkWorkerEvaluation(newWorker, evaluationState);
-        require(passesEvaluation == true);
+    function assignNewWorker(address newWorker) external onlyOwner {
+        require(newWorker != address(0));
+        require(_contractStatus == Evaluation.WorkRelationshipState.UNCLAIMED);
 
         _workerAddress = newWorker;
+        _contractStatus = Evaluation.WorkRelationshipState.CLAIMED;
+
+        assert(_workerAddress == newWorker);
+        assert(_contractStatus == Evaluation.WorkRelationshipState.CLAIMED);
+    }
+
+    function unAssignWorker() external onlyOwner onlyWorker {
+        require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED);
+        require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED);
+        _workerAddress = address(0);
+        _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
+
+        assert(worker() == address(0));
+        assert(_contractStatus == Evaluation.WorkRelationshipState.UNCLAIMED);
     }
 
     function checkWorkerEvaluation(
         address workerUniversalAddress,
         Evaluation.EvaluationState memory evaluationState
-    ) internal returns (bool) {
-        bool passesEvaluation =
-            UserSummary(workerUniversalAddress).evaluateUser(evaluationState);
+    ) external returns (bool) {
+        bool passesEvaluation = UserSummary(workerUniversalAddress)
+        .evaluateUser(evaluationState);
         return passesEvaluation;
     }
 
@@ -91,6 +106,4 @@ contract WorkRelationship {
     {
         return _taskSolutionPointer;
     }
-
-    withdraw
 }

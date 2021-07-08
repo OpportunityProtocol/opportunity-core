@@ -5,9 +5,9 @@ pragma solidity 0.8.4;
 import "./interface/IUserSummary.sol";
 
 contract UserSummary is IUserSummary {
-    event UserSummaryUpdate(string uniqueHash);
+    event UserSummaryUpdate(address universalAddress);
 
-    string private _uniqueHash;
+    address private _universalAddress;
     uint256 private _userReputation;
 
     Profile private _userProfile;
@@ -15,8 +15,8 @@ contract UserSummary is IUserSummary {
     WorkerTaskGeneralDescription private _workerTaskGeneralDescription;
     RequesterTaskGeneralDescription private _requesterTaskGeneralDescription;
 
-    constructor(string memory _uniqueHashIn) {
-        _uniqueHash = _uniqueHashIn;
+    constructor(address universalAddress) {
+        _universalAddress = universalAddress;
         _userReputation = 1;
 
         _workerTaskGeneralDescription.taskCompleted = 0;
@@ -35,22 +35,15 @@ contract UserSummary is IUserSummary {
      */
     function createMarket(address market) external {
         createdMarkets.push(market);
-        emit UserSummaryUpdate(_uniqueHash);
+        emit UserSummaryUpdate(_universalAddress);
     }
 
     /**
      *
      */
-    function updateProfile(Profile memory updatedProfile, string memory uniqueHash) external override onlyAuthenticatedUser(uniqueHash, _uniqueHash) {
+    function updateProfile(Profile memory updatedProfile, address universalAddress) external override {
         _userProfile = updatedProfile;
-        emit UserSummaryUpdate(_uniqueHash);
-    }
-
-   /**
-     *
-     */
-    function getContractAddress() public view returns(address) {
-        return address(this);
+        emit UserSummaryUpdate(universalAddress);
     }
 
     /**
