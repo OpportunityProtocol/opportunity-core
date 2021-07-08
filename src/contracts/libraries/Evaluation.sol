@@ -11,7 +11,6 @@ library Evaluation {
 
     enum WorkRelationshipState { 
         UNCLAIMED,
-        PENDING,
         PENDING_DISPUTE,
         CANCELLED,
         COMPLETED,

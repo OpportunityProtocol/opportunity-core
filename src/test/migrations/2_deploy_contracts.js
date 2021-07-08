@@ -32,9 +32,10 @@ module.exports = async function(deployer) {
   await deployer.link(User, UserSummary);
 
   await deployer.link(StringUtils, UserSummaryFactory);
-  await deployer.deploy(UserSummaryFactory);
-  await deployer.link(StringUtils, UserRegistration);
-  await deployer.deploy(UserRegistration);
+  await deployer.deploy(UserSummaryFactory)
+  const userSummaryFactory = await UserSummaryFactory.deployed()
+    await deployer.link(StringUtils, UserRegistration);
+    await deployer.deploy(UserRegistration, userSummaryFactory.address);
 
   await deployer.deploy(MarketFactory);
   await deployer.deploy(Market, '0x', 0)

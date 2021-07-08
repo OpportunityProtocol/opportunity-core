@@ -7,11 +7,6 @@ import "../../libraries/User.sol";
 import "../../libraries/StringUtils.sol";
 
 interface IUserSummary {
-    modifier onlyAuthenticatedUser(string memory uniqueID, string memory uniqueHash) {
-        require(StringUtils.equal(uniqueID, uniqueHash));
-        _;
-    }
-
     struct Profile {
         string[] skills;
         string profession;
@@ -37,5 +32,5 @@ interface IUserSummary {
 
     function evaluateUser(Evaluation.EvaluationState memory evaluationState) external returns(bool);
     function getUserProfile() external view returns(string[] memory, string memory, uint8);
-    function updateProfile(Profile memory updatedProfile, string memory uniqueHash)  external;
+    function updateProfile(Profile memory updatedProfile, address universalAddress) external;
 }
