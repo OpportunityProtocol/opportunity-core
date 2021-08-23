@@ -62,7 +62,7 @@ contract DaiEscrow {
 
     bytes32 public immutable domain_separator;
 
-    address immutable public beneficiary
+    address immutable public beneficiary;
     address immutable public depositor;
 
     uint immutable public wad;
