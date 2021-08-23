@@ -10,20 +10,17 @@ const provider = new ethers.providers.JsonRpcProvider();
 // send ether and pay to change state within the blockchain.
 // For this, we need the account signer...
 const signer = provider.getSigner()
-const wallet = new ethers.Wallet('dc0a8af4787e8a4712326ff7d01bac6cb7b2879ef89bab088859860916c24482', provider);
+const wallet = new ethers.Wallet('b64ffce83525dbca10c810abf1219eb671a9b1ee1d29f5cbac2fc52ac6344b78', provider);
 
 
 const COMPILED_MARKET_PATH = path.join(__dirname, '../../bin/src/contracts/market/')
 const marketFactoryABI = JSON.parse(fs.readFileSync(COMPILED_MARKET_PATH + 'MarketFactory.abi'));
 console.log('Creating market factory contract instance...')
-const marketFactoryContractInstance = new ethers.Contract('0xf425497f7a86feb4cbb0733e7a6e34Ed3c5aEB8d', marketFactoryABI, signer);
+const marketFactoryContractInstance = new ethers.Contract('0xc495f9f3061602c19EE7c99cb15C007F31e182AE', marketFactoryABI, signer);
 
 console.log('Creating markets...')
 createDummyMarkets()
 
 async function createDummyMarkets() {
-   await marketFactoryContractInstance.createMarket('Market DEFAULT_E', 0);
-    await marketFactoryContractInstance.createMarket('Market DEFAULT_B', 0);
-   await marketFactoryContractInstance.createMarket('Market DEFAULT_C', 0);
-   await marketFactoryContractInstance.createMarket('Market SPECIFIC_D', 1);
+   await marketFactoryContractInstance.createMarket('Market DEFAULT', 0);
 }

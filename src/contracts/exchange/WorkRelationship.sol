@@ -5,6 +5,7 @@ pragma solidity 0.8.4;
 import "../user/UserSummary.sol";
 import "../libraries/Evaluation.sol";
 import "../reputation/Tip.sol";
+import "./WorkExchange.sol";
 
 contract WorkRelationship {
     address public _workerAddress;
@@ -13,6 +14,7 @@ contract WorkRelationship {
     string public _taskMetadataPointer = "";
     string private _taskSolutionPointer = "";
 
+    WorkExchange _workExchange;
     Evaluation.WorkRelationshipState public _contractStatus;
 
     modifier onlyWorker() {
@@ -34,13 +36,13 @@ contract WorkRelationship {
         _;
     }
 
-    constructor(address jobRequester, string memory taskMetadataPointer)
-        public
-    {
+    constructor(address jobRequester, string memory taskMetadataPointer) { 
         require(jobRequester != address(0));
         _owner = jobRequester;
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
         _taskMetadataPointer = taskMetadataPointer;
+
+        _workExchange.deposit(jobRequester);
     }
 
     function worker() public view returns (address) {
@@ -54,13 +56,27 @@ contract WorkRelationship {
         return _owner;
     }
 
-    function assignNewWorker(address newWorker) external onlyOwner {
+    function completeContract() external onlyOwner {
+        require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED, "This relationship is already completed");
+        
+        _contractStatus = Evaluation.WorkRelationshipState.COMPLETED;
+        _workExchange.beneficiaryWithdraw();
+
+    }
+
+    function updateRelationshipState(uint newState) external {
+        
+    }
+
+    function assignNewWorker(address payable newWorker) external onlyOwner {
         require(newWorker != address(0));
         require(_contractStatus == Evaluation.WorkRelationshipState.UNCLAIMED);
 
         _workerAddress = newWorker;
+        _workExchange = new WorkExchange(newWorker);
         _contractStatus = Evaluation.WorkRelationshipState.CLAIMED;
 
+        assert(address(_workExchange) != address(0));
         assert(_workerAddress == newWorker);
         assert(_contractStatus == Evaluation.WorkRelationshipState.CLAIMED);
     }
@@ -68,6 +84,7 @@ contract WorkRelationship {
     function unAssignWorker() external onlyOwner onlyWorker {
         require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED);
         require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED);
+
         _workerAddress = address(0);
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
 

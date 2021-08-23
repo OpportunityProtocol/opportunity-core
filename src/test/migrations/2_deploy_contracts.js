@@ -20,11 +20,17 @@ const Controllable = artifacts.require('../../contracts/control/Controllable');
 
 const WorkRelationship = artifacts.require('../../contracts/exchange/WorkRelationship.sol');
 
+const DaiEscrow = artifacts.require('../../contracts/exchange/DaiEscrow.sol');
+
 module.exports = async function(deployer) {
   const uniqueHash = '#jf84ht'
   await deployer.deploy(StringUtils);
   await deployer.deploy(MarketLibrary);
   await deployer.deploy(Evaluation);
+
+  await deployer.deploy(DaiEscrow);
+
+  await deployer.deploy(MarketFactory);
   await deployer.deploy(User);
 
   await deployer.link(StringUtils, UserSummary);
@@ -37,9 +43,7 @@ module.exports = async function(deployer) {
     await deployer.link(StringUtils, UserRegistration);
     await deployer.deploy(UserRegistration, userSummaryFactory.address);
 
-  await deployer.deploy(MarketFactory);
-  await deployer.deploy(Market, '0x', 0)
-
-  await deployer.deploy(Dispute);
+  //
+  //await deployer.deploy(Dispute);
   await deployer.deploy(Controllable);
 };
