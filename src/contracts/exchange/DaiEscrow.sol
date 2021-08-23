@@ -69,6 +69,8 @@ contract DaiEscrow {
 
     Status public status;
 
+    DaiToken daiToken;
+
     modifier onlyWhen(Status _status) {
         require(status == _status, "Fn not presently valid");
         _;
@@ -77,10 +79,12 @@ contract DaiEscrow {
     constructor(
         address _beneficiary,
         address _depositor,
-        uint _wad
+        uint _wad,
+        address _daiTokenAddress
     ) public {
-        require(_depositor != address(0), "invalid seller");
-        require(_beneficiary != address(0), "invalid buyer");
+        require(_depositor != address(0), "invalid owner");
+        require(_beneficiary != address(0), "invalid worker");
+        require(_daiTokenAddress != address(0), "invalid dai token address");
 
         uint8 chain_id;
         assembly {
@@ -96,10 +100,10 @@ contract DaiEscrow {
         ));
 
         wad = _wad;
-        relayer = tx.origin;
         depositor = _depositor;
         beneficiary = _beneficiary;
         status = Status.AwaitingWad;
+        daiToken = DaiToken(_daiTokenAddress);
     }
 
     function getEscrowStatus() {
