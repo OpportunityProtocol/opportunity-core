@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.4;
+pragma solidity 0.8.7;
 
 import "./UserSummaryFactory.sol";
 import "../control/Controllable.sol";
@@ -37,7 +37,7 @@ contract UserRegistration is Controllable {
     /**
      * assignTrueUserIdentification
      */
-    function assignTrueUserIdentification(address universalAddress, address summaryContractAddress) internal returns(bool) {
+    function assignTrueUserIdentification(address universalAddress, address summaryContractAddress) internal {
         _trueIdentifcations[universalAddress] = summaryContractAddress;
         assert(_trueIdentifcations[universalAddress] == summaryContractAddress);
         emit UserAssignedTrueIdentification(universalAddress, summaryContractAddress);

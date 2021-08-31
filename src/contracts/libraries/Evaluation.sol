@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.4;
+pragma solidity 0.8.7;
 
 library Evaluation {
     struct EvaluationState {
@@ -16,5 +16,10 @@ library Evaluation {
         COMPLETED,
         EVALUATING,
         CLAIMED
+    }
+
+    enum ContractType {
+        NORMAL,
+        FLASH
     }
 }

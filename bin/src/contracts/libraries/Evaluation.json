@@ -1,0 +1,234 @@
+{
+    "contractName": "Evaluation",
+    "abi": [],
+    "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":\"Evaluation\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":{\"keccak256\":\"0x6576f413ca96def1e6d769344abac301e5650e1ade5e9828c64ed960e5b24b4f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f1003b2f3ce4982b1c3be8fc324e168c87a2cb6558bc108c8554b8f1e6791981\",\"dweb:/ipfs/QmR6MojsFVLjgBt5bQN6bKW7sEpUWUHhTZMVs2yB1oG4JD\"]}},\"version\":1}",
+    "bytecode": "60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206c9ac975f03a7555180c66678c0f23941e5ee03200c5611b1a2682718a03389064736f6c63430008070033",
+    "deployedBytecode": "73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206c9ac975f03a7555180c66678c0f23941e5ee03200c5611b1a2682718a03389064736f6c63430008070033",
+    "sourceMap": "57:361:0:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;57:361:0;;;;;;;;;;;;;;;;;",
+    "deployedSourceMap": "57:361:0:-:0;;;;;;;;",
+    "sourcePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
+    "compiler": {
+        "name": "solc",
+        "version": "0.8.7+commit.e28d00a7"
+    },
+    "ast": {
+        "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
+        "exportedSymbols": {
+            "Evaluation": [
+                19
+            ]
+        },
+        "id": 20,
+        "license": "MIT",
+        "nodeType": "SourceUnit",
+        "nodes": [
+            {
+                "id": 1,
+                "literals": [
+                    "solidity",
+                    "0.8",
+                    ".7"
+                ],
+                "nodeType": "PragmaDirective",
+                "src": "33:22:0"
+            },
+            {
+                "abstract": false,
+                "baseContracts": [],
+                "contractDependencies": [],
+                "contractKind": "library",
+                "fullyImplemented": true,
+                "id": 19,
+                "linearizedBaseContracts": [
+                    19
+                ],
+                "name": "Evaluation",
+                "nameLocation": "65:10:0",
+                "nodeType": "ContractDefinition",
+                "nodes": [
+                    {
+                        "canonicalName": "Evaluation.EvaluationState",
+                        "id": 8,
+                        "members": [
+                            {
+                                "constant": false,
+                                "id": 3,
+                                "mutability": "mutable",
+                                "name": "industry",
+                                "nameLocation": "122:8:0",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 8,
+                                "src": "115:15:0",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_string_storage_ptr",
+                                    "typeString": "string"
+                                },
+                                "typeName": {
+                                    "id": 2,
+                                    "name": "string",
+                                    "nodeType": "ElementaryTypeName",
+                                    "src": "115:6:0",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_string_storage_ptr",
+                                        "typeString": "string"
+                                    }
+                                },
+                                "visibility": "internal"
+                            },
+                            {
+                                "constant": false,
+                                "id": 5,
+                                "mutability": "mutable",
+                                "name": "industrylevel",
+                                "nameLocation": "148:13:0",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 8,
+                                "src": "140:21:0",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                },
+                                "typeName": {
+                                    "id": 4,
+                                    "name": "uint256",
+                                    "nodeType": "ElementaryTypeName",
+                                    "src": "140:7:0",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_uint256",
+                                        "typeString": "uint256"
+                                    }
+                                },
+                                "visibility": "internal"
+                            },
+                            {
+                                "constant": false,
+                                "id": 7,
+                                "mutability": "mutable",
+                                "name": "reputation",
+                                "nameLocation": "179:10:0",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 8,
+                                "src": "171:18:0",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                },
+                                "typeName": {
+                                    "id": 6,
+                                    "name": "uint256",
+                                    "nodeType": "ElementaryTypeName",
+                                    "src": "171:7:0",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_uint256",
+                                        "typeString": "uint256"
+                                    }
+                                },
+                                "visibility": "internal"
+                            }
+                        ],
+                        "name": "EvaluationState",
+                        "nameLocation": "89:15:0",
+                        "nodeType": "StructDefinition",
+                        "scope": 19,
+                        "src": "82:114:0",
+                        "visibility": "public"
+                    },
+                    {
+                        "canonicalName": "Evaluation.WorkRelationshipState",
+                        "id": 15,
+                        "members": [
+                            {
+                                "id": 9,
+                                "name": "UNCLAIMED",
+                                "nameLocation": "240:9:0",
+                                "nodeType": "EnumValue",
+                                "src": "240:9:0"
+                            },
+                            {
+                                "id": 10,
+                                "name": "PENDING_DISPUTE",
+                                "nameLocation": "259:15:0",
+                                "nodeType": "EnumValue",
+                                "src": "259:15:0"
+                            },
+                            {
+                                "id": 11,
+                                "name": "CANCELLED",
+                                "nameLocation": "284:9:0",
+                                "nodeType": "EnumValue",
+                                "src": "284:9:0"
+                            },
+                            {
+                                "id": 12,
+                                "name": "COMPLETED",
+                                "nameLocation": "303:9:0",
+                                "nodeType": "EnumValue",
+                                "src": "303:9:0"
+                            },
+                            {
+                                "id": 13,
+                                "name": "EVALUATING",
+                                "nameLocation": "322:10:0",
+                                "nodeType": "EnumValue",
+                                "src": "322:10:0"
+                            },
+                            {
+                                "id": 14,
+                                "name": "CLAIMED",
+                                "nameLocation": "342:7:0",
+                                "nodeType": "EnumValue",
+                                "src": "342:7:0"
+                            }
+                        ],
+                        "name": "WorkRelationshipState",
+                        "nameLocation": "207:21:0",
+                        "nodeType": "EnumDefinition",
+                        "src": "202:153:0"
+                    },
+                    {
+                        "canonicalName": "Evaluation.ContractType",
+                        "id": 18,
+                        "members": [
+                            {
+                                "id": 16,
+                                "name": "NORMAL",
+                                "nameLocation": "389:6:0",
+                                "nodeType": "EnumValue",
+                                "src": "389:6:0"
+                            },
+                            {
+                                "id": 17,
+                                "name": "FLASH",
+                                "nameLocation": "405:5:0",
+                                "nodeType": "EnumValue",
+                                "src": "405:5:0"
+                            }
+                        ],
+                        "name": "ContractType",
+                        "nameLocation": "366:12:0",
+                        "nodeType": "EnumDefinition",
+                        "src": "361:55:0"
+                    }
+                ],
+                "scope": 20,
+                "src": "57:361:0",
+                "usedErrors": []
+            }
+        ],
+        "src": "33:385:0"
+    },
+    "functionHashes": {},
+    "gasEstimates": {
+        "creation": {
+            "codeDepositCost": "17200",
+            "executionCost": "103",
+            "totalCost": "17303"
+        }
+    }
+}

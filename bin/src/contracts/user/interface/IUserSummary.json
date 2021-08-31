@@ -1,0 +1,820 @@
+{
+    "contractName": "IUserSummary",
+    "abi": [
+        {
+            "inputs": [
+                {
+                    "components": [
+                        {
+                            "internalType": "string",
+                            "name": "industry",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "industrylevel",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "reputation",
+                            "type": "uint256"
+                        }
+                    ],
+                    "internalType": "struct Evaluation.EvaluationState",
+                    "name": "evaluationState",
+                    "type": "tuple"
+                }
+            ],
+            "name": "evaluateUser",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getUserProfile",
+            "outputs": [
+                {
+                    "internalType": "string[]",
+                    "name": "",
+                    "type": "string[]"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "uint8",
+                    "name": "",
+                    "type": "uint8"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "components": [
+                        {
+                            "internalType": "string[]",
+                            "name": "skills",
+                            "type": "string[]"
+                        },
+                        {
+                            "internalType": "string",
+                            "name": "profession",
+                            "type": "string"
+                        },
+                        {
+                            "internalType": "uint8",
+                            "name": "activityLevel",
+                            "type": "uint8"
+                        }
+                    ],
+                    "internalType": "struct IUserSummary.Profile",
+                    "name": "updatedProfile",
+                    "type": "tuple"
+                },
+                {
+                    "internalType": "address",
+                    "name": "universalAddress",
+                    "type": "address"
+                }
+            ],
+            "name": "updateProfile",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ],
+    "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"industry\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"industrylevel\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reputation\",\"type\":\"uint256\"}],\"internalType\":\"struct Evaluation.EvaluationState\",\"name\":\"evaluationState\",\"type\":\"tuple\"}],\"name\":\"evaluateUser\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getUserProfile\",\"outputs\":[{\"internalType\":\"string[]\",\"name\":\"\",\"type\":\"string[]\"},{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"string[]\",\"name\":\"skills\",\"type\":\"string[]\"},{\"internalType\":\"string\",\"name\":\"profession\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"activityLevel\",\"type\":\"uint8\"}],\"internalType\":\"struct IUserSummary.Profile\",\"name\":\"updatedProfile\",\"type\":\"tuple\"},{\"internalType\":\"address\",\"name\":\"universalAddress\",\"type\":\"address\"}],\"name\":\"updateProfile\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/user/interface/IUserSummary.sol\":\"IUserSummary\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":{\"keccak256\":\"0x6576f413ca96def1e6d769344abac301e5650e1ade5e9828c64ed960e5b24b4f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f1003b2f3ce4982b1c3be8fc324e168c87a2cb6558bc108c8554b8f1e6791981\",\"dweb:/ipfs/QmR6MojsFVLjgBt5bQN6bKW7sEpUWUHhTZMVs2yB1oG4JD\"]},\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/StringUtils.sol\":{\"keccak256\":\"0x24330c7ac45d1992491dbff11dd687ea7a7a21a44122277263a43b107021067d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1c398376771df2c72107cc2064806c8366f6a869b0d04094e9e7288e73e3d0f1\",\"dweb:/ipfs/QmSkr6Bt7wNo18yW2CaxgSCse2XXnVP2FPWSbpUZpQiemv\"]},\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/User.sol\":{\"keccak256\":\"0x064c61f8f35fa7a1431a373e300980cf837339363ec810d7eea29239985414af\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8b26f56f048516c30b26d1e3c0dc3d70c1cf87ee652b488612263bb0b3a3c2e8\",\"dweb:/ipfs/QmexMQGdWmpcN1mvu9NUAjKXyjkJU3RxNphwtJqxdAuNcv\"]},\"/Users/elijahhampton/git/opportunity-core/src/contracts/user/interface/IUserSummary.sol\":{\"keccak256\":\"0x5d2ef9cbae7fdf951d044a3084313e8aeb3d2883909ceddab743cc71c828d5b1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://62623602db15758dcefce9c880a485914a270967b688fcf55ccdff8856671de8\",\"dweb:/ipfs/QmZn3KoG23qA5vpgTMYCBN9RAkd7z2R6uWNtGyaQ7fLdgL\"]}},\"version\":1}",
+    "bytecode": "",
+    "deployedBytecode": "",
+    "sourceMap": "",
+    "deployedSourceMap": "",
+    "sourcePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/user/interface/IUserSummary.sol",
+    "compiler": {
+        "name": "solc",
+        "version": "0.8.7+commit.e28d00a7"
+    },
+    "ast": {
+        "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/user/interface/IUserSummary.sol",
+        "exportedSymbols": {
+            "Evaluation": [
+                19
+            ],
+            "IUserSummary": [
+                338
+            ],
+            "StringUtils": [
+                260
+            ],
+            "User": [
+                280
+            ]
+        },
+        "id": 339,
+        "license": "MIT",
+        "nodeType": "SourceUnit",
+        "nodes": [
+            {
+                "id": 282,
+                "literals": [
+                    "solidity",
+                    "0.8",
+                    ".7"
+                ],
+                "nodeType": "PragmaDirective",
+                "src": "33:22:3"
+            },
+            {
+                "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
+                "file": "../../libraries/Evaluation.sol",
+                "id": 283,
+                "nameLocation": "-1:-1:-1",
+                "nodeType": "ImportDirective",
+                "scope": 339,
+                "sourceUnit": 20,
+                "src": "57:40:3",
+                "symbolAliases": [],
+                "unitAlias": ""
+            },
+            {
+                "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/User.sol",
+                "file": "../../libraries/User.sol",
+                "id": 284,
+                "nameLocation": "-1:-1:-1",
+                "nodeType": "ImportDirective",
+                "scope": 339,
+                "sourceUnit": 281,
+                "src": "98:34:3",
+                "symbolAliases": [],
+                "unitAlias": ""
+            },
+            {
+                "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/StringUtils.sol",
+                "file": "../../libraries/StringUtils.sol",
+                "id": 285,
+                "nameLocation": "-1:-1:-1",
+                "nodeType": "ImportDirective",
+                "scope": 339,
+                "sourceUnit": 261,
+                "src": "133:41:3",
+                "symbolAliases": [],
+                "unitAlias": ""
+            },
+            {
+                "abstract": false,
+                "baseContracts": [],
+                "contractDependencies": [],
+                "contractKind": "interface",
+                "fullyImplemented": false,
+                "id": 338,
+                "linearizedBaseContracts": [
+                    338
+                ],
+                "name": "IUserSummary",
+                "nameLocation": "186:12:3",
+                "nodeType": "ContractDefinition",
+                "nodes": [
+                    {
+                        "canonicalName": "IUserSummary.Profile",
+                        "id": 293,
+                        "members": [
+                            {
+                                "constant": false,
+                                "id": 288,
+                                "mutability": "mutable",
+                                "name": "skills",
+                                "nameLocation": "239:6:3",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 293,
+                                "src": "230:15:3",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_array$_t_string_storage_$dyn_storage_ptr",
+                                    "typeString": "string[]"
+                                },
+                                "typeName": {
+                                    "baseType": {
+                                        "id": 286,
+                                        "name": "string",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "230:6:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_string_storage_ptr",
+                                            "typeString": "string"
+                                        }
+                                    },
+                                    "id": 287,
+                                    "nodeType": "ArrayTypeName",
+                                    "src": "230:8:3",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_array$_t_string_storage_$dyn_storage_ptr",
+                                        "typeString": "string[]"
+                                    }
+                                },
+                                "visibility": "internal"
+                            },
+                            {
+                                "constant": false,
+                                "id": 290,
+                                "mutability": "mutable",
+                                "name": "profession",
+                                "nameLocation": "262:10:3",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 293,
+                                "src": "255:17:3",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_string_storage_ptr",
+                                    "typeString": "string"
+                                },
+                                "typeName": {
+                                    "id": 289,
+                                    "name": "string",
+                                    "nodeType": "ElementaryTypeName",
+                                    "src": "255:6:3",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_string_storage_ptr",
+                                        "typeString": "string"
+                                    }
+                                },
+                                "visibility": "internal"
+                            },
+                            {
+                                "constant": false,
+                                "id": 292,
+                                "mutability": "mutable",
+                                "name": "activityLevel",
+                                "nameLocation": "288:13:3",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 293,
+                                "src": "282:19:3",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_uint8",
+                                    "typeString": "uint8"
+                                },
+                                "typeName": {
+                                    "id": 291,
+                                    "name": "uint8",
+                                    "nodeType": "ElementaryTypeName",
+                                    "src": "282:5:3",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_uint8",
+                                        "typeString": "uint8"
+                                    }
+                                },
+                                "visibility": "internal"
+                            }
+                        ],
+                        "name": "Profile",
+                        "nameLocation": "212:7:3",
+                        "nodeType": "StructDefinition",
+                        "scope": 338,
+                        "src": "205:103:3",
+                        "visibility": "public"
+                    },
+                    {
+                        "canonicalName": "IUserSummary.WorkerTaskGeneralDescription",
+                        "id": 304,
+                        "members": [
+                            {
+                                "constant": false,
+                                "id": 295,
+                                "mutability": "mutable",
+                                "name": "taskCompleted",
+                                "nameLocation": "368:13:3",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 304,
+                                "src": "360:21:3",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                },
+                                "typeName": {
+                                    "id": 294,
+                                    "name": "uint256",
+                                    "nodeType": "ElementaryTypeName",
+                                    "src": "360:7:3",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_uint256",
+                                        "typeString": "uint256"
+                                    }
+                                },
+                                "visibility": "internal"
+                            },
+                            {
+                                "constant": false,
+                                "id": 299,
+                                "mutability": "mutable",
+                                "name": "industryEvaluation",
+                                "nameLocation": "469:18:3",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 304,
+                                "src": "442:45:3",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_mapping$_t_string_memory_ptr_$_t_uint256_$",
+                                    "typeString": "mapping(string => uint256)"
+                                },
+                                "typeName": {
+                                    "id": 298,
+                                    "keyType": {
+                                        "id": 296,
+                                        "name": "string",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "450:6:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_string_storage_ptr",
+                                            "typeString": "string"
+                                        }
+                                    },
+                                    "nodeType": "Mapping",
+                                    "src": "442:26:3",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_mapping$_t_string_memory_ptr_$_t_uint256_$",
+                                        "typeString": "mapping(string => uint256)"
+                                    },
+                                    "valueType": {
+                                        "id": 297,
+                                        "name": "uint256",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "460:7:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_uint256",
+                                            "typeString": "uint256"
+                                        }
+                                    }
+                                },
+                                "visibility": "internal"
+                            },
+                            {
+                                "constant": false,
+                                "id": 303,
+                                "mutability": "mutable",
+                                "name": "relationshipExchanges",
+                                "nameLocation": "574:21:3",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 304,
+                                "src": "547:48:3",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_mapping$_t_address_$_t_string_storage_$",
+                                    "typeString": "mapping(address => string)"
+                                },
+                                "typeName": {
+                                    "id": 302,
+                                    "keyType": {
+                                        "id": 300,
+                                        "name": "address",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "555:7:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_address",
+                                            "typeString": "address"
+                                        }
+                                    },
+                                    "nodeType": "Mapping",
+                                    "src": "547:26:3",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_mapping$_t_address_$_t_string_storage_$",
+                                        "typeString": "mapping(address => string)"
+                                    },
+                                    "valueType": {
+                                        "id": 301,
+                                        "name": "string",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "566:6:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_string_storage_ptr",
+                                            "typeString": "string"
+                                        }
+                                    }
+                                },
+                                "visibility": "internal"
+                            }
+                        ],
+                        "name": "WorkerTaskGeneralDescription",
+                        "nameLocation": "321:28:3",
+                        "nodeType": "StructDefinition",
+                        "scope": 338,
+                        "src": "314:288:3",
+                        "visibility": "public"
+                    },
+                    {
+                        "canonicalName": "IUserSummary.RequesterTaskGeneralDescription",
+                        "id": 311,
+                        "members": [
+                            {
+                                "constant": false,
+                                "id": 306,
+                                "mutability": "mutable",
+                                "name": "taskAssigned",
+                                "nameLocation": "665:12:3",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 311,
+                                "src": "657:20:3",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_uint256",
+                                    "typeString": "uint256"
+                                },
+                                "typeName": {
+                                    "id": 305,
+                                    "name": "uint256",
+                                    "nodeType": "ElementaryTypeName",
+                                    "src": "657:7:3",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_uint256",
+                                        "typeString": "uint256"
+                                    }
+                                },
+                                "visibility": "internal"
+                            },
+                            {
+                                "constant": false,
+                                "id": 310,
+                                "mutability": "mutable",
+                                "name": "relationshipExchanges",
+                                "nameLocation": "786:21:3",
+                                "nodeType": "VariableDeclaration",
+                                "scope": 311,
+                                "src": "758:49:3",
+                                "stateVariable": false,
+                                "storageLocation": "default",
+                                "typeDescriptions": {
+                                    "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                                    "typeString": "mapping(uint256 => address)"
+                                },
+                                "typeName": {
+                                    "id": 309,
+                                    "keyType": {
+                                        "id": 307,
+                                        "name": "uint256",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "766:7:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_uint256",
+                                            "typeString": "uint256"
+                                        }
+                                    },
+                                    "nodeType": "Mapping",
+                                    "src": "758:27:3",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_mapping$_t_uint256_$_t_address_$",
+                                        "typeString": "mapping(uint256 => address)"
+                                    },
+                                    "valueType": {
+                                        "id": 308,
+                                        "name": "address",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "777:7:3",
+                                        "stateMutability": "nonpayable",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_address",
+                                            "typeString": "address"
+                                        }
+                                    }
+                                },
+                                "visibility": "internal"
+                            }
+                        ],
+                        "name": "RequesterTaskGeneralDescription",
+                        "nameLocation": "615:31:3",
+                        "nodeType": "StructDefinition",
+                        "scope": 338,
+                        "src": "608:206:3",
+                        "visibility": "public"
+                    },
+                    {
+                        "functionSelector": "5d5f221f",
+                        "id": 319,
+                        "implemented": false,
+                        "kind": "function",
+                        "modifiers": [],
+                        "name": "evaluateUser",
+                        "nameLocation": "829:12:3",
+                        "nodeType": "FunctionDefinition",
+                        "parameters": {
+                            "id": 315,
+                            "nodeType": "ParameterList",
+                            "parameters": [
+                                {
+                                    "constant": false,
+                                    "id": 314,
+                                    "mutability": "mutable",
+                                    "name": "evaluationState",
+                                    "nameLocation": "876:15:3",
+                                    "nodeType": "VariableDeclaration",
+                                    "scope": 319,
+                                    "src": "842:49:3",
+                                    "stateVariable": false,
+                                    "storageLocation": "memory",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_struct$_EvaluationState_$8_memory_ptr",
+                                        "typeString": "struct Evaluation.EvaluationState"
+                                    },
+                                    "typeName": {
+                                        "id": 313,
+                                        "nodeType": "UserDefinedTypeName",
+                                        "pathNode": {
+                                            "id": 312,
+                                            "name": "Evaluation.EvaluationState",
+                                            "nodeType": "IdentifierPath",
+                                            "referencedDeclaration": 8,
+                                            "src": "842:26:3"
+                                        },
+                                        "referencedDeclaration": 8,
+                                        "src": "842:26:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_struct$_EvaluationState_$8_storage_ptr",
+                                            "typeString": "struct Evaluation.EvaluationState"
+                                        }
+                                    },
+                                    "visibility": "internal"
+                                }
+                            ],
+                            "src": "841:51:3"
+                        },
+                        "returnParameters": {
+                            "id": 318,
+                            "nodeType": "ParameterList",
+                            "parameters": [
+                                {
+                                    "constant": false,
+                                    "id": 317,
+                                    "mutability": "mutable",
+                                    "name": "",
+                                    "nameLocation": "-1:-1:-1",
+                                    "nodeType": "VariableDeclaration",
+                                    "scope": 319,
+                                    "src": "910:4:3",
+                                    "stateVariable": false,
+                                    "storageLocation": "default",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_bool",
+                                        "typeString": "bool"
+                                    },
+                                    "typeName": {
+                                        "id": 316,
+                                        "name": "bool",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "910:4:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_bool",
+                                            "typeString": "bool"
+                                        }
+                                    },
+                                    "visibility": "internal"
+                                }
+                            ],
+                            "src": "909:6:3"
+                        },
+                        "scope": 338,
+                        "src": "820:96:3",
+                        "stateMutability": "nonpayable",
+                        "virtual": false,
+                        "visibility": "external"
+                    },
+                    {
+                        "functionSelector": "6f61c744",
+                        "id": 329,
+                        "implemented": false,
+                        "kind": "function",
+                        "modifiers": [],
+                        "name": "getUserProfile",
+                        "nameLocation": "930:14:3",
+                        "nodeType": "FunctionDefinition",
+                        "parameters": {
+                            "id": 320,
+                            "nodeType": "ParameterList",
+                            "parameters": [],
+                            "src": "944:2:3"
+                        },
+                        "returnParameters": {
+                            "id": 328,
+                            "nodeType": "ParameterList",
+                            "parameters": [
+                                {
+                                    "constant": false,
+                                    "id": 323,
+                                    "mutability": "mutable",
+                                    "name": "",
+                                    "nameLocation": "-1:-1:-1",
+                                    "nodeType": "VariableDeclaration",
+                                    "scope": 329,
+                                    "src": "969:15:3",
+                                    "stateVariable": false,
+                                    "storageLocation": "memory",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_array$_t_string_memory_ptr_$dyn_memory_ptr",
+                                        "typeString": "string[]"
+                                    },
+                                    "typeName": {
+                                        "baseType": {
+                                            "id": 321,
+                                            "name": "string",
+                                            "nodeType": "ElementaryTypeName",
+                                            "src": "969:6:3",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_string_storage_ptr",
+                                                "typeString": "string"
+                                            }
+                                        },
+                                        "id": 322,
+                                        "nodeType": "ArrayTypeName",
+                                        "src": "969:8:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_array$_t_string_storage_$dyn_storage_ptr",
+                                            "typeString": "string[]"
+                                        }
+                                    },
+                                    "visibility": "internal"
+                                },
+                                {
+                                    "constant": false,
+                                    "id": 325,
+                                    "mutability": "mutable",
+                                    "name": "",
+                                    "nameLocation": "-1:-1:-1",
+                                    "nodeType": "VariableDeclaration",
+                                    "scope": 329,
+                                    "src": "986:13:3",
+                                    "stateVariable": false,
+                                    "storageLocation": "memory",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_string_memory_ptr",
+                                        "typeString": "string"
+                                    },
+                                    "typeName": {
+                                        "id": 324,
+                                        "name": "string",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "986:6:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_string_storage_ptr",
+                                            "typeString": "string"
+                                        }
+                                    },
+                                    "visibility": "internal"
+                                },
+                                {
+                                    "constant": false,
+                                    "id": 327,
+                                    "mutability": "mutable",
+                                    "name": "",
+                                    "nameLocation": "-1:-1:-1",
+                                    "nodeType": "VariableDeclaration",
+                                    "scope": 329,
+                                    "src": "1001:5:3",
+                                    "stateVariable": false,
+                                    "storageLocation": "default",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_uint8",
+                                        "typeString": "uint8"
+                                    },
+                                    "typeName": {
+                                        "id": 326,
+                                        "name": "uint8",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "1001:5:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_uint8",
+                                            "typeString": "uint8"
+                                        }
+                                    },
+                                    "visibility": "internal"
+                                }
+                            ],
+                            "src": "968:39:3"
+                        },
+                        "scope": 338,
+                        "src": "921:87:3",
+                        "stateMutability": "view",
+                        "virtual": false,
+                        "visibility": "external"
+                    },
+                    {
+                        "functionSelector": "7ca97e8c",
+                        "id": 337,
+                        "implemented": false,
+                        "kind": "function",
+                        "modifiers": [],
+                        "name": "updateProfile",
+                        "nameLocation": "1022:13:3",
+                        "nodeType": "FunctionDefinition",
+                        "parameters": {
+                            "id": 335,
+                            "nodeType": "ParameterList",
+                            "parameters": [
+                                {
+                                    "constant": false,
+                                    "id": 332,
+                                    "mutability": "mutable",
+                                    "name": "updatedProfile",
+                                    "nameLocation": "1051:14:3",
+                                    "nodeType": "VariableDeclaration",
+                                    "scope": 337,
+                                    "src": "1036:29:3",
+                                    "stateVariable": false,
+                                    "storageLocation": "memory",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_struct$_Profile_$293_memory_ptr",
+                                        "typeString": "struct IUserSummary.Profile"
+                                    },
+                                    "typeName": {
+                                        "id": 331,
+                                        "nodeType": "UserDefinedTypeName",
+                                        "pathNode": {
+                                            "id": 330,
+                                            "name": "Profile",
+                                            "nodeType": "IdentifierPath",
+                                            "referencedDeclaration": 293,
+                                            "src": "1036:7:3"
+                                        },
+                                        "referencedDeclaration": 293,
+                                        "src": "1036:7:3",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_struct$_Profile_$293_storage_ptr",
+                                            "typeString": "struct IUserSummary.Profile"
+                                        }
+                                    },
+                                    "visibility": "internal"
+                                },
+                                {
+                                    "constant": false,
+                                    "id": 334,
+                                    "mutability": "mutable",
+                                    "name": "universalAddress",
+                                    "nameLocation": "1075:16:3",
+                                    "nodeType": "VariableDeclaration",
+                                    "scope": 337,
+                                    "src": "1067:24:3",
+                                    "stateVariable": false,
+                                    "storageLocation": "default",
+                                    "typeDescriptions": {
+                                        "typeIdentifier": "t_address",
+                                        "typeString": "address"
+                                    },
+                                    "typeName": {
+                                        "id": 333,
+                                        "name": "address",
+                                        "nodeType": "ElementaryTypeName",
+                                        "src": "1067:7:3",
+                                        "stateMutability": "nonpayable",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_address",
+                                            "typeString": "address"
+                                        }
+                                    },
+                                    "visibility": "internal"
+                                }
+                            ],
+                            "src": "1035:57:3"
+                        },
+                        "returnParameters": {
+                            "id": 336,
+                            "nodeType": "ParameterList",
+                            "parameters": [],
+                            "src": "1101:0:3"
+                        },
+                        "scope": 338,
+                        "src": "1013:89:3",
+                        "stateMutability": "nonpayable",
+                        "virtual": false,
+                        "visibility": "external"
+                    }
+                ],
+                "scope": 339,
+                "src": "176:928:3",
+                "usedErrors": []
+            }
+        ],
+        "src": "33:1071:3"
+    },
+    "functionHashes": {
+        "evaluateUser((string,uint256,uint256))": "5d5f221f",
+        "getUserProfile()": "6f61c744",
+        "updateProfile((string[],string,uint8),address)": "7ca97e8c"
+    },
+    "gasEstimates": null
+}

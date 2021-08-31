@@ -1,8 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity 0.8.4;
-
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "./interfaces/ILendingPool.sol";
+pragma solidity 0.8.7;
 
 /// Dai Token Interface
 interface DaiToken {
@@ -27,16 +24,13 @@ interface DaiToken {
 // / @author Vypo Mouse (Forked and modified by Elijah Hampton) - https://forum.openzeppelin.com/t/feedback-on-dai-escrow-contract-that-reimburses-a-relayer-using-uniswap/2771
 // / @title DaiEscrow
 // / @notice Holds Dai tokens in escrow until the buyer and seller agree to
-// /         release them. A relayer handles paying the transaction fees, and is
-// /         reimbursed when the funds are released.
+// /         release them.
 // / @dev First construct the contract, specifying the buyer and seller addresses.
 // /      Then `initialize` the contract with signatures for Dai's `permit`. This
 // /      transfers Dai from the buyer to the escrow contract.
 // /
-// /      When the seller has completed their responsibilities, the relayer
-// /      calls `submit` on their behalf. If the seller does not complete their
-// /      tasks within ~30 days, anyone may call `submitPastDue` and refund the
-// /      buyer.
+// /      When the seller has completed their responsibilities, the seller
+// /      calls `submit` on their behalf.
 // /
 // /      Once `submit` has been called, the buyer has ~30 days to call `review`.
 // /      If the buyer does not call `review`, anyone may call `reviewPastDue` to
@@ -81,9 +75,9 @@ contract DaiEscrow {
         address _depositor,
         uint _wad,
         address _daiTokenAddress
-    ) public {
+    ) {
         require(_depositor != address(0), "invalid owner");
-        require(_beneficiary != address(0), "invalid worker");
+        //require(_beneficiary != address(0), "invalid worker");
         require(_daiTokenAddress != address(0), "invalid dai token address");
 
         uint8 chain_id;
@@ -106,10 +100,6 @@ contract DaiEscrow {
         daiToken = DaiToken(_daiTokenAddress);
     }
 
-    function getEscrowStatus() {
-        return status;
-    }
-
     function initialize(
         uint256 nonce,
         uint256 expiry,
@@ -123,13 +113,13 @@ contract DaiEscrow {
         status = Status.AwaitingSubmission;
 
         // Unlock buyer's Dai balance to transfer `wad` to this contract.
-        DAI.permit(depositor, address(this), nonce, expiry, true, v_allow, r_allow, s_allow);
+        daiToken.permit(depositor, address(this), nonce, expiry, true, v_allow, r_allow, s_allow);
 
         // Transfer Dai from `buyer` to this contract.
-        DAI.pull(depositor, wad);
+        daiToken.pull(depositor, wad);
 
         // Relock Dai balance of `buyer`.
-        DAI.permit(depositor, address(this), nonce + 1, expiry, false, v_deny, r_deny, s_deny);
+        daiToken.permit(depositor, address(this), nonce + 1, expiry, false, v_deny, r_deny, s_deny);
     }
 
     function submit(
@@ -144,6 +134,7 @@ contract DaiEscrow {
             keccak256(abi.encode(SUBMIT_TYPEHASH, _submission))
         ));
 
+        require(beneficiary != address(0));
         require(beneficiary == ecrecover(digest, _v, _r, _s), "invalid-permit");
 
         status = Status.AwaitingReview;
@@ -165,12 +156,11 @@ contract DaiEscrow {
 
         if (_approve) {
             resolve(beneficiary);
-        } else {
-            resolve(address(0));
         }
     }
 
     function resolve(address dai_target) private {
+        require(dai_target != address(0));
         bool locked = dai_target == address(0);
 
         if (locked) {
@@ -180,11 +170,15 @@ contract DaiEscrow {
         }
 
         if (!locked) {
-            DAI.push(dai_target, DAI.balanceOf(address(this)));
+            daiToken.push(dai_target, daiToken.balanceOf(address(this)));
         }
     }
 
-    function cancel() external {
+    function cancel() external view {
         require(status == Status.AwaitingWad || status == Status.Complete, "wrong status");
+    }
+    
+    function updateStatus(address callee) public {
+        
     }
 }

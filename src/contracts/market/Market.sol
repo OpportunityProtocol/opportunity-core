@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
+pragma solidity 0.8.7;
 
-pragma solidity 0.8.4;
-
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/Pausable.sol";
 import "../libraries/Evaluation.sol";
 import "../exchange/WorkRelationship.sol";
 import "../libraries/MarketLib.sol";
 import "../control/Controllable.sol";
+import "../../../node_modules/@openzeppelin/contracts/access/Ownable.sol";
+import "../../../node_modules/@openzeppelin/contracts/security/Pausable.sol";
 
 contract Market is Ownable, Controllable, Pausable {
     event MarketPaused(
@@ -46,14 +45,15 @@ contract Market is Ownable, Controllable, Pausable {
     /**
      * Creates a user summary contract for each user based on their civic ID.
      */
-    function createJob(address jobRequester, string memory taskMetadataPointer
+    function createJob(Evaluation.ContractType _contractType, string memory taskMetadataPointer
     ) external {
-        require(jobRequester != address(0));
+        address owner = msg.sender;
+        require(owner!= address(0));
         WorkRelationship createdJob =
-            new WorkRelationship(jobRequester, taskMetadataPointer);
+            new WorkRelationship(owner, _contractType, taskMetadataPointer);
         _createdJobs.push(createdJob);
         emit WorkRelationshipCreated(
-            jobRequester,
+            owner,
             address(createdJob),
             address(this)
         );

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.4;
+pragma solidity 0.8.7;
 
 library StringUtils {
     /// @dev Does a byte-by-byte lexicographical comparison of two strings.

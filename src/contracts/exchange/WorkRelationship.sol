@@ -1,25 +1,28 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.4;
+pragma solidity 0.8.7;
 
 import "../user/UserSummary.sol";
 import "../libraries/Evaluation.sol";
-import "../reputation/Tip.sol";
 import "./WorkExchange.sol";
 
 contract WorkRelationship {
-    address public _workerAddress;
-    address private _owner;
+    address public worker;
+    address private owner;
 
     string public _taskMetadataPointer = "";
     string private _taskSolutionPointer = "";
 
-    WorkExchange _workExchange;
+    WorkExchange private _workExchange;
     Evaluation.WorkRelationshipState public _contractStatus;
+
+    Evaluation.ContractType public contractType;
+
+    uint public contractPayout;
 
     modifier onlyWorker() {
         require(
-            worker() == msg.sender,
+            worker == msg.sender,
             "WorkRelationship: caller is not the worker"
         );
         _;
@@ -30,37 +33,43 @@ contract WorkRelationship {
      */
     modifier onlyOwner() {
         require(
-            owner() == msg.sender,
+            owner == msg.sender,
             "WorkRelationship: caller is not the owner"
         );
         _;
     }
 
-    constructor(address jobRequester, string memory taskMetadataPointer) { 
-        require(jobRequester != address(0));
-        _owner = jobRequester;
+    modifier onlyOwnerWhenNotFlash() {
+        if (contractType == Evaluation.ContractType.FLASH) {
+            _;
+        } else {
+            require(owner == msg.sender, "Caller is not owner and contract is not flash.");
+        }
+        _;
+    }
+
+    modifier onlyWhen(Evaluation.WorkRelationshipState status) {
+        require(_contractStatus == status);
+        _;
+    }
+
+    constructor(address _owner, Evaluation.ContractType _contractType, string memory taskMetadataPointer) { 
+        owner = _owner;
+        worker = address(0);
+        contractType = _contractType;
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
         _taskMetadataPointer = taskMetadataPointer;
-
-        _workExchange.deposit(jobRequester);
     }
 
-    function worker() public view returns (address) {
-        return _workerAddress;
-    }
-
-    /**
-     * @dev Returns the address of the current owner.
-     */
-    function owner() public view returns (address) {
-        return _owner;
+    function updateContractPayout(uint amount) external onlyOwner {
+        //send back value
     }
 
     function completeContract() external onlyOwner {
         require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED, "This relationship is already completed");
         
         _contractStatus = Evaluation.WorkRelationshipState.COMPLETED;
-        _workExchange.beneficiaryWithdraw();
+        //_workExchange.beneficiaryWithdraw();
 
     }
 
@@ -68,27 +77,26 @@ contract WorkRelationship {
         
     }
 
-    function assignNewWorker(address payable newWorker) external onlyOwner {
+    function assignNewWorker(address payable newWorker, uint _wad, address _daiTokenAddress) external onlyOwnerWhenNotFlash onlyWhen(Evaluation.WorkRelationshipState.UNCLAIMED) {
         require(newWorker != address(0));
-        require(_contractStatus == Evaluation.WorkRelationshipState.UNCLAIMED);
 
-        _workerAddress = newWorker;
-        _workExchange = new WorkExchange(newWorker);
+        worker = newWorker;
+        _workExchange = new WorkExchange(newWorker, owner, _wad, _daiTokenAddress);
         _contractStatus = Evaluation.WorkRelationshipState.CLAIMED;
 
         assert(address(_workExchange) != address(0));
-        assert(_workerAddress == newWorker);
+        assert(worker == newWorker);
         assert(_contractStatus == Evaluation.WorkRelationshipState.CLAIMED);
     }
 
-    function unAssignWorker() external onlyOwner onlyWorker {
+    function unAssignWorker() external onlyWorker {
         require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED);
         require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED);
 
-        _workerAddress = address(0);
+        worker = address(0);
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
 
-        assert(worker() == address(0));
+        assert(worker == address(0));
         assert(_contractStatus == Evaluation.WorkRelationshipState.UNCLAIMED);
     }
 
@@ -110,7 +118,7 @@ contract WorkRelationship {
 
     function updateTaskSolutionPointer(string memory newTaskPointerHash)
         external
-        onlyWorker
+        onlyWorker onlyWhen(Evaluation.WorkRelationshipState.CLAIMED)
     {
         _taskSolutionPointer = newTaskPointerHash;
     }
@@ -122,5 +130,25 @@ contract WorkRelationship {
         returns (string memory)
     {
         return _taskSolutionPointer;
+    }
+    
+    function submitDispute(address disputor) external{
+        _workExchange.disputeFunds(disputor);
+    }
+
+    function submitWork(
+        bytes32 _submission,
+        uint8 _v,
+        bytes32 _r,
+        bytes32 _s) onlyWorker external {
+        _workExchange.submit(_submission, _v, _r, _s);
+    }
+
+    function submitWorkEvaluation(
+        bool _approved,
+        uint8 _v,
+        bytes32 _r,
+        bytes32 _s) onlyOwner external {
+        _workExchange.review(_approved, _v, _r, _s);
     }
 }
