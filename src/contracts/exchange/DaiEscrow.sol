@@ -42,12 +42,17 @@ interface DaiToken {
 // /      forever.
 contract DaiEscrow {
   enum Status {
-        AwaitingWad,
         AwaitingSubmission,
         AwaitingReview,
         Complete,
         Locked
     }
+
+  enum ContractState {
+      Initialized,
+      Uninitialized
+  }
+
     // keccak256("Review(bool _approve)")
     bytes32 public constant REVIEW_TYPEHASH = 0xfa5e0016fb62b8dffda8fd95249d438edcffd3689b40ac3b4281d4cf710609ae;
 
@@ -62,6 +67,7 @@ contract DaiEscrow {
     uint immutable public wad;
 
     Status public status;
+    ContractState public contractState;
 
     DaiToken daiToken;
 
@@ -96,7 +102,8 @@ contract DaiEscrow {
         wad = _wad;
         depositor = _depositor;
         beneficiary = _beneficiary;
-        status = Status.AwaitingWad;
+        status = Status.AwaitingSubmission;
+        contractState = ContractState.Uninitialized;
         daiToken = DaiToken(_daiTokenAddress);
     }
 
@@ -109,8 +116,7 @@ contract DaiEscrow {
         uint8 v_deny,
         bytes32 r_deny,
         bytes32 s_deny
-    ) external onlyWhen(Status.AwaitingWad) {
-        status = Status.AwaitingSubmission;
+    ) external {
 
         // Unlock buyer's Dai balance to transfer `wad` to this contract.
         daiToken.permit(depositor, address(this), nonce, expiry, true, v_allow, r_allow, s_allow);
@@ -120,6 +126,7 @@ contract DaiEscrow {
 
         // Relock Dai balance of `buyer`.
         daiToken.permit(depositor, address(this), nonce + 1, expiry, false, v_deny, r_deny, s_deny);
+        contractState = ContractState.Initialized;
     }
 
     function submit(
@@ -146,6 +153,7 @@ contract DaiEscrow {
         bytes32 _r,
         bytes32 _s
     ) external onlyWhen(Status.AwaitingReview) {
+        require(msg.sender == depositor, "Wrong reviewer");
         bytes32 digest = keccak256(abi.encodePacked(
             "\x19\x01",
             domain_separator,
@@ -174,9 +182,9 @@ contract DaiEscrow {
         }
     }
 
-    function cancel() external view {
+   /* function cancel() external view {
         require(status == Status.AwaitingWad || status == Status.Complete, "wrong status");
-    }
+    } */
     
     function updateStatus(address callee) public {
         

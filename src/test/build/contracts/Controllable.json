@@ -7,24 +7,24 @@
       "type": "constructor"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/control/Controllable.sol\":\"Controllable\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/control/Controllable.sol\":{\"keccak256\":\"0xc238d6026100e53a28c0c2b82ca5d48050abe245133189d1faf7463b995ac96a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0c09cb3eda0dc03f8f3a7e7bffa997f94cdbff415d9d4645d77dcffa1b525e3c\",\"dweb:/ipfs/QmVAVPYGATZSC9f4FRY25LqSL3iaJTwU5bnkLvWMJWufFo\"]},\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol\":{\"keccak256\":\"0x7e944e129858491254735d487535aaa1198b85f4ba614076850e783664ef7a30\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://67ed08794bdb6a3b9848ac2d3a965ecfabfe8849e273b897349a5693952b5a2a\",\"dweb:/ipfs/QmfMFmxcPUpf13ABjuhmaTvmLuenJU86F3HENtDFb5Jg8s\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50600080546001600160a01b03191633179055603f80602f6000396000f3fe6080604052600080fdfea26469706673582212202cb12936c58658e3e020e0e08f97a57154a6b376f02128e67bd3f2a291a8297364736f6c63430008070033",
-  "deployedBytecode": "0x6080604052600080fdfea26469706673582212202cb12936c58658e3e020e0e08f97a57154a6b376f02128e67bd3f2a291a8297364736f6c63430008070033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/control/Controllable.sol\":\"Controllable\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/control/Controllable.sol\":{\"keccak256\":\"0xc238d6026100e53a28c0c2b82ca5d48050abe245133189d1faf7463b995ac96a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0c09cb3eda0dc03f8f3a7e7bffa997f94cdbff415d9d4645d77dcffa1b525e3c\",\"dweb:/ipfs/QmVAVPYGATZSC9f4FRY25LqSL3iaJTwU5bnkLvWMJWufFo\"]},\"/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/libraries/MarketLib.sol\":{\"keccak256\":\"0x7e944e129858491254735d487535aaa1198b85f4ba614076850e783664ef7a30\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://67ed08794bdb6a3b9848ac2d3a965ecfabfe8849e273b897349a5693952b5a2a\",\"dweb:/ipfs/QmfMFmxcPUpf13ABjuhmaTvmLuenJU86F3HENtDFb5Jg8s\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50600080546001600160a01b03191633179055603f80602f6000396000f3fe6080604052600080fdfea2646970667358221220fd9e97e26c0cb09cdc897dcb970a0989fe6a71e2613fa44025d525e41034a78164736f6c63430008070033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220fd9e97e26c0cb09cdc897dcb970a0989fe6a71e2613fa44025d525e41034a78164736f6c63430008070033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
   "sourceMap": "95:870:4:-:0;;;163:62;;;;;;;;;-1:-1:-1;187:17:4;:30;;-1:-1:-1;;;;;;187:30:4;207:10;187:30;;;95:870;;;;;;",
   "deployedSourceMap": "95:870:4:-:0;;;;;",
   "source": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.8.7;\n\nimport \"../libraries/MarketLib.sol\";\n\ncontract Controllable {\n    address private _globalController;\n\n    constructor() {\n        _globalController = msg.sender;\n     }\n\n     modifier onlyGlobalController(address requester) {\n         require(requester == _globalController);\n         _;\n     }\n\n     modifier onlyDefaultMarkets(MarketLib.MarketType marketType) {\n         require(marketType == MarketLib.MarketType.DEFAULT);\n        _;\n     }\n\n     modifier onlyCustomMarkets(MarketLib.MarketType marketType) {\n          require(marketType == MarketLib.MarketType.CREATED);\n         _;\n     }\n\n     modifier onlyNotPausedState(MarketLib.MarketStatus marketStatus) {\n         require(marketStatus != MarketLib.MarketStatus.PAUSED);\n         _;\n     }\n\n      modifier onlyPausedState(MarketLib.MarketStatus marketStatus) {\n         require(marketStatus == MarketLib.MarketStatus.ACTIVE);\n         _;\n     }\n\n}",
-  "sourcePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/control/Controllable.sol",
+  "sourcePath": "/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/control/Controllable.sol",
   "ast": {
-    "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/control/Controllable.sol",
+    "absolutePath": "/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/control/Controllable.sol",
     "exportedSymbols": {
       "Controllable": [
         337
       ],
       "MarketLib": [
-        1287
+        1300
       ]
     },
     "id": 338,
@@ -42,13 +42,13 @@
         "src": "33:22:4"
       },
       {
-        "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol",
+        "absolutePath": "/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/libraries/MarketLib.sol",
         "file": "../libraries/MarketLib.sol",
         "id": 253,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 338,
-        "sourceUnit": 1288,
+        "sourceUnit": 1301,
         "src": "57:36:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -338,7 +338,7 @@
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketType_$1283",
+                          "typeIdentifier": "t_enum$_MarketType_$1296",
                           "typeString": "enum MarketLib.MarketType"
                         },
                         "id": 286,
@@ -354,7 +354,7 @@
                           "referencedDeclaration": 279,
                           "src": "438:10:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$1283",
+                            "typeIdentifier": "t_enum$_MarketType_$1296",
                             "typeString": "enum MarketLib.MarketType"
                           }
                         },
@@ -367,10 +367,10 @@
                               "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1287,
+                              "referencedDeclaration": 1300,
                               "src": "452:9:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1287_$",
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1300_$",
                                 "typeString": "type(library MarketLib)"
                               }
                             },
@@ -381,10 +381,10 @@
                             "lValueRequested": false,
                             "memberName": "MarketType",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 1283,
+                            "referencedDeclaration": 1296,
                             "src": "452:20:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketType_$1283_$",
+                              "typeIdentifier": "t_type$_t_enum$_MarketType_$1296_$",
                               "typeString": "type(enum MarketLib.MarketType)"
                             }
                           },
@@ -395,10 +395,10 @@
                           "lValueRequested": false,
                           "memberName": "DEFAULT",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1281,
+                          "referencedDeclaration": 1294,
                           "src": "452:28:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$1283",
+                            "typeIdentifier": "t_enum$_MarketType_$1296",
                             "typeString": "enum MarketLib.MarketType"
                           }
                         },
@@ -476,7 +476,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketType_$1283",
+                    "typeIdentifier": "t_enum$_MarketType_$1296",
                     "typeString": "enum MarketLib.MarketType"
                   },
                   "typeName": {
@@ -486,13 +486,13 @@
                       "id": 277,
                       "name": "MarketLib.MarketType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1283,
+                      "referencedDeclaration": 1296,
                       "src": "386:20:4"
                     },
-                    "referencedDeclaration": 1283,
+                    "referencedDeclaration": 1296,
                     "src": "386:20:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketType_$1283",
+                      "typeIdentifier": "t_enum$_MarketType_$1296",
                       "typeString": "enum MarketLib.MarketType"
                     }
                   },
@@ -516,7 +516,7 @@
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketType_$1283",
+                          "typeIdentifier": "t_enum$_MarketType_$1296",
                           "typeString": "enum MarketLib.MarketType"
                         },
                         "id": 301,
@@ -532,7 +532,7 @@
                           "referencedDeclaration": 294,
                           "src": "587:10:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$1283",
+                            "typeIdentifier": "t_enum$_MarketType_$1296",
                             "typeString": "enum MarketLib.MarketType"
                           }
                         },
@@ -545,10 +545,10 @@
                               "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1287,
+                              "referencedDeclaration": 1300,
                               "src": "601:9:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1287_$",
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1300_$",
                                 "typeString": "type(library MarketLib)"
                               }
                             },
@@ -559,10 +559,10 @@
                             "lValueRequested": false,
                             "memberName": "MarketType",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 1283,
+                            "referencedDeclaration": 1296,
                             "src": "601:20:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketType_$1283_$",
+                              "typeIdentifier": "t_type$_t_enum$_MarketType_$1296_$",
                               "typeString": "type(enum MarketLib.MarketType)"
                             }
                           },
@@ -573,10 +573,10 @@
                           "lValueRequested": false,
                           "memberName": "CREATED",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1282,
+                          "referencedDeclaration": 1295,
                           "src": "601:28:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$1283",
+                            "typeIdentifier": "t_enum$_MarketType_$1296",
                             "typeString": "enum MarketLib.MarketType"
                           }
                         },
@@ -654,7 +654,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketType_$1283",
+                    "typeIdentifier": "t_enum$_MarketType_$1296",
                     "typeString": "enum MarketLib.MarketType"
                   },
                   "typeName": {
@@ -664,13 +664,13 @@
                       "id": 292,
                       "name": "MarketLib.MarketType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1283,
+                      "referencedDeclaration": 1296,
                       "src": "534:20:4"
                     },
-                    "referencedDeclaration": 1283,
+                    "referencedDeclaration": 1296,
                     "src": "534:20:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketType_$1283",
+                      "typeIdentifier": "t_enum$_MarketType_$1296",
                       "typeString": "enum MarketLib.MarketType"
                     }
                   },
@@ -694,7 +694,7 @@
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                          "typeIdentifier": "t_enum$_MarketStatus_$1299",
                           "typeString": "enum MarketLib.MarketStatus"
                         },
                         "id": 316,
@@ -710,7 +710,7 @@
                           "referencedDeclaration": 309,
                           "src": "741:12:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                            "typeIdentifier": "t_enum$_MarketStatus_$1299",
                             "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
@@ -723,10 +723,10 @@
                               "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1287,
+                              "referencedDeclaration": 1300,
                               "src": "757:9:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1287_$",
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1300_$",
                                 "typeString": "type(library MarketLib)"
                               }
                             },
@@ -737,10 +737,10 @@
                             "lValueRequested": false,
                             "memberName": "MarketStatus",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 1286,
+                            "referencedDeclaration": 1299,
                             "src": "757:22:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$1286_$",
+                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$1299_$",
                               "typeString": "type(enum MarketLib.MarketStatus)"
                             }
                           },
@@ -751,10 +751,10 @@
                           "lValueRequested": false,
                           "memberName": "PAUSED",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1285,
+                          "referencedDeclaration": 1298,
                           "src": "757:29:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                            "typeIdentifier": "t_enum$_MarketStatus_$1299",
                             "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
@@ -832,7 +832,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                    "typeIdentifier": "t_enum$_MarketStatus_$1299",
                     "typeString": "enum MarketLib.MarketStatus"
                   },
                   "typeName": {
@@ -842,13 +842,13 @@
                       "id": 307,
                       "name": "MarketLib.MarketStatus",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1286,
+                      "referencedDeclaration": 1299,
                       "src": "685:22:4"
                     },
-                    "referencedDeclaration": 1286,
+                    "referencedDeclaration": 1299,
                     "src": "685:22:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                      "typeIdentifier": "t_enum$_MarketStatus_$1299",
                       "typeString": "enum MarketLib.MarketStatus"
                     }
                   },
@@ -872,7 +872,7 @@
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                          "typeIdentifier": "t_enum$_MarketStatus_$1299",
                           "typeString": "enum MarketLib.MarketStatus"
                         },
                         "id": 331,
@@ -888,7 +888,7 @@
                           "referencedDeclaration": 324,
                           "src": "896:12:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                            "typeIdentifier": "t_enum$_MarketStatus_$1299",
                             "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
@@ -901,10 +901,10 @@
                               "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1287,
+                              "referencedDeclaration": 1300,
                               "src": "912:9:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1287_$",
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1300_$",
                                 "typeString": "type(library MarketLib)"
                               }
                             },
@@ -915,10 +915,10 @@
                             "lValueRequested": false,
                             "memberName": "MarketStatus",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 1286,
+                            "referencedDeclaration": 1299,
                             "src": "912:22:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$1286_$",
+                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$1299_$",
                               "typeString": "type(enum MarketLib.MarketStatus)"
                             }
                           },
@@ -929,10 +929,10 @@
                           "lValueRequested": false,
                           "memberName": "ACTIVE",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1284,
+                          "referencedDeclaration": 1297,
                           "src": "912:29:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                            "typeIdentifier": "t_enum$_MarketStatus_$1299",
                             "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
@@ -1010,7 +1010,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                    "typeIdentifier": "t_enum$_MarketStatus_$1299",
                     "typeString": "enum MarketLib.MarketStatus"
                   },
                   "typeName": {
@@ -1020,13 +1020,13 @@
                       "id": 322,
                       "name": "MarketLib.MarketStatus",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1286,
+                      "referencedDeclaration": 1299,
                       "src": "840:22:4"
                     },
-                    "referencedDeclaration": 1286,
+                    "referencedDeclaration": 1299,
                     "src": "840:22:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                      "typeIdentifier": "t_enum$_MarketStatus_$1299",
                       "typeString": "enum MarketLib.MarketStatus"
                     }
                   },
@@ -1048,13 +1048,13 @@
     "src": "33:932:4"
   },
   "legacyAST": {
-    "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/control/Controllable.sol",
+    "absolutePath": "/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/control/Controllable.sol",
     "exportedSymbols": {
       "Controllable": [
         337
       ],
       "MarketLib": [
-        1287
+        1300
       ]
     },
     "id": 338,
@@ -1072,13 +1072,13 @@
         "src": "33:22:4"
       },
       {
-        "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/MarketLib.sol",
+        "absolutePath": "/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/libraries/MarketLib.sol",
         "file": "../libraries/MarketLib.sol",
         "id": 253,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 338,
-        "sourceUnit": 1288,
+        "sourceUnit": 1301,
         "src": "57:36:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1368,7 +1368,7 @@
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketType_$1283",
+                          "typeIdentifier": "t_enum$_MarketType_$1296",
                           "typeString": "enum MarketLib.MarketType"
                         },
                         "id": 286,
@@ -1384,7 +1384,7 @@
                           "referencedDeclaration": 279,
                           "src": "438:10:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$1283",
+                            "typeIdentifier": "t_enum$_MarketType_$1296",
                             "typeString": "enum MarketLib.MarketType"
                           }
                         },
@@ -1397,10 +1397,10 @@
                               "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1287,
+                              "referencedDeclaration": 1300,
                               "src": "452:9:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1287_$",
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1300_$",
                                 "typeString": "type(library MarketLib)"
                               }
                             },
@@ -1411,10 +1411,10 @@
                             "lValueRequested": false,
                             "memberName": "MarketType",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 1283,
+                            "referencedDeclaration": 1296,
                             "src": "452:20:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketType_$1283_$",
+                              "typeIdentifier": "t_type$_t_enum$_MarketType_$1296_$",
                               "typeString": "type(enum MarketLib.MarketType)"
                             }
                           },
@@ -1425,10 +1425,10 @@
                           "lValueRequested": false,
                           "memberName": "DEFAULT",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1281,
+                          "referencedDeclaration": 1294,
                           "src": "452:28:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$1283",
+                            "typeIdentifier": "t_enum$_MarketType_$1296",
                             "typeString": "enum MarketLib.MarketType"
                           }
                         },
@@ -1506,7 +1506,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketType_$1283",
+                    "typeIdentifier": "t_enum$_MarketType_$1296",
                     "typeString": "enum MarketLib.MarketType"
                   },
                   "typeName": {
@@ -1516,13 +1516,13 @@
                       "id": 277,
                       "name": "MarketLib.MarketType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1283,
+                      "referencedDeclaration": 1296,
                       "src": "386:20:4"
                     },
-                    "referencedDeclaration": 1283,
+                    "referencedDeclaration": 1296,
                     "src": "386:20:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketType_$1283",
+                      "typeIdentifier": "t_enum$_MarketType_$1296",
                       "typeString": "enum MarketLib.MarketType"
                     }
                   },
@@ -1546,7 +1546,7 @@
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketType_$1283",
+                          "typeIdentifier": "t_enum$_MarketType_$1296",
                           "typeString": "enum MarketLib.MarketType"
                         },
                         "id": 301,
@@ -1562,7 +1562,7 @@
                           "referencedDeclaration": 294,
                           "src": "587:10:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$1283",
+                            "typeIdentifier": "t_enum$_MarketType_$1296",
                             "typeString": "enum MarketLib.MarketType"
                           }
                         },
@@ -1575,10 +1575,10 @@
                               "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1287,
+                              "referencedDeclaration": 1300,
                               "src": "601:9:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1287_$",
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1300_$",
                                 "typeString": "type(library MarketLib)"
                               }
                             },
@@ -1589,10 +1589,10 @@
                             "lValueRequested": false,
                             "memberName": "MarketType",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 1283,
+                            "referencedDeclaration": 1296,
                             "src": "601:20:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketType_$1283_$",
+                              "typeIdentifier": "t_type$_t_enum$_MarketType_$1296_$",
                               "typeString": "type(enum MarketLib.MarketType)"
                             }
                           },
@@ -1603,10 +1603,10 @@
                           "lValueRequested": false,
                           "memberName": "CREATED",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1282,
+                          "referencedDeclaration": 1295,
                           "src": "601:28:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketType_$1283",
+                            "typeIdentifier": "t_enum$_MarketType_$1296",
                             "typeString": "enum MarketLib.MarketType"
                           }
                         },
@@ -1684,7 +1684,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketType_$1283",
+                    "typeIdentifier": "t_enum$_MarketType_$1296",
                     "typeString": "enum MarketLib.MarketType"
                   },
                   "typeName": {
@@ -1694,13 +1694,13 @@
                       "id": 292,
                       "name": "MarketLib.MarketType",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1283,
+                      "referencedDeclaration": 1296,
                       "src": "534:20:4"
                     },
-                    "referencedDeclaration": 1283,
+                    "referencedDeclaration": 1296,
                     "src": "534:20:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketType_$1283",
+                      "typeIdentifier": "t_enum$_MarketType_$1296",
                       "typeString": "enum MarketLib.MarketType"
                     }
                   },
@@ -1724,7 +1724,7 @@
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                          "typeIdentifier": "t_enum$_MarketStatus_$1299",
                           "typeString": "enum MarketLib.MarketStatus"
                         },
                         "id": 316,
@@ -1740,7 +1740,7 @@
                           "referencedDeclaration": 309,
                           "src": "741:12:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                            "typeIdentifier": "t_enum$_MarketStatus_$1299",
                             "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
@@ -1753,10 +1753,10 @@
                               "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1287,
+                              "referencedDeclaration": 1300,
                               "src": "757:9:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1287_$",
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1300_$",
                                 "typeString": "type(library MarketLib)"
                               }
                             },
@@ -1767,10 +1767,10 @@
                             "lValueRequested": false,
                             "memberName": "MarketStatus",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 1286,
+                            "referencedDeclaration": 1299,
                             "src": "757:22:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$1286_$",
+                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$1299_$",
                               "typeString": "type(enum MarketLib.MarketStatus)"
                             }
                           },
@@ -1781,10 +1781,10 @@
                           "lValueRequested": false,
                           "memberName": "PAUSED",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1285,
+                          "referencedDeclaration": 1298,
                           "src": "757:29:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                            "typeIdentifier": "t_enum$_MarketStatus_$1299",
                             "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
@@ -1862,7 +1862,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                    "typeIdentifier": "t_enum$_MarketStatus_$1299",
                     "typeString": "enum MarketLib.MarketStatus"
                   },
                   "typeName": {
@@ -1872,13 +1872,13 @@
                       "id": 307,
                       "name": "MarketLib.MarketStatus",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1286,
+                      "referencedDeclaration": 1299,
                       "src": "685:22:4"
                     },
-                    "referencedDeclaration": 1286,
+                    "referencedDeclaration": 1299,
                     "src": "685:22:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                      "typeIdentifier": "t_enum$_MarketStatus_$1299",
                       "typeString": "enum MarketLib.MarketStatus"
                     }
                   },
@@ -1902,7 +1902,7 @@
                     "arguments": [
                       {
                         "commonType": {
-                          "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                          "typeIdentifier": "t_enum$_MarketStatus_$1299",
                           "typeString": "enum MarketLib.MarketStatus"
                         },
                         "id": 331,
@@ -1918,7 +1918,7 @@
                           "referencedDeclaration": 324,
                           "src": "896:12:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                            "typeIdentifier": "t_enum$_MarketStatus_$1299",
                             "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
@@ -1931,10 +1931,10 @@
                               "name": "MarketLib",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1287,
+                              "referencedDeclaration": 1300,
                               "src": "912:9:4",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1287_$",
+                                "typeIdentifier": "t_type$_t_contract$_MarketLib_$1300_$",
                                 "typeString": "type(library MarketLib)"
                               }
                             },
@@ -1945,10 +1945,10 @@
                             "lValueRequested": false,
                             "memberName": "MarketStatus",
                             "nodeType": "MemberAccess",
-                            "referencedDeclaration": 1286,
+                            "referencedDeclaration": 1299,
                             "src": "912:22:4",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$1286_$",
+                              "typeIdentifier": "t_type$_t_enum$_MarketStatus_$1299_$",
                               "typeString": "type(enum MarketLib.MarketStatus)"
                             }
                           },
@@ -1959,10 +1959,10 @@
                           "lValueRequested": false,
                           "memberName": "ACTIVE",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 1284,
+                          "referencedDeclaration": 1297,
                           "src": "912:29:4",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                            "typeIdentifier": "t_enum$_MarketStatus_$1299",
                             "typeString": "enum MarketLib.MarketStatus"
                           }
                         },
@@ -2040,7 +2040,7 @@
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                    "typeIdentifier": "t_enum$_MarketStatus_$1299",
                     "typeString": "enum MarketLib.MarketStatus"
                   },
                   "typeName": {
@@ -2050,13 +2050,13 @@
                       "id": 322,
                       "name": "MarketLib.MarketStatus",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1286,
+                      "referencedDeclaration": 1299,
                       "src": "840:22:4"
                     },
-                    "referencedDeclaration": 1286,
+                    "referencedDeclaration": 1299,
                     "src": "840:22:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_enum$_MarketStatus_$1286",
+                      "typeIdentifier": "t_enum$_MarketStatus_$1299",
                       "typeString": "enum MarketLib.MarketStatus"
                     }
                   },
@@ -2085,12 +2085,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x177529a71dbD0f4F6494cc2f03F991Fbf9a454a8",
-      "transactionHash": "0xc512b04b5b7d9a8894860680d57d1d150ddf02ac8225495151b151ed1e689dcb"
+      "address": "0xc1E3F70EeAfE4f63F62C63897C23351612c8979B",
+      "transactionHash": "0x4c0dea694071b3aa89f0bd819ce88bf11d6e26a4c291f51d1273d408764474a1"
     }
   },
-  "schemaVersion": "3.4.1",
-  "updatedAt": "2021-08-30T00:38:08.540Z",
+  "schemaVersion": "3.4.3",
+  "updatedAt": "2021-09-06T17:19:25.863Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

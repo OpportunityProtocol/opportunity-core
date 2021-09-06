@@ -77,11 +77,12 @@ contract WorkRelationship {
         
     }
 
-    function assignNewWorker(address payable newWorker, uint _wad, address _daiTokenAddress) external onlyOwnerWhenNotFlash onlyWhen(Evaluation.WorkRelationshipState.UNCLAIMED) {
+    function assignNewWorker(address payable newWorker, address _daiTokenAddress) external payable onlyOwnerWhenNotFlash onlyWhen(Evaluation.WorkRelationshipState.UNCLAIMED) {
         require(newWorker != address(0));
+        require(msg.value != 0);
 
         worker = newWorker;
-        _workExchange = new WorkExchange(newWorker, owner, _wad, _daiTokenAddress);
+        _workExchange = new WorkExchange(newWorker, owner, msg.value, _daiTokenAddress);
         _contractStatus = Evaluation.WorkRelationshipState.CLAIMED;
 
         assert(address(_workExchange) != address(0));

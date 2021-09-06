@@ -1,29 +1,29 @@
 {
   "contractName": "Evaluation",
   "abi": [],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":\"Evaluation\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":{\"keccak256\":\"0x6576f413ca96def1e6d769344abac301e5650e1ade5e9828c64ed960e5b24b4f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f1003b2f3ce4982b1c3be8fc324e168c87a2cb6558bc108c8554b8f1e6791981\",\"dweb:/ipfs/QmR6MojsFVLjgBt5bQN6bKW7sEpUWUHhTZMVs2yB1oG4JD\"]}},\"version\":1}",
-  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206c9ac975f03a7555180c66678c0f23941e5ee03200c5611b1a2682718a03389064736f6c63430008070033",
-  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212206c9ac975f03a7555180c66678c0f23941e5ee03200c5611b1a2682718a03389064736f6c63430008070033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":\"Evaluation\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/libraries/Evaluation.sol\":{\"keccak256\":\"0x6576f413ca96def1e6d769344abac301e5650e1ade5e9828c64ed960e5b24b4f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f1003b2f3ce4982b1c3be8fc324e168c87a2cb6558bc108c8554b8f1e6791981\",\"dweb:/ipfs/QmR6MojsFVLjgBt5bQN6bKW7sEpUWUHhTZMVs2yB1oG4JD\"]}},\"version\":1}",
+  "bytecode": "0x60566037600b82828239805160001a607314602a57634e487b7160e01b600052600060045260246000fd5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212201a89fe03118975a09476f8ad65e4b9a4e034e00d0e2e323f3301c077040c101064736f6c63430008070033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600080fdfea26469706673582212201a89fe03118975a09476f8ad65e4b9a4e034e00d0e2e323f3301c077040c101064736f6c63430008070033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
   "sourceMap": "57:361:9:-:0;;;;;;;;;;;;;;;-1:-1:-1;;;57:361:9;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "57:361:9:-:0;;;;;;;;",
   "source": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.8.7;\n\nlibrary Evaluation {\n    struct EvaluationState {\n        string industry;\n        uint256 industrylevel;\n        uint256 reputation;\n    }\n\n    enum WorkRelationshipState { \n        UNCLAIMED,\n        PENDING_DISPUTE,\n        CANCELLED,\n        COMPLETED,\n        EVALUATING,\n        CLAIMED\n    }\n\n    enum ContractType {\n        NORMAL,\n        FLASH\n    }\n}",
-  "sourcePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
+  "sourcePath": "/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
   "ast": {
-    "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
+    "absolutePath": "/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
     "exportedSymbols": {
       "Evaluation": [
-        1278
+        1291
       ]
     },
-    "id": 1279,
+    "id": 1292,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1260,
+        "id": 1273,
         "literals": [
           "solidity",
           "0.8",
@@ -38,9 +38,9 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 1278,
+        "id": 1291,
         "linearizedBaseContracts": [
-          1278
+          1291
         ],
         "name": "Evaluation",
         "nameLocation": "65:10:9",
@@ -48,16 +48,16 @@
         "nodes": [
           {
             "canonicalName": "Evaluation.EvaluationState",
-            "id": 1267,
+            "id": 1280,
             "members": [
               {
                 "constant": false,
-                "id": 1262,
+                "id": 1275,
                 "mutability": "mutable",
                 "name": "industry",
                 "nameLocation": "122:8:9",
                 "nodeType": "VariableDeclaration",
-                "scope": 1267,
+                "scope": 1280,
                 "src": "115:15:9",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -66,7 +66,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1261,
+                  "id": 1274,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "115:6:9",
@@ -79,12 +79,12 @@
               },
               {
                 "constant": false,
-                "id": 1264,
+                "id": 1277,
                 "mutability": "mutable",
                 "name": "industrylevel",
                 "nameLocation": "148:13:9",
                 "nodeType": "VariableDeclaration",
-                "scope": 1267,
+                "scope": 1280,
                 "src": "140:21:9",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -93,7 +93,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1263,
+                  "id": 1276,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "140:7:9",
@@ -106,12 +106,12 @@
               },
               {
                 "constant": false,
-                "id": 1266,
+                "id": 1279,
                 "mutability": "mutable",
                 "name": "reputation",
                 "nameLocation": "179:10:9",
                 "nodeType": "VariableDeclaration",
-                "scope": 1267,
+                "scope": 1280,
                 "src": "171:18:9",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -120,7 +120,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1265,
+                  "id": 1278,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "171:7:9",
@@ -135,51 +135,51 @@
             "name": "EvaluationState",
             "nameLocation": "89:15:9",
             "nodeType": "StructDefinition",
-            "scope": 1278,
+            "scope": 1291,
             "src": "82:114:9",
             "visibility": "public"
           },
           {
             "canonicalName": "Evaluation.WorkRelationshipState",
-            "id": 1274,
+            "id": 1287,
             "members": [
               {
-                "id": 1268,
+                "id": 1281,
                 "name": "UNCLAIMED",
                 "nameLocation": "240:9:9",
                 "nodeType": "EnumValue",
                 "src": "240:9:9"
               },
               {
-                "id": 1269,
+                "id": 1282,
                 "name": "PENDING_DISPUTE",
                 "nameLocation": "259:15:9",
                 "nodeType": "EnumValue",
                 "src": "259:15:9"
               },
               {
-                "id": 1270,
+                "id": 1283,
                 "name": "CANCELLED",
                 "nameLocation": "284:9:9",
                 "nodeType": "EnumValue",
                 "src": "284:9:9"
               },
               {
-                "id": 1271,
+                "id": 1284,
                 "name": "COMPLETED",
                 "nameLocation": "303:9:9",
                 "nodeType": "EnumValue",
                 "src": "303:9:9"
               },
               {
-                "id": 1272,
+                "id": 1285,
                 "name": "EVALUATING",
                 "nameLocation": "322:10:9",
                 "nodeType": "EnumValue",
                 "src": "322:10:9"
               },
               {
-                "id": 1273,
+                "id": 1286,
                 "name": "CLAIMED",
                 "nameLocation": "342:7:9",
                 "nodeType": "EnumValue",
@@ -193,17 +193,17 @@
           },
           {
             "canonicalName": "Evaluation.ContractType",
-            "id": 1277,
+            "id": 1290,
             "members": [
               {
-                "id": 1275,
+                "id": 1288,
                 "name": "NORMAL",
                 "nameLocation": "389:6:9",
                 "nodeType": "EnumValue",
                 "src": "389:6:9"
               },
               {
-                "id": 1276,
+                "id": 1289,
                 "name": "FLASH",
                 "nameLocation": "405:5:9",
                 "nodeType": "EnumValue",
@@ -216,7 +216,7 @@
             "src": "361:55:9"
           }
         ],
-        "scope": 1279,
+        "scope": 1292,
         "src": "57:361:9",
         "usedErrors": []
       }
@@ -224,18 +224,18 @@
     "src": "33:385:9"
   },
   "legacyAST": {
-    "absolutePath": "/Users/elijahhampton/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
+    "absolutePath": "/Volumes/GLYPH-3TB/git/opportunity-core/src/contracts/libraries/Evaluation.sol",
     "exportedSymbols": {
       "Evaluation": [
-        1278
+        1291
       ]
     },
-    "id": 1279,
+    "id": 1292,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1260,
+        "id": 1273,
         "literals": [
           "solidity",
           "0.8",
@@ -250,9 +250,9 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 1278,
+        "id": 1291,
         "linearizedBaseContracts": [
-          1278
+          1291
         ],
         "name": "Evaluation",
         "nameLocation": "65:10:9",
@@ -260,16 +260,16 @@
         "nodes": [
           {
             "canonicalName": "Evaluation.EvaluationState",
-            "id": 1267,
+            "id": 1280,
             "members": [
               {
                 "constant": false,
-                "id": 1262,
+                "id": 1275,
                 "mutability": "mutable",
                 "name": "industry",
                 "nameLocation": "122:8:9",
                 "nodeType": "VariableDeclaration",
-                "scope": 1267,
+                "scope": 1280,
                 "src": "115:15:9",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -278,7 +278,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1261,
+                  "id": 1274,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "115:6:9",
@@ -291,12 +291,12 @@
               },
               {
                 "constant": false,
-                "id": 1264,
+                "id": 1277,
                 "mutability": "mutable",
                 "name": "industrylevel",
                 "nameLocation": "148:13:9",
                 "nodeType": "VariableDeclaration",
-                "scope": 1267,
+                "scope": 1280,
                 "src": "140:21:9",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -305,7 +305,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1263,
+                  "id": 1276,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "140:7:9",
@@ -318,12 +318,12 @@
               },
               {
                 "constant": false,
-                "id": 1266,
+                "id": 1279,
                 "mutability": "mutable",
                 "name": "reputation",
                 "nameLocation": "179:10:9",
                 "nodeType": "VariableDeclaration",
-                "scope": 1267,
+                "scope": 1280,
                 "src": "171:18:9",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -332,7 +332,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1265,
+                  "id": 1278,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "171:7:9",
@@ -347,51 +347,51 @@
             "name": "EvaluationState",
             "nameLocation": "89:15:9",
             "nodeType": "StructDefinition",
-            "scope": 1278,
+            "scope": 1291,
             "src": "82:114:9",
             "visibility": "public"
           },
           {
             "canonicalName": "Evaluation.WorkRelationshipState",
-            "id": 1274,
+            "id": 1287,
             "members": [
               {
-                "id": 1268,
+                "id": 1281,
                 "name": "UNCLAIMED",
                 "nameLocation": "240:9:9",
                 "nodeType": "EnumValue",
                 "src": "240:9:9"
               },
               {
-                "id": 1269,
+                "id": 1282,
                 "name": "PENDING_DISPUTE",
                 "nameLocation": "259:15:9",
                 "nodeType": "EnumValue",
                 "src": "259:15:9"
               },
               {
-                "id": 1270,
+                "id": 1283,
                 "name": "CANCELLED",
                 "nameLocation": "284:9:9",
                 "nodeType": "EnumValue",
                 "src": "284:9:9"
               },
               {
-                "id": 1271,
+                "id": 1284,
                 "name": "COMPLETED",
                 "nameLocation": "303:9:9",
                 "nodeType": "EnumValue",
                 "src": "303:9:9"
               },
               {
-                "id": 1272,
+                "id": 1285,
                 "name": "EVALUATING",
                 "nameLocation": "322:10:9",
                 "nodeType": "EnumValue",
                 "src": "322:10:9"
               },
               {
-                "id": 1273,
+                "id": 1286,
                 "name": "CLAIMED",
                 "nameLocation": "342:7:9",
                 "nodeType": "EnumValue",
@@ -405,17 +405,17 @@
           },
           {
             "canonicalName": "Evaluation.ContractType",
-            "id": 1277,
+            "id": 1290,
             "members": [
               {
-                "id": 1275,
+                "id": 1288,
                 "name": "NORMAL",
                 "nameLocation": "389:6:9",
                 "nodeType": "EnumValue",
                 "src": "389:6:9"
               },
               {
-                "id": 1276,
+                "id": 1289,
                 "name": "FLASH",
                 "nameLocation": "405:5:9",
                 "nodeType": "EnumValue",
@@ -428,7 +428,7 @@
             "src": "361:55:9"
           }
         ],
-        "scope": 1279,
+        "scope": 1292,
         "src": "57:361:9",
         "usedErrors": []
       }
@@ -443,12 +443,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xdB89C5b9489c854F88b82F5e52B3450B3c4ddA7e",
-      "transactionHash": "0xf07b2a2721fde81f27b7d3b2ddc79c03dca672199ef50bbe8bb91cb96bc7b8d5"
+      "address": "0xCC2C9fFa46A586177a2dA2f362CFC1B54251EcaE",
+      "transactionHash": "0xde3f8a47ad9843840dc8309878c0fd796ba99185646082ec2dd55da2fd323a1b"
     }
   },
-  "schemaVersion": "3.4.1",
-  "updatedAt": "2021-08-30T00:38:08.532Z",
+  "schemaVersion": "3.4.3",
+  "updatedAt": "2021-09-06T17:19:25.856Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
