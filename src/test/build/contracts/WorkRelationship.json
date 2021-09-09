@@ -10074,7 +10074,7 @@
         1561
       ],
       "UserSummary": [
-        2687
+        2685
       ],
       "WorkExchange": [
         864
@@ -10104,7 +10104,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 1272,
-        "sourceUnit": 2688,
+        "sourceUnit": 2686,
         "src": "57:33:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -13747,10 +13747,10 @@
                           "name": "UserSummary",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 2687,
+                          "referencedDeclaration": 2685,
                           "src": "3373:11:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_UserSummary_$2687_$",
+                            "typeIdentifier": "t_type$_t_contract$_UserSummary_$2685_$",
                             "typeString": "type(contract UserSummary)"
                           }
                         },
@@ -13765,7 +13765,7 @@
                         "src": "3373:35:8",
                         "tryCall": false,
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_UserSummary_$2687",
+                          "typeIdentifier": "t_contract$_UserSummary_$2685",
                           "typeString": "contract UserSummary"
                         }
                       },
@@ -13776,7 +13776,7 @@
                       "lValueRequested": false,
                       "memberName": "evaluateUser",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2686,
+                      "referencedDeclaration": 2684,
                       "src": "3373:57:8",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_struct$_EvaluationState_$1280_memory_ptr_$returns$_t_bool_$",
@@ -15034,7 +15034,7 @@
         1561
       ],
       "UserSummary": [
-        2687
+        2685
       ],
       "WorkExchange": [
         864
@@ -15064,7 +15064,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 1272,
-        "sourceUnit": 2688,
+        "sourceUnit": 2686,
         "src": "57:33:8",
         "symbolAliases": [],
         "unitAlias": ""
@@ -18707,10 +18707,10 @@
                           "name": "UserSummary",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 2687,
+                          "referencedDeclaration": 2685,
                           "src": "3373:11:8",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_UserSummary_$2687_$",
+                            "typeIdentifier": "t_type$_t_contract$_UserSummary_$2685_$",
                             "typeString": "type(contract UserSummary)"
                           }
                         },
@@ -18725,7 +18725,7 @@
                         "src": "3373:35:8",
                         "tryCall": false,
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_UserSummary_$2687",
+                          "typeIdentifier": "t_contract$_UserSummary_$2685",
                           "typeString": "contract UserSummary"
                         }
                       },
@@ -18736,7 +18736,7 @@
                       "lValueRequested": false,
                       "memberName": "evaluateUser",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2686,
+                      "referencedDeclaration": 2684,
                       "src": "3373:57:8",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_struct$_EvaluationState_$1280_memory_ptr_$returns$_t_bool_$",
@@ -19980,12 +19980,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x338633c844E8C0BD645D3b909622D7a7a6C8AB52",
-      "transactionHash": "0xfe8bac26c6749b92351def85130f52c87dbea48f61dc4bb0acbcb89d71ee7507"
+      "address": "0x840284AE37a5b96C60EeA26BdDA8eb46f872Be03",
+      "transactionHash": "0x815ea063945c3eb338a81b2600fe995a24bea56209a4f4f12eab55b78ee592c8"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-06T20:47:38.766Z",
+  "updatedAt": "2021-09-08T21:32:19.706Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

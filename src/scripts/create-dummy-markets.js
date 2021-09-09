@@ -15,12 +15,12 @@ const wallet = new ethers.Wallet('b64ffce83525dbca10c810abf1219eb671a9b1ee1d29f5
 
 const COMPILED_MARKET_PATH = path.join(__dirname, '../../bin/src/contracts/market/')
 const marketFactoryABI = JSON.parse(fs.readFileSync(COMPILED_MARKET_PATH + 'MarketFactory.abi'));
-console.log('Creating market factory contract instance...')
-const marketFactoryContractInstance = new ethers.Contract('0x9AE94160Cb13404f30EBAd4266Bda653D7082634', marketFactoryABI, signer);
 
+console.log('Creating market factory contract instance...')
+const marketFactoryContractInstance = new ethers.Contract('0x229f81c5C10906899f0103A0a7FA4c14Af60195F', marketFactoryABI, signer);
 console.log('Creating markets...')
 createDummyMarkets()
 
 async function createDummyMarkets() {
-   await marketFactoryContractInstance.createMarket('Market DEFAULT', 0);
+   await marketFactoryContractInstance.createMarket('Market DEFAULT2', 0);
 }

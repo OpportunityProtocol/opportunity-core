@@ -6,8 +6,8 @@ import "./Market.sol";
 import "../libraries/MarketLib.sol";
 
 contract MarketFactory {
-    event MarketCreated(Market indexed _market, uint256 indexed index, address owner, 
-        string marketName, MarketLib.MarketType marketType);
+    event MarketCreated(address indexed _market, uint256 indexed index, address owner, 
+        string marketName);
     event MarketDestroyed(address indexed _marketAddress);
 
     Market[] private _createdMarkets;
@@ -22,7 +22,7 @@ contract MarketFactory {
         //idsToMarkets[marketId] = marketName;
 
         _createdMarkets.push(createdMarket);
-        emit MarketCreated(createdMarket, _createdMarkets.length, msg.sender, marketName, marketType);
+        emit MarketCreated(address(createdMarket), _createdMarkets.length, msg.sender, marketName);
     }
 
     /**

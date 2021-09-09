@@ -575,7 +575,7 @@
         1561
       ],
       "UserSummary": [
-        2687
+        2685
       ],
       "WorkExchange": [
         864
@@ -1301,7 +1301,7 @@
         1561
       ],
       "UserSummary": [
-        2687
+        2685
       ],
       "WorkExchange": [
         864
@@ -2008,7 +2008,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-06T20:47:38.781Z",
+  "updatedAt": "2021-09-08T21:32:19.726Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

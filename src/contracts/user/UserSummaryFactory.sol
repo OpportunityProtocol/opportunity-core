@@ -5,7 +5,7 @@ pragma solidity 0.8.7;
 import "./UserSummary.sol";
 
 contract UserSummaryFactory {
-    event UserSummaryCreated(UserSummary indexed _userSummary, uint256 indexed index, address indexed universalAddress);
+    event UserSummaryCreated(address indexed _userSummary, uint256 indexed index, address indexed universalAddress);
     UserSummary[] private _userSummaries;
 
     constructor() {}
@@ -17,7 +17,7 @@ contract UserSummaryFactory {
         UserSummary userSummary = new UserSummary(universalAddress);
         _userSummaries.push(userSummary);
 
-        emit UserSummaryCreated(userSummary, _userSummaries.length, universalAddress);
+        emit UserSummaryCreated(address(userSummary), _userSummaries.length, universalAddress);
         return address(userSummary);
     }
 
