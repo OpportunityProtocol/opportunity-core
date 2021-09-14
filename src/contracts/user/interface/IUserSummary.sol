@@ -5,6 +5,7 @@ pragma solidity 0.8.7;
 import "../../libraries/Evaluation.sol";
 import "../../libraries/User.sol";
 import "../../libraries/StringUtils.sol";
+import "@openzeppelin/access/Ownable.sol";
 
 interface IUserSummary {
     struct Profile {

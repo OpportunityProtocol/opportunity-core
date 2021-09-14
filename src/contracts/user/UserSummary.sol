@@ -8,15 +8,19 @@ contract UserSummary is IUserSummary {
     event UserSummaryUpdate(address universalAddress);
 
     address private _universalAddress;
-    uint256 private _userReputation;
+    uint256 public _userReputation;
+    uint256 public stakedReputation;
 
     Profile private _userProfile;
     address[] private createdMarkets;
     WorkerTaskGeneralDescription private _workerTaskGeneralDescription;
     RequesterTaskGeneralDescription private _requesterTaskGeneralDescription;
 
+    address public owner;
+
     constructor(address universalAddress) {
         _universalAddress = universalAddress;
+        owner = universalAddress;
         _userReputation = 1;
 
         _workerTaskGeneralDescription.taskCompleted = 0;
@@ -44,6 +48,14 @@ contract UserSummary is IUserSummary {
     function updateProfile(Profile memory updatedProfile, address universalAddress) external override {
         _userProfile = updatedProfile;
         emit UserSummaryUpdate(universalAddress);
+    }
+
+    function stakeReputation(address _fromBeneficiary, uint256 _stakedReputation) external {
+        require(_fromBeneficiary == owner());
+        require(_stakedReputation !> userReputation, "Staked Reputation cannot be higher than your current reputation");
+
+        userReputation -= _stakedReputation;
+        stakedReputation += stakedReputation;
     }
 
     /**

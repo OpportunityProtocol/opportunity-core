@@ -62,7 +62,7 @@ contract WorkRelationship {
     }
 
     function updateContractPayout(uint amount) external onlyOwner {
-        //send back value
+        //send back vaalue
     }
 
     function completeContract() external onlyOwner {
@@ -77,12 +77,20 @@ contract WorkRelationship {
         
     }
 
-    function assignNewWorker(address payable newWorker, address _daiTokenAddress) external payable onlyOwnerWhenNotFlash onlyWhen(Evaluation.WorkRelationshipState.UNCLAIMED) {
+    function assignNewWorker(
+        address payable newWorker, 
+        address _daiTokenAddress
+        ) external payable onlyOwnerWhenNotFlash onlyWhen(Evaluation.WorkRelationshipState.UNCLAIMED) {
         require(newWorker != address(0));
         require(msg.value != 0);
 
         worker = newWorker;
-        _workExchange = new WorkExchange(newWorker, owner, msg.value, _daiTokenAddress);
+        _workExchange = new WorkExchange(
+            newWorker, 
+            owner, 
+            msg.value, 
+            _daiTokenAddres);
+            
         _contractStatus = Evaluation.WorkRelationshipState.CLAIMED;
 
         assert(address(_workExchange) != address(0));

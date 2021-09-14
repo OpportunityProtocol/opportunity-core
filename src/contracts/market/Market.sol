@@ -48,7 +48,7 @@ contract Market is Ownable, Controllable, Pausable {
     function createJob(Evaluation.ContractType _contractType, string memory taskMetadataPointer
     ) external {
         address owner = msg.sender;
-        require(owner!= address(0));
+        require(owner != address(0));
         WorkRelationship createdJob =
             new WorkRelationship(owner, _contractType, taskMetadataPointer);
         _createdJobs.push(createdJob);

@@ -96,7 +96,7 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"industry\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"industrylevel\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reputation\",\"type\":\"uint256\"}],\"internalType\":\"struct Evaluation.EvaluationState\",\"name\":\"evaluationState\",\"type\":\"tuple\"}],\"name\":\"evaluateUser\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getUserProfile\",\"outputs\":[{\"internalType\":\"string[]\",\"name\":\"\",\"type\":\"string[]\"},{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"string[]\",\"name\":\"skills\",\"type\":\"string[]\"},{\"internalType\":\"string\",\"name\":\"profession\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"activityLevel\",\"type\":\"uint8\"}],\"internalType\":\"struct IUserSummary.Profile\",\"name\":\"updatedProfile\",\"type\":\"tuple\"},{\"internalType\":\"address\",\"name\":\"universalAddress\",\"type\":\"address\"}],\"name\":\"updateProfile\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Volumes/NO NAME/opportunity-core/src/contracts/user/interface/IUserSummary.sol\":\"IUserSummary\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Volumes/NO NAME/opportunity-core/src/contracts/libraries/Evaluation.sol\":{\"keccak256\":\"0x6576f413ca96def1e6d769344abac301e5650e1ade5e9828c64ed960e5b24b4f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f1003b2f3ce4982b1c3be8fc324e168c87a2cb6558bc108c8554b8f1e6791981\",\"dweb:/ipfs/QmR6MojsFVLjgBt5bQN6bKW7sEpUWUHhTZMVs2yB1oG4JD\"]},\"/Volumes/NO NAME/opportunity-core/src/contracts/libraries/StringUtils.sol\":{\"keccak256\":\"0x24330c7ac45d1992491dbff11dd687ea7a7a21a44122277263a43b107021067d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1c398376771df2c72107cc2064806c8366f6a869b0d04094e9e7288e73e3d0f1\",\"dweb:/ipfs/QmSkr6Bt7wNo18yW2CaxgSCse2XXnVP2FPWSbpUZpQiemv\"]},\"/Volumes/NO NAME/opportunity-core/src/contracts/libraries/User.sol\":{\"keccak256\":\"0x064c61f8f35fa7a1431a373e300980cf837339363ec810d7eea29239985414af\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8b26f56f048516c30b26d1e3c0dc3d70c1cf87ee652b488612263bb0b3a3c2e8\",\"dweb:/ipfs/QmexMQGdWmpcN1mvu9NUAjKXyjkJU3RxNphwtJqxdAuNcv\"]},\"/Volumes/NO NAME/opportunity-core/src/contracts/user/interface/IUserSummary.sol\":{\"keccak256\":\"0x5d2ef9cbae7fdf951d044a3084313e8aeb3d2883909ceddab743cc71c828d5b1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://62623602db15758dcefce9c880a485914a270967b688fcf55ccdff8856671de8\",\"dweb:/ipfs/QmZn3KoG23qA5vpgTMYCBN9RAkd7z2R6uWNtGyaQ7fLdgL\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"components\":[{\"internalType\":\"string\",\"name\":\"industry\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"industrylevel\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reputation\",\"type\":\"uint256\"}],\"internalType\":\"struct Evaluation.EvaluationState\",\"name\":\"evaluationState\",\"type\":\"tuple\"}],\"name\":\"evaluateUser\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getUserProfile\",\"outputs\":[{\"internalType\":\"string[]\",\"name\":\"\",\"type\":\"string[]\"},{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"string[]\",\"name\":\"skills\",\"type\":\"string[]\"},{\"internalType\":\"string\",\"name\":\"profession\",\"type\":\"string\"},{\"internalType\":\"uint8\",\"name\":\"activityLevel\",\"type\":\"uint8\"}],\"internalType\":\"struct IUserSummary.Profile\",\"name\":\"updatedProfile\",\"type\":\"tuple\"},{\"internalType\":\"address\",\"name\":\"universalAddress\",\"type\":\"address\"}],\"name\":\"updateProfile\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/interface/IUserSummary.sol\":\"IUserSummary\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/Evaluation.sol\":{\"keccak256\":\"0x6576f413ca96def1e6d769344abac301e5650e1ade5e9828c64ed960e5b24b4f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f1003b2f3ce4982b1c3be8fc324e168c87a2cb6558bc108c8554b8f1e6791981\",\"dweb:/ipfs/QmR6MojsFVLjgBt5bQN6bKW7sEpUWUHhTZMVs2yB1oG4JD\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol\":{\"keccak256\":\"0x24330c7ac45d1992491dbff11dd687ea7a7a21a44122277263a43b107021067d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://1c398376771df2c72107cc2064806c8366f6a869b0d04094e9e7288e73e3d0f1\",\"dweb:/ipfs/QmSkr6Bt7wNo18yW2CaxgSCse2XXnVP2FPWSbpUZpQiemv\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol\":{\"keccak256\":\"0x064c61f8f35fa7a1431a373e300980cf837339363ec810d7eea29239985414af\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8b26f56f048516c30b26d1e3c0dc3d70c1cf87ee652b488612263bb0b3a3c2e8\",\"dweb:/ipfs/QmexMQGdWmpcN1mvu9NUAjKXyjkJU3RxNphwtJqxdAuNcv\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/interface/IUserSummary.sol\":{\"keccak256\":\"0x5d2ef9cbae7fdf951d044a3084313e8aeb3d2883909ceddab743cc71c828d5b1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://62623602db15758dcefce9c880a485914a270967b688fcf55ccdff8856671de8\",\"dweb:/ipfs/QmZn3KoG23qA5vpgTMYCBN9RAkd7z2R6uWNtGyaQ7fLdgL\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "immutableReferences": {},
@@ -105,9 +105,9 @@
   "sourceMap": "",
   "deployedSourceMap": "",
   "source": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.8.7;\n\nimport \"../../libraries/Evaluation.sol\";\nimport \"../../libraries/User.sol\";\nimport \"../../libraries/StringUtils.sol\";\n\ninterface IUserSummary {\n    struct Profile {\n        string[] skills;\n        string profession;\n        uint8 activityLevel;\n    }\n\n    struct WorkerTaskGeneralDescription {\n        uint256 taskCompleted;\n\n        // Mapping of industry ids to evaluations\n        mapping(string => uint256) industryEvaluation;\n\n        // Mapping of WorkRelationship to status\n        mapping(address => string) relationshipExchanges;\n    }\n\n    struct RequesterTaskGeneralDescription {\n        uint256 taskAssigned;\n\n         // Mapping of WorkRelationship IDs to current WorkExchanges.\n        mapping(uint256 => address) relationshipExchanges;\n    }\n\n    function evaluateUser(Evaluation.EvaluationState memory evaluationState) external returns(bool);\n    function getUserProfile() external view returns(string[] memory, string memory, uint8);\n    function updateProfile(Profile memory updatedProfile, address universalAddress) external;\n}",
-  "sourcePath": "/Volumes/NO NAME/opportunity-core/src/contracts/user/interface/IUserSummary.sol",
+  "sourcePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/interface/IUserSummary.sol",
   "ast": {
-    "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/user/interface/IUserSummary.sol",
+    "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/interface/IUserSummary.sol",
     "exportedSymbols": {
       "Evaluation": [
         1291
@@ -137,7 +137,7 @@
         "src": "33:22:19"
       },
       {
-        "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/libraries/Evaluation.sol",
+        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/Evaluation.sol",
         "file": "../../libraries/Evaluation.sol",
         "id": 2756,
         "nameLocation": "-1:-1:-1",
@@ -149,7 +149,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/libraries/User.sol",
+        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol",
         "file": "../../libraries/User.sol",
         "id": 2757,
         "nameLocation": "-1:-1:-1",
@@ -161,7 +161,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/libraries/StringUtils.sol",
+        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol",
         "file": "../../libraries/StringUtils.sol",
         "id": 2758,
         "nameLocation": "-1:-1:-1",
@@ -812,7 +812,7 @@
     "src": "33:1071:19"
   },
   "legacyAST": {
-    "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/user/interface/IUserSummary.sol",
+    "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/interface/IUserSummary.sol",
     "exportedSymbols": {
       "Evaluation": [
         1291
@@ -842,7 +842,7 @@
         "src": "33:22:19"
       },
       {
-        "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/libraries/Evaluation.sol",
+        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/Evaluation.sol",
         "file": "../../libraries/Evaluation.sol",
         "id": 2756,
         "nameLocation": "-1:-1:-1",
@@ -854,7 +854,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/libraries/User.sol",
+        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol",
         "file": "../../libraries/User.sol",
         "id": 2757,
         "nameLocation": "-1:-1:-1",
@@ -866,7 +866,7 @@
         "unitAlias": ""
       },
       {
-        "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/libraries/StringUtils.sol",
+        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol",
         "file": "../../libraries/StringUtils.sol",
         "id": 2758,
         "nameLocation": "-1:-1:-1",
@@ -1522,7 +1522,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-08T21:32:19.680Z",
+  "updatedAt": "2021-09-11T07:05:10.914Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

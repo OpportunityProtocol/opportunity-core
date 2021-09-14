@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity 0.8.7;
 
+import "../user/UserSummary.sol";
+
 /// Dai Token Interface
 interface DaiToken {
     function balanceOf(address tokenOwner) external view returns (uint256);
@@ -110,22 +112,26 @@ contract DaiEscrow {
     function initialize(
         uint256 nonce,
         uint256 expiry,
-        uint8 v_allow,
-        bytes32 r_allow,
-        bytes32 s_allow,
-        uint8 v_deny,
-        bytes32 r_deny,
-        bytes32 s_deny
+        uint8 v,
+        bytes32 r,
+        bytes32 s,
+        uint256 stakedReputation
     ) external {
 
         // Unlock buyer's Dai balance to transfer `wad` to this contract.
-        daiToken.permit(depositor, address(this), nonce, expiry, true, v_allow, r_allow, s_allow);
+        daiToken.permit(depositor, address(this), nonce, expiry, true, v, r, s);
 
         // Transfer Dai from `buyer` to this contract.
         daiToken.pull(depositor, wad);
 
         // Relock Dai balance of `buyer`.
-        daiToken.permit(depositor, address(this), nonce + 1, expiry, false, v_deny, r_deny, s_deny);
+        daiToken.permit(depositor, address(this), nonce + 1, expiry, false, v, r, s);
+
+        //stake the workers reputation by the required amount
+        //TODO: Need to revert if the user cannot fulfill the reputation requirements
+        UserSummary userSummary = UserSummary(beneficiary);
+        userSummary.stakeReputation(beneficiary, stakedReputation);
+
         contractState = ContractState.Initialized;
     }
 

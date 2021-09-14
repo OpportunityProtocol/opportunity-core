@@ -28,11 +28,10 @@ module.exports = async function(deployer) {
   await deployer.deploy(Evaluation);
 
   await deployer.deploy(DaiToken, 5777);
+  const deployedDaiToken = await DaiToken.deployed()
 
   await deployer.deploy(MarketFactory);
   await deployer.deploy(User);
-
-  await deployer.deploy(WorkRelationship, '0xEb529c2580a84DADC3bb73eecB1ef230fccB242D', 0, "");
 
   await deployer.link(StringUtils, UserSummary);
   await deployer.link(Evaluation, UserSummary);

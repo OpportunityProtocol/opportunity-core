@@ -7,18 +7,18 @@
       "type": "constructor"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Volumes/NO NAME/opportunity-core/src/contracts/control/Controllable.sol\":\"Controllable\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Volumes/NO NAME/opportunity-core/src/contracts/control/Controllable.sol\":{\"keccak256\":\"0xc238d6026100e53a28c0c2b82ca5d48050abe245133189d1faf7463b995ac96a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0c09cb3eda0dc03f8f3a7e7bffa997f94cdbff415d9d4645d77dcffa1b525e3c\",\"dweb:/ipfs/QmVAVPYGATZSC9f4FRY25LqSL3iaJTwU5bnkLvWMJWufFo\"]},\"/Volumes/NO NAME/opportunity-core/src/contracts/libraries/MarketLib.sol\":{\"keccak256\":\"0x7e944e129858491254735d487535aaa1198b85f4ba614076850e783664ef7a30\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://67ed08794bdb6a3b9848ac2d3a965ecfabfe8849e273b897349a5693952b5a2a\",\"dweb:/ipfs/QmfMFmxcPUpf13ABjuhmaTvmLuenJU86F3HENtDFb5Jg8s\"]}},\"version\":1}",
-  "bytecode": "0x6080604052348015600f57600080fd5b50600080546001600160a01b03191633179055603f80602f6000396000f3fe6080604052600080fdfea26469706673582212204516d34a1d4b0fea3841c053cbee407f138b04ef3185a017688a9b6b00bf4eef64736f6c63430008070033",
-  "deployedBytecode": "0x6080604052600080fdfea26469706673582212204516d34a1d4b0fea3841c053cbee407f138b04ef3185a017688a9b6b00bf4eef64736f6c63430008070033",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/control/Controllable.sol\":\"Controllable\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/control/Controllable.sol\":{\"keccak256\":\"0xc238d6026100e53a28c0c2b82ca5d48050abe245133189d1faf7463b995ac96a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0c09cb3eda0dc03f8f3a7e7bffa997f94cdbff415d9d4645d77dcffa1b525e3c\",\"dweb:/ipfs/QmVAVPYGATZSC9f4FRY25LqSL3iaJTwU5bnkLvWMJWufFo\"]},\"/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/MarketLib.sol\":{\"keccak256\":\"0x7e944e129858491254735d487535aaa1198b85f4ba614076850e783664ef7a30\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://67ed08794bdb6a3b9848ac2d3a965ecfabfe8849e273b897349a5693952b5a2a\",\"dweb:/ipfs/QmfMFmxcPUpf13ABjuhmaTvmLuenJU86F3HENtDFb5Jg8s\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50600080546001600160a01b03191633179055603f80602f6000396000f3fe6080604052600080fdfea2646970667358221220b86b54466de33c54f292695942319ee11405e83fda7761ff725938432d22432464736f6c63430008070033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220b86b54466de33c54f292695942319ee11405e83fda7761ff725938432d22432464736f6c63430008070033",
   "immutableReferences": {},
   "generatedSources": [],
   "deployedGeneratedSources": [],
   "sourceMap": "95:870:4:-:0;;;163:62;;;;;;;;;-1:-1:-1;187:17:4;:30;;-1:-1:-1;;;;;;187:30:4;207:10;187:30;;;95:870;;;;;;",
   "deployedSourceMap": "95:870:4:-:0;;;;;",
   "source": "// SPDX-License-Identifier: MIT\n\npragma solidity 0.8.7;\n\nimport \"../libraries/MarketLib.sol\";\n\ncontract Controllable {\n    address private _globalController;\n\n    constructor() {\n        _globalController = msg.sender;\n     }\n\n     modifier onlyGlobalController(address requester) {\n         require(requester == _globalController);\n         _;\n     }\n\n     modifier onlyDefaultMarkets(MarketLib.MarketType marketType) {\n         require(marketType == MarketLib.MarketType.DEFAULT);\n        _;\n     }\n\n     modifier onlyCustomMarkets(MarketLib.MarketType marketType) {\n          require(marketType == MarketLib.MarketType.CREATED);\n         _;\n     }\n\n     modifier onlyNotPausedState(MarketLib.MarketStatus marketStatus) {\n         require(marketStatus != MarketLib.MarketStatus.PAUSED);\n         _;\n     }\n\n      modifier onlyPausedState(MarketLib.MarketStatus marketStatus) {\n         require(marketStatus == MarketLib.MarketStatus.ACTIVE);\n         _;\n     }\n\n}",
-  "sourcePath": "/Volumes/NO NAME/opportunity-core/src/contracts/control/Controllable.sol",
+  "sourcePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/control/Controllable.sol",
   "ast": {
-    "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/control/Controllable.sol",
+    "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/control/Controllable.sol",
     "exportedSymbols": {
       "Controllable": [
         337
@@ -42,7 +42,7 @@
         "src": "33:22:4"
       },
       {
-        "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/libraries/MarketLib.sol",
+        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/MarketLib.sol",
         "file": "../libraries/MarketLib.sol",
         "id": 253,
         "nameLocation": "-1:-1:-1",
@@ -1048,7 +1048,7 @@
     "src": "33:932:4"
   },
   "legacyAST": {
-    "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/control/Controllable.sol",
+    "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/control/Controllable.sol",
     "exportedSymbols": {
       "Controllable": [
         337
@@ -1072,7 +1072,7 @@
         "src": "33:22:4"
       },
       {
-        "absolutePath": "/Volumes/NO NAME/opportunity-core/src/contracts/libraries/MarketLib.sol",
+        "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/MarketLib.sol",
         "file": "../libraries/MarketLib.sol",
         "id": 253,
         "nameLocation": "-1:-1:-1",
@@ -2085,12 +2085,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xbeE88041da1955ee468F993BE0283187bc25c9F8",
-      "transactionHash": "0x882a5a070d78a8c1cae447bfceee40bd40dac3348ae90708a0498ff55d92cf03"
+      "address": "0xE4b530a6D53dBaD3Fed3EA9aA4Ab6c390dA0c2Ed",
+      "transactionHash": "0x892ca844c73a5e5836ff6a20fc2e6254538af9719df9e19fc1f44a4a0ac3ca95"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-08T21:32:19.727Z",
+  "updatedAt": "2021-09-11T07:05:10.957Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
