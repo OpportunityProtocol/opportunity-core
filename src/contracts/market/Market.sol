@@ -45,12 +45,17 @@ contract Market is Ownable, Controllable, Pausable {
     /**
      * Creates a user summary contract for each user based on their civic ID.
      */
-    function createJob(Evaluation.ContractType _contractType, string memory taskMetadataPointer
+    function createJob(
+        address taskOwner,
+        Evaluation.ContractType _contractType, 
+        string memory taskMetadataPointer,
+        uint256 _wad,
+        address _daiTokenAddress
     ) external {
-        address owner = msg.sender;
-        require(owner != address(0));
+        address owner = taskOwner;
+        require(owner != address(0), "Invalid task owner.");
         WorkRelationship createdJob =
-            new WorkRelationship(owner, _contractType, taskMetadataPointer);
+            new WorkRelationship(taskOwner, _contractType, taskMetadataPointer, _wad, _daiTokenAddress);
         _createdJobs.push(createdJob);
         emit WorkRelationshipCreated(
             owner,

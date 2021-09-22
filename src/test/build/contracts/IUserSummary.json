@@ -110,24 +110,24 @@
     "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/interface/IUserSummary.sol",
     "exportedSymbols": {
       "Evaluation": [
-        1291
+        1352
       ],
       "IUserSummary": [
-        2811
+        2919
       ],
       "StringUtils": [
-        1541
+        1602
       ],
       "User": [
-        1561
+        1622
       ]
     },
-    "id": 2812,
+    "id": 2920,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2755,
+        "id": 2863,
         "literals": [
           "solidity",
           "0.8",
@@ -139,11 +139,11 @@
       {
         "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/Evaluation.sol",
         "file": "../../libraries/Evaluation.sol",
-        "id": 2756,
+        "id": 2864,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 2812,
-        "sourceUnit": 1292,
+        "scope": 2920,
+        "sourceUnit": 1353,
         "src": "57:40:19",
         "symbolAliases": [],
         "unitAlias": ""
@@ -151,11 +151,11 @@
       {
         "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol",
         "file": "../../libraries/User.sol",
-        "id": 2757,
+        "id": 2865,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 2812,
-        "sourceUnit": 1562,
+        "scope": 2920,
+        "sourceUnit": 1623,
         "src": "98:34:19",
         "symbolAliases": [],
         "unitAlias": ""
@@ -163,11 +163,11 @@
       {
         "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol",
         "file": "../../libraries/StringUtils.sol",
-        "id": 2758,
+        "id": 2866,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 2812,
-        "sourceUnit": 1542,
+        "scope": 2920,
+        "sourceUnit": 1603,
         "src": "133:41:19",
         "symbolAliases": [],
         "unitAlias": ""
@@ -178,9 +178,9 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 2811,
+        "id": 2919,
         "linearizedBaseContracts": [
-          2811
+          2919
         ],
         "name": "IUserSummary",
         "nameLocation": "186:12:19",
@@ -188,16 +188,16 @@
         "nodes": [
           {
             "canonicalName": "IUserSummary.Profile",
-            "id": 2766,
+            "id": 2874,
             "members": [
               {
                 "constant": false,
-                "id": 2761,
+                "id": 2869,
                 "mutability": "mutable",
                 "name": "skills",
                 "nameLocation": "239:6:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2766,
+                "scope": 2874,
                 "src": "230:15:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -207,7 +207,7 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 2759,
+                    "id": 2867,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "230:6:19",
@@ -216,7 +216,7 @@
                       "typeString": "string"
                     }
                   },
-                  "id": 2760,
+                  "id": 2868,
                   "nodeType": "ArrayTypeName",
                   "src": "230:8:19",
                   "typeDescriptions": {
@@ -228,12 +228,12 @@
               },
               {
                 "constant": false,
-                "id": 2763,
+                "id": 2871,
                 "mutability": "mutable",
                 "name": "profession",
                 "nameLocation": "262:10:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2766,
+                "scope": 2874,
                 "src": "255:17:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -242,7 +242,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 2762,
+                  "id": 2870,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "255:6:19",
@@ -255,12 +255,12 @@
               },
               {
                 "constant": false,
-                "id": 2765,
+                "id": 2873,
                 "mutability": "mutable",
                 "name": "activityLevel",
                 "nameLocation": "288:13:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2766,
+                "scope": 2874,
                 "src": "282:19:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -269,7 +269,7 @@
                   "typeString": "uint8"
                 },
                 "typeName": {
-                  "id": 2764,
+                  "id": 2872,
                   "name": "uint8",
                   "nodeType": "ElementaryTypeName",
                   "src": "282:5:19",
@@ -284,22 +284,22 @@
             "name": "Profile",
             "nameLocation": "212:7:19",
             "nodeType": "StructDefinition",
-            "scope": 2811,
+            "scope": 2919,
             "src": "205:103:19",
             "visibility": "public"
           },
           {
             "canonicalName": "IUserSummary.WorkerTaskGeneralDescription",
-            "id": 2777,
+            "id": 2885,
             "members": [
               {
                 "constant": false,
-                "id": 2768,
+                "id": 2876,
                 "mutability": "mutable",
                 "name": "taskCompleted",
                 "nameLocation": "368:13:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2777,
+                "scope": 2885,
                 "src": "360:21:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -308,7 +308,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2767,
+                  "id": 2875,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "360:7:19",
@@ -321,12 +321,12 @@
               },
               {
                 "constant": false,
-                "id": 2772,
+                "id": 2880,
                 "mutability": "mutable",
                 "name": "industryEvaluation",
                 "nameLocation": "469:18:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2777,
+                "scope": 2885,
                 "src": "442:45:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -335,9 +335,9 @@
                   "typeString": "mapping(string => uint256)"
                 },
                 "typeName": {
-                  "id": 2771,
+                  "id": 2879,
                   "keyType": {
-                    "id": 2769,
+                    "id": 2877,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "450:6:19",
@@ -353,7 +353,7 @@
                     "typeString": "mapping(string => uint256)"
                   },
                   "valueType": {
-                    "id": 2770,
+                    "id": 2878,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "460:7:19",
@@ -367,12 +367,12 @@
               },
               {
                 "constant": false,
-                "id": 2776,
+                "id": 2884,
                 "mutability": "mutable",
                 "name": "relationshipExchanges",
                 "nameLocation": "574:21:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2777,
+                "scope": 2885,
                 "src": "547:48:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -381,9 +381,9 @@
                   "typeString": "mapping(address => string)"
                 },
                 "typeName": {
-                  "id": 2775,
+                  "id": 2883,
                   "keyType": {
-                    "id": 2773,
+                    "id": 2881,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "555:7:19",
@@ -399,7 +399,7 @@
                     "typeString": "mapping(address => string)"
                   },
                   "valueType": {
-                    "id": 2774,
+                    "id": 2882,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "566:6:19",
@@ -415,22 +415,22 @@
             "name": "WorkerTaskGeneralDescription",
             "nameLocation": "321:28:19",
             "nodeType": "StructDefinition",
-            "scope": 2811,
+            "scope": 2919,
             "src": "314:288:19",
             "visibility": "public"
           },
           {
             "canonicalName": "IUserSummary.RequesterTaskGeneralDescription",
-            "id": 2784,
+            "id": 2892,
             "members": [
               {
                 "constant": false,
-                "id": 2779,
+                "id": 2887,
                 "mutability": "mutable",
                 "name": "taskAssigned",
                 "nameLocation": "665:12:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2784,
+                "scope": 2892,
                 "src": "657:20:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -439,7 +439,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2778,
+                  "id": 2886,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "657:7:19",
@@ -452,12 +452,12 @@
               },
               {
                 "constant": false,
-                "id": 2783,
+                "id": 2891,
                 "mutability": "mutable",
                 "name": "relationshipExchanges",
                 "nameLocation": "786:21:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2784,
+                "scope": 2892,
                 "src": "758:49:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -466,9 +466,9 @@
                   "typeString": "mapping(uint256 => address)"
                 },
                 "typeName": {
-                  "id": 2782,
+                  "id": 2890,
                   "keyType": {
-                    "id": 2780,
+                    "id": 2888,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "766:7:19",
@@ -484,7 +484,7 @@
                     "typeString": "mapping(uint256 => address)"
                   },
                   "valueType": {
-                    "id": 2781,
+                    "id": 2889,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "777:7:19",
@@ -501,13 +501,13 @@
             "name": "RequesterTaskGeneralDescription",
             "nameLocation": "615:31:19",
             "nodeType": "StructDefinition",
-            "scope": 2811,
+            "scope": 2919,
             "src": "608:206:19",
             "visibility": "public"
           },
           {
             "functionSelector": "5d5f221f",
-            "id": 2792,
+            "id": 2900,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -515,38 +515,38 @@
             "nameLocation": "829:12:19",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2788,
+              "id": 2896,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2787,
+                  "id": 2895,
                   "mutability": "mutable",
                   "name": "evaluationState",
                   "nameLocation": "876:15:19",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2792,
+                  "scope": 2900,
                   "src": "842:49:19",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_EvaluationState_$1280_memory_ptr",
+                    "typeIdentifier": "t_struct$_EvaluationState_$1341_memory_ptr",
                     "typeString": "struct Evaluation.EvaluationState"
                   },
                   "typeName": {
-                    "id": 2786,
+                    "id": 2894,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 2785,
+                      "id": 2893,
                       "name": "Evaluation.EvaluationState",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1280,
+                      "referencedDeclaration": 1341,
                       "src": "842:26:19"
                     },
-                    "referencedDeclaration": 1280,
+                    "referencedDeclaration": 1341,
                     "src": "842:26:19",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_EvaluationState_$1280_storage_ptr",
+                      "typeIdentifier": "t_struct$_EvaluationState_$1341_storage_ptr",
                       "typeString": "struct Evaluation.EvaluationState"
                     }
                   },
@@ -556,17 +556,17 @@
               "src": "841:51:19"
             },
             "returnParameters": {
-              "id": 2791,
+              "id": 2899,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2790,
+                  "id": 2898,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2792,
+                  "scope": 2900,
                   "src": "910:4:19",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -575,7 +575,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 2789,
+                    "id": 2897,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "910:4:19",
@@ -589,7 +589,7 @@
               ],
               "src": "909:6:19"
             },
-            "scope": 2811,
+            "scope": 2919,
             "src": "820:96:19",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -597,7 +597,7 @@
           },
           {
             "functionSelector": "6f61c744",
-            "id": 2802,
+            "id": 2910,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -605,23 +605,23 @@
             "nameLocation": "930:14:19",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2793,
+              "id": 2901,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "944:2:19"
             },
             "returnParameters": {
-              "id": 2801,
+              "id": 2909,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2796,
+                  "id": 2904,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2802,
+                  "scope": 2910,
                   "src": "969:15:19",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -631,7 +631,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 2794,
+                      "id": 2902,
                       "name": "string",
                       "nodeType": "ElementaryTypeName",
                       "src": "969:6:19",
@@ -640,7 +640,7 @@
                         "typeString": "string"
                       }
                     },
-                    "id": 2795,
+                    "id": 2903,
                     "nodeType": "ArrayTypeName",
                     "src": "969:8:19",
                     "typeDescriptions": {
@@ -652,12 +652,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 2798,
+                  "id": 2906,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2802,
+                  "scope": 2910,
                   "src": "986:13:19",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -666,7 +666,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 2797,
+                    "id": 2905,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "986:6:19",
@@ -679,12 +679,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 2800,
+                  "id": 2908,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2802,
+                  "scope": 2910,
                   "src": "1001:5:19",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -693,7 +693,7 @@
                     "typeString": "uint8"
                   },
                   "typeName": {
-                    "id": 2799,
+                    "id": 2907,
                     "name": "uint8",
                     "nodeType": "ElementaryTypeName",
                     "src": "1001:5:19",
@@ -707,7 +707,7 @@
               ],
               "src": "968:39:19"
             },
-            "scope": 2811,
+            "scope": 2919,
             "src": "921:87:19",
             "stateMutability": "view",
             "virtual": false,
@@ -715,7 +715,7 @@
           },
           {
             "functionSelector": "7ca97e8c",
-            "id": 2810,
+            "id": 2918,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -723,38 +723,38 @@
             "nameLocation": "1022:13:19",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2808,
+              "id": 2916,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2805,
+                  "id": 2913,
                   "mutability": "mutable",
                   "name": "updatedProfile",
                   "nameLocation": "1051:14:19",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2810,
+                  "scope": 2918,
                   "src": "1036:29:19",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Profile_$2766_memory_ptr",
+                    "typeIdentifier": "t_struct$_Profile_$2874_memory_ptr",
                     "typeString": "struct IUserSummary.Profile"
                   },
                   "typeName": {
-                    "id": 2804,
+                    "id": 2912,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 2803,
+                      "id": 2911,
                       "name": "Profile",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 2766,
+                      "referencedDeclaration": 2874,
                       "src": "1036:7:19"
                     },
-                    "referencedDeclaration": 2766,
+                    "referencedDeclaration": 2874,
                     "src": "1036:7:19",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Profile_$2766_storage_ptr",
+                      "typeIdentifier": "t_struct$_Profile_$2874_storage_ptr",
                       "typeString": "struct IUserSummary.Profile"
                     }
                   },
@@ -762,12 +762,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 2807,
+                  "id": 2915,
                   "mutability": "mutable",
                   "name": "universalAddress",
                   "nameLocation": "1075:16:19",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2810,
+                  "scope": 2918,
                   "src": "1067:24:19",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -776,7 +776,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2806,
+                    "id": 2914,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1067:7:19",
@@ -792,19 +792,19 @@
               "src": "1035:57:19"
             },
             "returnParameters": {
-              "id": 2809,
+              "id": 2917,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1101:0:19"
             },
-            "scope": 2811,
+            "scope": 2919,
             "src": "1013:89:19",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 2812,
+        "scope": 2920,
         "src": "176:928:19",
         "usedErrors": []
       }
@@ -815,24 +815,24 @@
     "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/user/interface/IUserSummary.sol",
     "exportedSymbols": {
       "Evaluation": [
-        1291
+        1352
       ],
       "IUserSummary": [
-        2811
+        2919
       ],
       "StringUtils": [
-        1541
+        1602
       ],
       "User": [
-        1561
+        1622
       ]
     },
-    "id": 2812,
+    "id": 2920,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 2755,
+        "id": 2863,
         "literals": [
           "solidity",
           "0.8",
@@ -844,11 +844,11 @@
       {
         "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/Evaluation.sol",
         "file": "../../libraries/Evaluation.sol",
-        "id": 2756,
+        "id": 2864,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 2812,
-        "sourceUnit": 1292,
+        "scope": 2920,
+        "sourceUnit": 1353,
         "src": "57:40:19",
         "symbolAliases": [],
         "unitAlias": ""
@@ -856,11 +856,11 @@
       {
         "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/User.sol",
         "file": "../../libraries/User.sol",
-        "id": 2757,
+        "id": 2865,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 2812,
-        "sourceUnit": 1562,
+        "scope": 2920,
+        "sourceUnit": 1623,
         "src": "98:34:19",
         "symbolAliases": [],
         "unitAlias": ""
@@ -868,11 +868,11 @@
       {
         "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/StringUtils.sol",
         "file": "../../libraries/StringUtils.sol",
-        "id": 2758,
+        "id": 2866,
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
-        "scope": 2812,
-        "sourceUnit": 1542,
+        "scope": 2920,
+        "sourceUnit": 1603,
         "src": "133:41:19",
         "symbolAliases": [],
         "unitAlias": ""
@@ -883,9 +883,9 @@
         "contractDependencies": [],
         "contractKind": "interface",
         "fullyImplemented": false,
-        "id": 2811,
+        "id": 2919,
         "linearizedBaseContracts": [
-          2811
+          2919
         ],
         "name": "IUserSummary",
         "nameLocation": "186:12:19",
@@ -893,16 +893,16 @@
         "nodes": [
           {
             "canonicalName": "IUserSummary.Profile",
-            "id": 2766,
+            "id": 2874,
             "members": [
               {
                 "constant": false,
-                "id": 2761,
+                "id": 2869,
                 "mutability": "mutable",
                 "name": "skills",
                 "nameLocation": "239:6:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2766,
+                "scope": 2874,
                 "src": "230:15:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -912,7 +912,7 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 2759,
+                    "id": 2867,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "230:6:19",
@@ -921,7 +921,7 @@
                       "typeString": "string"
                     }
                   },
-                  "id": 2760,
+                  "id": 2868,
                   "nodeType": "ArrayTypeName",
                   "src": "230:8:19",
                   "typeDescriptions": {
@@ -933,12 +933,12 @@
               },
               {
                 "constant": false,
-                "id": 2763,
+                "id": 2871,
                 "mutability": "mutable",
                 "name": "profession",
                 "nameLocation": "262:10:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2766,
+                "scope": 2874,
                 "src": "255:17:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -947,7 +947,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 2762,
+                  "id": 2870,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "255:6:19",
@@ -960,12 +960,12 @@
               },
               {
                 "constant": false,
-                "id": 2765,
+                "id": 2873,
                 "mutability": "mutable",
                 "name": "activityLevel",
                 "nameLocation": "288:13:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2766,
+                "scope": 2874,
                 "src": "282:19:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -974,7 +974,7 @@
                   "typeString": "uint8"
                 },
                 "typeName": {
-                  "id": 2764,
+                  "id": 2872,
                   "name": "uint8",
                   "nodeType": "ElementaryTypeName",
                   "src": "282:5:19",
@@ -989,22 +989,22 @@
             "name": "Profile",
             "nameLocation": "212:7:19",
             "nodeType": "StructDefinition",
-            "scope": 2811,
+            "scope": 2919,
             "src": "205:103:19",
             "visibility": "public"
           },
           {
             "canonicalName": "IUserSummary.WorkerTaskGeneralDescription",
-            "id": 2777,
+            "id": 2885,
             "members": [
               {
                 "constant": false,
-                "id": 2768,
+                "id": 2876,
                 "mutability": "mutable",
                 "name": "taskCompleted",
                 "nameLocation": "368:13:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2777,
+                "scope": 2885,
                 "src": "360:21:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1013,7 +1013,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2767,
+                  "id": 2875,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "360:7:19",
@@ -1026,12 +1026,12 @@
               },
               {
                 "constant": false,
-                "id": 2772,
+                "id": 2880,
                 "mutability": "mutable",
                 "name": "industryEvaluation",
                 "nameLocation": "469:18:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2777,
+                "scope": 2885,
                 "src": "442:45:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1040,9 +1040,9 @@
                   "typeString": "mapping(string => uint256)"
                 },
                 "typeName": {
-                  "id": 2771,
+                  "id": 2879,
                   "keyType": {
-                    "id": 2769,
+                    "id": 2877,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "450:6:19",
@@ -1058,7 +1058,7 @@
                     "typeString": "mapping(string => uint256)"
                   },
                   "valueType": {
-                    "id": 2770,
+                    "id": 2878,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "460:7:19",
@@ -1072,12 +1072,12 @@
               },
               {
                 "constant": false,
-                "id": 2776,
+                "id": 2884,
                 "mutability": "mutable",
                 "name": "relationshipExchanges",
                 "nameLocation": "574:21:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2777,
+                "scope": 2885,
                 "src": "547:48:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1086,9 +1086,9 @@
                   "typeString": "mapping(address => string)"
                 },
                 "typeName": {
-                  "id": 2775,
+                  "id": 2883,
                   "keyType": {
-                    "id": 2773,
+                    "id": 2881,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "555:7:19",
@@ -1104,7 +1104,7 @@
                     "typeString": "mapping(address => string)"
                   },
                   "valueType": {
-                    "id": 2774,
+                    "id": 2882,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "566:6:19",
@@ -1120,22 +1120,22 @@
             "name": "WorkerTaskGeneralDescription",
             "nameLocation": "321:28:19",
             "nodeType": "StructDefinition",
-            "scope": 2811,
+            "scope": 2919,
             "src": "314:288:19",
             "visibility": "public"
           },
           {
             "canonicalName": "IUserSummary.RequesterTaskGeneralDescription",
-            "id": 2784,
+            "id": 2892,
             "members": [
               {
                 "constant": false,
-                "id": 2779,
+                "id": 2887,
                 "mutability": "mutable",
                 "name": "taskAssigned",
                 "nameLocation": "665:12:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2784,
+                "scope": 2892,
                 "src": "657:20:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1144,7 +1144,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 2778,
+                  "id": 2886,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "657:7:19",
@@ -1157,12 +1157,12 @@
               },
               {
                 "constant": false,
-                "id": 2783,
+                "id": 2891,
                 "mutability": "mutable",
                 "name": "relationshipExchanges",
                 "nameLocation": "786:21:19",
                 "nodeType": "VariableDeclaration",
-                "scope": 2784,
+                "scope": 2892,
                 "src": "758:49:19",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1171,9 +1171,9 @@
                   "typeString": "mapping(uint256 => address)"
                 },
                 "typeName": {
-                  "id": 2782,
+                  "id": 2890,
                   "keyType": {
-                    "id": 2780,
+                    "id": 2888,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "766:7:19",
@@ -1189,7 +1189,7 @@
                     "typeString": "mapping(uint256 => address)"
                   },
                   "valueType": {
-                    "id": 2781,
+                    "id": 2889,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "777:7:19",
@@ -1206,13 +1206,13 @@
             "name": "RequesterTaskGeneralDescription",
             "nameLocation": "615:31:19",
             "nodeType": "StructDefinition",
-            "scope": 2811,
+            "scope": 2919,
             "src": "608:206:19",
             "visibility": "public"
           },
           {
             "functionSelector": "5d5f221f",
-            "id": 2792,
+            "id": 2900,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -1220,38 +1220,38 @@
             "nameLocation": "829:12:19",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2788,
+              "id": 2896,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2787,
+                  "id": 2895,
                   "mutability": "mutable",
                   "name": "evaluationState",
                   "nameLocation": "876:15:19",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2792,
+                  "scope": 2900,
                   "src": "842:49:19",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_EvaluationState_$1280_memory_ptr",
+                    "typeIdentifier": "t_struct$_EvaluationState_$1341_memory_ptr",
                     "typeString": "struct Evaluation.EvaluationState"
                   },
                   "typeName": {
-                    "id": 2786,
+                    "id": 2894,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 2785,
+                      "id": 2893,
                       "name": "Evaluation.EvaluationState",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 1280,
+                      "referencedDeclaration": 1341,
                       "src": "842:26:19"
                     },
-                    "referencedDeclaration": 1280,
+                    "referencedDeclaration": 1341,
                     "src": "842:26:19",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_EvaluationState_$1280_storage_ptr",
+                      "typeIdentifier": "t_struct$_EvaluationState_$1341_storage_ptr",
                       "typeString": "struct Evaluation.EvaluationState"
                     }
                   },
@@ -1261,17 +1261,17 @@
               "src": "841:51:19"
             },
             "returnParameters": {
-              "id": 2791,
+              "id": 2899,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2790,
+                  "id": 2898,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2792,
+                  "scope": 2900,
                   "src": "910:4:19",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1280,7 +1280,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 2789,
+                    "id": 2897,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "910:4:19",
@@ -1294,7 +1294,7 @@
               ],
               "src": "909:6:19"
             },
-            "scope": 2811,
+            "scope": 2919,
             "src": "820:96:19",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -1302,7 +1302,7 @@
           },
           {
             "functionSelector": "6f61c744",
-            "id": 2802,
+            "id": 2910,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -1310,23 +1310,23 @@
             "nameLocation": "930:14:19",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2793,
+              "id": 2901,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "944:2:19"
             },
             "returnParameters": {
-              "id": 2801,
+              "id": 2909,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2796,
+                  "id": 2904,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2802,
+                  "scope": 2910,
                   "src": "969:15:19",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1336,7 +1336,7 @@
                   },
                   "typeName": {
                     "baseType": {
-                      "id": 2794,
+                      "id": 2902,
                       "name": "string",
                       "nodeType": "ElementaryTypeName",
                       "src": "969:6:19",
@@ -1345,7 +1345,7 @@
                         "typeString": "string"
                       }
                     },
-                    "id": 2795,
+                    "id": 2903,
                     "nodeType": "ArrayTypeName",
                     "src": "969:8:19",
                     "typeDescriptions": {
@@ -1357,12 +1357,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 2798,
+                  "id": 2906,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2802,
+                  "scope": 2910,
                   "src": "986:13:19",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1371,7 +1371,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 2797,
+                    "id": 2905,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "986:6:19",
@@ -1384,12 +1384,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 2800,
+                  "id": 2908,
                   "mutability": "mutable",
                   "name": "",
                   "nameLocation": "-1:-1:-1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2802,
+                  "scope": 2910,
                   "src": "1001:5:19",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1398,7 +1398,7 @@
                     "typeString": "uint8"
                   },
                   "typeName": {
-                    "id": 2799,
+                    "id": 2907,
                     "name": "uint8",
                     "nodeType": "ElementaryTypeName",
                     "src": "1001:5:19",
@@ -1412,7 +1412,7 @@
               ],
               "src": "968:39:19"
             },
-            "scope": 2811,
+            "scope": 2919,
             "src": "921:87:19",
             "stateMutability": "view",
             "virtual": false,
@@ -1420,7 +1420,7 @@
           },
           {
             "functionSelector": "7ca97e8c",
-            "id": 2810,
+            "id": 2918,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
@@ -1428,38 +1428,38 @@
             "nameLocation": "1022:13:19",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 2808,
+              "id": 2916,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 2805,
+                  "id": 2913,
                   "mutability": "mutable",
                   "name": "updatedProfile",
                   "nameLocation": "1051:14:19",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2810,
+                  "scope": 2918,
                   "src": "1036:29:19",
                   "stateVariable": false,
                   "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Profile_$2766_memory_ptr",
+                    "typeIdentifier": "t_struct$_Profile_$2874_memory_ptr",
                     "typeString": "struct IUserSummary.Profile"
                   },
                   "typeName": {
-                    "id": 2804,
+                    "id": 2912,
                     "nodeType": "UserDefinedTypeName",
                     "pathNode": {
-                      "id": 2803,
+                      "id": 2911,
                       "name": "Profile",
                       "nodeType": "IdentifierPath",
-                      "referencedDeclaration": 2766,
+                      "referencedDeclaration": 2874,
                       "src": "1036:7:19"
                     },
-                    "referencedDeclaration": 2766,
+                    "referencedDeclaration": 2874,
                     "src": "1036:7:19",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Profile_$2766_storage_ptr",
+                      "typeIdentifier": "t_struct$_Profile_$2874_storage_ptr",
                       "typeString": "struct IUserSummary.Profile"
                     }
                   },
@@ -1467,12 +1467,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 2807,
+                  "id": 2915,
                   "mutability": "mutable",
                   "name": "universalAddress",
                   "nameLocation": "1075:16:19",
                   "nodeType": "VariableDeclaration",
-                  "scope": 2810,
+                  "scope": 2918,
                   "src": "1067:24:19",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1481,7 +1481,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 2806,
+                    "id": 2914,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1067:7:19",
@@ -1497,19 +1497,19 @@
               "src": "1035:57:19"
             },
             "returnParameters": {
-              "id": 2809,
+              "id": 2917,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1101:0:19"
             },
-            "scope": 2811,
+            "scope": 2919,
             "src": "1013:89:19",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "external"
           }
         ],
-        "scope": 2812,
+        "scope": 2920,
         "src": "176:928:19",
         "usedErrors": []
       }
@@ -1522,7 +1522,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-11T07:05:10.914Z",
+  "updatedAt": "2021-09-20T01:30:17.353Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

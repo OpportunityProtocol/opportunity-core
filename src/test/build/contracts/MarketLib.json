@@ -15,15 +15,15 @@
     "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/MarketLib.sol",
     "exportedSymbols": {
       "MarketLib": [
-        1300
+        1361
       ]
     },
-    "id": 1301,
+    "id": 1362,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1293,
+        "id": 1354,
         "literals": [
           "solidity",
           "0.8",
@@ -38,9 +38,9 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 1300,
+        "id": 1361,
         "linearizedBaseContracts": [
-          1300
+          1361
         ],
         "name": "MarketLib",
         "nameLocation": "65:9:10",
@@ -48,17 +48,17 @@
         "nodes": [
           {
             "canonicalName": "MarketLib.MarketType",
-            "id": 1296,
+            "id": 1357,
             "members": [
               {
-                "id": 1294,
+                "id": 1355,
                 "name": "DEFAULT",
                 "nameLocation": "108:7:10",
                 "nodeType": "EnumValue",
                 "src": "108:7:10"
               },
               {
-                "id": 1295,
+                "id": 1356,
                 "name": "CREATED",
                 "nameLocation": "125:7:10",
                 "nodeType": "EnumValue",
@@ -72,17 +72,17 @@
           },
           {
             "canonicalName": "MarketLib.MarketStatus",
-            "id": 1299,
+            "id": 1360,
             "members": [
               {
-                "id": 1297,
+                "id": 1358,
                 "name": "ACTIVE",
                 "nameLocation": "172:6:10",
                 "nodeType": "EnumValue",
                 "src": "172:6:10"
               },
               {
-                "id": 1298,
+                "id": 1359,
                 "name": "PAUSED",
                 "nameLocation": "188:6:10",
                 "nodeType": "EnumValue",
@@ -95,7 +95,7 @@
             "src": "144:56:10"
           }
         ],
-        "scope": 1301,
+        "scope": 1362,
         "src": "57:145:10",
         "usedErrors": []
       }
@@ -106,15 +106,15 @@
     "absolutePath": "/Users/elijahhampton/Desktop/opportunity-core/src/contracts/libraries/MarketLib.sol",
     "exportedSymbols": {
       "MarketLib": [
-        1300
+        1361
       ]
     },
-    "id": 1301,
+    "id": 1362,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1293,
+        "id": 1354,
         "literals": [
           "solidity",
           "0.8",
@@ -129,9 +129,9 @@
         "contractDependencies": [],
         "contractKind": "library",
         "fullyImplemented": true,
-        "id": 1300,
+        "id": 1361,
         "linearizedBaseContracts": [
-          1300
+          1361
         ],
         "name": "MarketLib",
         "nameLocation": "65:9:10",
@@ -139,17 +139,17 @@
         "nodes": [
           {
             "canonicalName": "MarketLib.MarketType",
-            "id": 1296,
+            "id": 1357,
             "members": [
               {
-                "id": 1294,
+                "id": 1355,
                 "name": "DEFAULT",
                 "nameLocation": "108:7:10",
                 "nodeType": "EnumValue",
                 "src": "108:7:10"
               },
               {
-                "id": 1295,
+                "id": 1356,
                 "name": "CREATED",
                 "nameLocation": "125:7:10",
                 "nodeType": "EnumValue",
@@ -163,17 +163,17 @@
           },
           {
             "canonicalName": "MarketLib.MarketStatus",
-            "id": 1299,
+            "id": 1360,
             "members": [
               {
-                "id": 1297,
+                "id": 1358,
                 "name": "ACTIVE",
                 "nameLocation": "172:6:10",
                 "nodeType": "EnumValue",
                 "src": "172:6:10"
               },
               {
-                "id": 1298,
+                "id": 1359,
                 "name": "PAUSED",
                 "nameLocation": "188:6:10",
                 "nodeType": "EnumValue",
@@ -186,7 +186,7 @@
             "src": "144:56:10"
           }
         ],
-        "scope": 1301,
+        "scope": 1362,
         "src": "57:145:10",
         "usedErrors": []
       }
@@ -201,12 +201,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x25D655672f1a7A0044A5b7069914c083Aad4C84D",
-      "transactionHash": "0x2ad162f695757e40b38717ca7db20d0479933d91790b783343338bd3078f96f3"
+      "address": "0x4752475f4E0e591bE467ACBa3B90756fae234B9C",
+      "transactionHash": "0xca096d918922342a621b9af0e97a70d0bb1daaa079dd8e20e7719970cc63359a"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-11T07:05:10.945Z",
+  "updatedAt": "2021-09-20T01:30:17.383Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

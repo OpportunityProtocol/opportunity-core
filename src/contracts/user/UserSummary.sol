@@ -51,10 +51,10 @@ contract UserSummary is IUserSummary {
     }
 
     function stakeReputation(address _fromBeneficiary, uint256 _stakedReputation) external {
-        require(_fromBeneficiary == owner());
-        require(_stakedReputation !> userReputation, "Staked Reputation cannot be higher than your current reputation");
+        require(_fromBeneficiary == owner);
+        require(_stakedReputation <= _userReputation, "Staked Reputation cannot be higher than your current reputation");
 
-        userReputation -= _stakedReputation;
+       _userReputation = _userReputation - _stakedReputation;
         stakedReputation += stakedReputation;
     }
 

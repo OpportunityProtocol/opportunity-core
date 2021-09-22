@@ -8,12 +8,12 @@ import "./WorkExchange.sol";
 
 contract WorkRelationship {
     address public worker;
-    address private owner;
+    address public owner;
 
     string public _taskMetadataPointer = "";
     string private _taskSolutionPointer = "";
 
-    WorkExchange private _workExchange;
+    address public immutable workExchange;
     Evaluation.WorkRelationshipState public _contractStatus;
 
     Evaluation.ContractType public contractType;
@@ -53,12 +53,26 @@ contract WorkRelationship {
         _;
     }
 
-    constructor(address _owner, Evaluation.ContractType _contractType, string memory taskMetadataPointer) { 
+     constructor(
+         address _owner, 
+        Evaluation.ContractType _contractType, 
+        string memory taskMetadataPointer, 
+        uint256 _wad,
+        address _daiTokenAddress
+        ) payable { 
+        require(_wad != 0, "Must send more than 0 dai to this contract.");
         owner = _owner;
         worker = address(0);
         contractType = _contractType;
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
         _taskMetadataPointer = taskMetadataPointer;
+
+        WorkExchange workExchangeContract = new WorkExchange(
+            owner, 
+            _wad, 
+            _daiTokenAddress);
+        
+        workExchange = address(workExchangeContract);
     }
 
     function updateContractPayout(uint amount) external onlyOwner {
@@ -69,7 +83,7 @@ contract WorkRelationship {
         require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED, "This relationship is already completed");
         
         _contractStatus = Evaluation.WorkRelationshipState.COMPLETED;
-        //_workExchange.beneficiaryWithdraw();
+        //workExchange.beneficiaryWithdraw();
 
     }
 
@@ -78,23 +92,19 @@ contract WorkRelationship {
     }
 
     function assignNewWorker(
-        address payable newWorker, 
-        address _daiTokenAddress
-        ) external payable onlyOwnerWhenNotFlash onlyWhen(Evaluation.WorkRelationshipState.UNCLAIMED) {
-        require(newWorker != address(0));
-        require(msg.value != 0);
+        address payable _newWorker, 
+        uint256 _stakedReputation
+        ) external onlyOwnerWhenNotFlash {
+        require(_newWorker != address(0));
 
-        worker = newWorker;
-        _workExchange = new WorkExchange(
-            newWorker, 
-            owner, 
-            msg.value, 
-            _daiTokenAddres);
+        worker = _newWorker;
+
+        WorkExchange(workExchange).assignNewBeneficiary(_newWorker, _stakedReputation);
             
         _contractStatus = Evaluation.WorkRelationshipState.CLAIMED;
 
-        assert(address(_workExchange) != address(0));
-        assert(worker == newWorker);
+        assert(workExchange != address(0));
+        assert(worker == _newWorker);
         assert(_contractStatus == Evaluation.WorkRelationshipState.CLAIMED);
     }
 
@@ -142,7 +152,7 @@ contract WorkRelationship {
     }
     
     function submitDispute(address disputor) external{
-        _workExchange.disputeFunds(disputor);
+        WorkExchange(workExchange).disputeFunds(disputor);
     }
 
     function submitWork(
@@ -150,7 +160,7 @@ contract WorkRelationship {
         uint8 _v,
         bytes32 _r,
         bytes32 _s) onlyWorker external {
-        _workExchange.submit(_submission, _v, _r, _s);
+        WorkExchange(workExchange).submit(_submission, _v, _r, _s);
     }
 
     function submitWorkEvaluation(
@@ -158,6 +168,6 @@ contract WorkRelationship {
         uint8 _v,
         bytes32 _r,
         bytes32 _s) onlyOwner external {
-        _workExchange.review(_approved, _v, _r, _s);
+        WorkExchange(workExchange).review(_approved, _v, _r, _s);
     }
 }

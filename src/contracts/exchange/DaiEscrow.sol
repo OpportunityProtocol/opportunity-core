@@ -5,8 +5,6 @@ import "../user/UserSummary.sol";
 
 /// Dai Token Interface
 interface DaiToken {
-    function balanceOf(address tokenOwner) external view returns (uint256);
-
     function permit(
         address holder,
         address spender,
@@ -21,6 +19,11 @@ interface DaiToken {
     function pull(address usr, uint wad) external;
     function push(address usr, uint wad) external;
     function approve(address usr, uint wad) external returns (bool);
+    function totalSupply() external view returns (uint256);
+	    function balanceOf(address account) external view returns (uint256);
+	    function allowance(address owner, address spender) external view returns (uint256);
+	
+	    function transfer(address recipient, uint256 amount) external returns (bool);
 }
 
 // / @author Vypo Mouse (Forked and modified by Elijah Hampton) - https://forum.openzeppelin.com/t/feedback-on-dai-escrow-contract-that-reimburses-a-relayer-using-uniswap/2771
@@ -63,10 +66,12 @@ contract DaiEscrow {
 
     bytes32 public immutable domain_separator;
 
-    address immutable public beneficiary;
+    address public beneficiary;
     address immutable public depositor;
 
     uint immutable public wad;
+
+    mapping(address => uint256) public storedFunds;
 
     Status public status;
     ContractState public contractState;
@@ -79,13 +84,11 @@ contract DaiEscrow {
     }
 
     constructor(
-        address _beneficiary,
         address _depositor,
         uint _wad,
         address _daiTokenAddress
     ) {
         require(_depositor != address(0), "invalid owner");
-        //require(_beneficiary != address(0), "invalid worker");
         require(_daiTokenAddress != address(0), "invalid dai token address");
 
         uint8 chain_id;
@@ -95,18 +98,27 @@ contract DaiEscrow {
 
         domain_separator = keccak256(abi.encode(
             keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),
-            keccak256(bytes("escrow")),
+            keccak256(bytes("Dai Escrow")),
             keccak256(bytes("1")),
             chain_id,
             address(this)
         ));
 
-        wad = _wad;
         depositor = _depositor;
-        beneficiary = _beneficiary;
+        wad = _wad;
         status = Status.AwaitingSubmission;
         contractState = ContractState.Uninitialized;
         daiToken = DaiToken(_daiTokenAddress);
+    }
+
+    function assignNewBeneficiary(address payable _beneficiary, uint256 _stakedReputation) external {
+        beneficiary = _beneficiary;
+        require(_beneficiary != address(0), "Beneficiary cannot be 0x address");
+
+        //stake the workers reputation by the required amount
+        //TODO: Need to revert if the user cannot fulfill the reputation requirements
+        UserSummary userSummary = UserSummary(_beneficiary);
+        userSummary.stakeReputation(beneficiary, _stakedReputation);
     }
 
     function initialize(
@@ -114,10 +126,8 @@ contract DaiEscrow {
         uint256 expiry,
         uint8 v,
         bytes32 r,
-        bytes32 s,
-        uint256 stakedReputation
+        bytes32 s
     ) external {
-
         // Unlock buyer's Dai balance to transfer `wad` to this contract.
         daiToken.permit(depositor, address(this), nonce, expiry, true, v, r, s);
 
@@ -127,17 +137,12 @@ contract DaiEscrow {
         // Relock Dai balance of `buyer`.
         daiToken.permit(depositor, address(this), nonce + 1, expiry, false, v, r, s);
 
-        //stake the workers reputation by the required amount
-        //TODO: Need to revert if the user cannot fulfill the reputation requirements
-        UserSummary userSummary = UserSummary(beneficiary);
-        userSummary.stakeReputation(beneficiary, stakedReputation);
-
         contractState = ContractState.Initialized;
     }
 
     function submit(
         bytes32 _submission,
-        uint8 _v,
+       uint8 _v,
         bytes32 _r,
         bytes32 _s
     ) external onlyWhen(Status.AwaitingSubmission) {
@@ -155,7 +160,7 @@ contract DaiEscrow {
 
     function review(
         bool _approve,
-        uint8 _v,
+       uint8 _v,
         bytes32 _r,
         bytes32 _s
     ) external onlyWhen(Status.AwaitingReview) {
