@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "gsn-with-ganache": "run-with-testrpc --networkId 5777 --chainId 5777 'gsn start'"
+    "gsn-with-ganache": "run-with-testrpc --networkId 1337 --chainId 1337 'gsn start'"
   },
   "repository": {
     "type": "git",

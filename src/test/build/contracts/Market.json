@@ -7576,7 +7576,7 @@
         1352
       ],
       "IUserSummary": [
-        2919
+        2875
       ],
       "Market": [
         1829
@@ -7597,7 +7597,7 @@
         1622
       ],
       "UserSummary": [
-        2793
+        2749
       ],
       "WorkExchange": [
         913
@@ -9966,7 +9966,7 @@
         1352
       ],
       "IUserSummary": [
-        2919
+        2875
       ],
       "Market": [
         1829
@@ -9987,7 +9987,7 @@
         1622
       ],
       "UserSummary": [
-        2793
+        2749
       ],
       "WorkExchange": [
         913
@@ -12343,7 +12343,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-20T01:30:17.359Z",
+  "updatedAt": "2021-09-29T04:01:30.300Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

@@ -27,7 +27,7 @@ module.exports = async function(deployer) {
   await deployer.deploy(MarketLibrary);
   await deployer.deploy(Evaluation);
 
-  await deployer.deploy(DaiToken, 5777);
+  await deployer.deploy(DaiToken, 1337);
   const deployedDaiToken = await DaiToken.deployed()
 
   await deployer.deploy(MarketFactory);

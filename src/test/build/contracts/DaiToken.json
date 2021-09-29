@@ -213,7 +213,7 @@
         1352
       ],
       "IUserSummary": [
-        2919
+        2875
       ],
       "StringUtils": [
         1602
@@ -222,7 +222,7 @@
         1622
       ],
       "UserSummary": [
-        2793
+        2749
       ]
     },
     "id": 883,
@@ -246,7 +246,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 883,
-        "sourceUnit": 2794,
+        "sourceUnit": 2750,
         "src": "61:33:6",
         "symbolAliases": [],
         "unitAlias": ""
@@ -3208,7 +3208,7 @@
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_UserSummary_$2793",
+                        "typeIdentifier": "t_contract$_UserSummary_$2749",
                         "typeString": "contract UserSummary"
                       },
                       "typeName": {
@@ -3218,13 +3218,13 @@
                           "id": 626,
                           "name": "UserSummary",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 2793,
+                          "referencedDeclaration": 2749,
                           "src": "4104:11:6"
                         },
-                        "referencedDeclaration": 2793,
+                        "referencedDeclaration": 2749,
                         "src": "4104:11:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_UserSummary_$2793",
+                          "typeIdentifier": "t_contract$_UserSummary_$2749",
                           "typeString": "contract UserSummary"
                         }
                       },
@@ -3258,10 +3258,10 @@
                       "name": "UserSummary",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2793,
+                      "referencedDeclaration": 2749,
                       "src": "4130:11:6",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_contract$_UserSummary_$2793_$",
+                        "typeIdentifier": "t_type$_t_contract$_UserSummary_$2749_$",
                         "typeString": "type(contract UserSummary)"
                       }
                     },
@@ -3276,7 +3276,7 @@
                     "src": "4130:25:6",
                     "tryCall": false,
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_UserSummary_$2793",
+                      "typeIdentifier": "t_contract$_UserSummary_$2749",
                       "typeString": "contract UserSummary"
                     }
                   },
@@ -3330,7 +3330,7 @@
                         "referencedDeclaration": 628,
                         "src": "4165:11:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_UserSummary_$2793",
+                          "typeIdentifier": "t_contract$_UserSummary_$2749",
                           "typeString": "contract UserSummary"
                         }
                       },
@@ -3341,7 +3341,7 @@
                       "lValueRequested": false,
                       "memberName": "stakeReputation",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2782,
+                      "referencedDeclaration": 2738,
                       "src": "4165:27:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$returns$__$",
@@ -6711,7 +6711,7 @@
         1352
       ],
       "IUserSummary": [
-        2919
+        2875
       ],
       "StringUtils": [
         1602
@@ -6720,7 +6720,7 @@
         1622
       ],
       "UserSummary": [
-        2793
+        2749
       ]
     },
     "id": 883,
@@ -6744,7 +6744,7 @@
         "nameLocation": "-1:-1:-1",
         "nodeType": "ImportDirective",
         "scope": 883,
-        "sourceUnit": 2794,
+        "sourceUnit": 2750,
         "src": "61:33:6",
         "symbolAliases": [],
         "unitAlias": ""
@@ -9706,7 +9706,7 @@
                       "stateVariable": false,
                       "storageLocation": "default",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_contract$_UserSummary_$2793",
+                        "typeIdentifier": "t_contract$_UserSummary_$2749",
                         "typeString": "contract UserSummary"
                       },
                       "typeName": {
@@ -9716,13 +9716,13 @@
                           "id": 626,
                           "name": "UserSummary",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 2793,
+                          "referencedDeclaration": 2749,
                           "src": "4104:11:6"
                         },
-                        "referencedDeclaration": 2793,
+                        "referencedDeclaration": 2749,
                         "src": "4104:11:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_UserSummary_$2793",
+                          "typeIdentifier": "t_contract$_UserSummary_$2749",
                           "typeString": "contract UserSummary"
                         }
                       },
@@ -9756,10 +9756,10 @@
                       "name": "UserSummary",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 2793,
+                      "referencedDeclaration": 2749,
                       "src": "4130:11:6",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_contract$_UserSummary_$2793_$",
+                        "typeIdentifier": "t_type$_t_contract$_UserSummary_$2749_$",
                         "typeString": "type(contract UserSummary)"
                       }
                     },
@@ -9774,7 +9774,7 @@
                     "src": "4130:25:6",
                     "tryCall": false,
                     "typeDescriptions": {
-                      "typeIdentifier": "t_contract$_UserSummary_$2793",
+                      "typeIdentifier": "t_contract$_UserSummary_$2749",
                       "typeString": "contract UserSummary"
                     }
                   },
@@ -9828,7 +9828,7 @@
                         "referencedDeclaration": 628,
                         "src": "4165:11:6",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_UserSummary_$2793",
+                          "typeIdentifier": "t_contract$_UserSummary_$2749",
                           "typeString": "contract UserSummary"
                         }
                       },
@@ -9839,7 +9839,7 @@
                       "lValueRequested": false,
                       "memberName": "stakeReputation",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 2782,
+                      "referencedDeclaration": 2738,
                       "src": "4165:27:6",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$_t_uint256_$returns$__$",
@@ -13202,7 +13202,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-20T01:30:14.276Z",
+  "updatedAt": "2021-09-29T04:01:27.420Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

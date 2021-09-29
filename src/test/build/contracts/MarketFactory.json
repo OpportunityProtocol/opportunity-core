@@ -2834,7 +2834,7 @@
         1352
       ],
       "IUserSummary": [
-        2919
+        2875
       ],
       "Market": [
         1829
@@ -2858,7 +2858,7 @@
         1622
       ],
       "UserSummary": [
-        2793
+        2749
       ],
       "WorkExchange": [
         913
@@ -4032,7 +4032,7 @@
         1352
       ],
       "IUserSummary": [
-        2919
+        2875
       ],
       "Market": [
         1829
@@ -4056,7 +4056,7 @@
         1622
       ],
       "UserSummary": [
-        2793
+        2749
       ],
       "WorkExchange": [
         913
@@ -5216,15 +5216,15 @@
     "version": "0.8.7+commit.e28d00a7.Emscripten.clang"
   },
   "networks": {
-    "5777": {
+    "1337": {
       "events": {},
       "links": {},
-      "address": "0xE7Fc4CEE4f791c2d4a2BB8088a9fd69e50C9538D",
-      "transactionHash": "0x1e707b8be2f95d710861fdff5ea1bad5a8bb77335c21910e7db0e4e796598932"
+      "address": "0xe94B03590228828F5436CE4A5bb42957E5af4742",
+      "transactionHash": "0xdc32745b0e1f3487d15bf2840dd98edd3f3b7f589cdb02d3e4c36a56e82e8c57"
     }
   },
   "schemaVersion": "3.4.3",
-  "updatedAt": "2021-09-20T01:30:17.365Z",
+  "updatedAt": "2021-09-29T04:01:30.308Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
