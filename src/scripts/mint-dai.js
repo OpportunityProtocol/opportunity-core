@@ -17,13 +17,13 @@ const COMPILED_DAI_PATH = path.join(__dirname, '../../bin/src/contracts/test/')
 const daiContractAbi = JSON.parse(fs.readFileSync(COMPILED_DAI_PATH + 'Dai.abi'));
 
 console.log('Creating Dai contract instance...')
-const daiContractInstance = new ethers.Contract('0x55Ab6543bC504E80e32C43384bc088c82814Cd5B', daiContractAbi, signer);
+const daiContractInstance = new ethers.Contract('0xF9B20f94A64F03e37701e044572169C5A97f2f34', daiContractAbi, signer);
 console.log('Minting Dai')
 mintDai()
 
 async function mintDai() {
     console.log('Minting dai to first address...')
     await daiContractInstance.mint('0x74F6ff3Ae3f5EB38354FfB05867a37B7B40E6000', 10000)
-    console.log('Minting dai to second address...')
-    await daiContractInstance.mint('0xd4342e1d818843f49cd25273d2fbea73d1719da6', 10000)
+    //console.log('Minting dai to second address...')
+    //await daiContractInstance.mint('0xd4342e1d818843f49cd25273d2fbea73d1719da6', 10000)
 }
