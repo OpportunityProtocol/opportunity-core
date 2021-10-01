@@ -3,24 +3,39 @@
 pragma solidity 0.8.7;
 
 import "../user/UserSummary.sol";
-import "../libraries/Evaluation.sol";
 import "./WorkExchange.sol";
 
 contract WorkRelationship {
+    struct EvaluationState {
+        string industry;
+        uint256 industrylevel;
+        uint256 reputation;
+    }
+
+    enum WorkRelationshipState { 
+        UNCLAIMED,
+        CLAIMED
+    }
+
+    enum ContractType {
+        NORMAL,
+        FLASH
+    }
+
     address public worker;
     address public owner;
+    address public immutable workExchange;
 
     string public _taskMetadataPointer = "";
-    string private _taskSolutionPointer = "";
-
-    address public immutable workExchange;
-    Evaluation.WorkRelationshipState public _contractStatus;
-
-    Evaluation.ContractType public contractType;
+    bytes32 private _taskSolutionPointer = "";
 
     uint public contractPayout;
 
-    modifier onlyWorker() {
+    WorkRelationshipState public _contractStatus;
+    ContractType public contractType;
+
+    modifier onlyWorker() 
+    {
         require(
             worker == msg.sender,
             "WorkRelationship: caller is not the worker"
@@ -31,7 +46,8 @@ contract WorkRelationship {
     /**
      * @dev Throws if called by any account other than the owner.
      */
-    modifier onlyOwner() {
+    modifier onlyOwner() 
+    {
         require(
             owner == msg.sender,
             "WorkRelationship: caller is not the owner"
@@ -39,17 +55,15 @@ contract WorkRelationship {
         _;
     }
 
-    modifier onlyOwnerWhenNotFlash() {
-        if (contractType == Evaluation.ContractType.FLASH) {
-            _;
-        } else {
-            require(owner == msg.sender, "Caller is not owner and contract is not flash.");
-        }
+    modifier onlyWhenState(WorkRelationshipState status) 
+    {
+        require(_contractStatus == status, "This action cannot be carried out under the current contract status.");
         _;
     }
 
-    modifier onlyWhen(Evaluation.WorkRelationshipState status) {
-        require(_contractStatus == status);
+    modifier onlyWhenType(ContractType currentContractType) 
+    {
+        require(contractType == currentContractType, "This action cannot be carried out under this contract type");
         _;
     }
 
@@ -64,6 +78,7 @@ contract WorkRelationship {
         owner = _owner;
         worker = address(0);
         contractType = _contractType;
+        contractPayout = _wad;
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
         _taskMetadataPointer = taskMetadataPointer;
 
@@ -75,32 +90,17 @@ contract WorkRelationship {
         workExchange = address(workExchangeContract);
     }
 
-    function updateContractPayout(uint amount) external onlyOwner {
-        //send back vaalue
-    }
-
-    function completeContract() external onlyOwner {
-        require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED, "This relationship is already completed");
-        
-        _contractStatus = Evaluation.WorkRelationshipState.COMPLETED;
-        //workExchange.beneficiaryWithdraw();
-
-    }
-
-    function updateRelationshipState(uint newState) external {
-        
-    }
-
     function assignNewWorker(
         address payable _newWorker, 
         uint256 _stakedReputation
-        ) external onlyOwnerWhenNotFlash {
-        require(_newWorker != address(0));
+        ) 
+        external 
+        onlyOwner
+    {
+        require(_newWorker != address(0), "Worker address must not be 0 when assigning new worker.");
 
         worker = _newWorker;
-
         WorkExchange(workExchange).assignNewBeneficiary(_newWorker, _stakedReputation);
-            
         _contractStatus = Evaluation.WorkRelationshipState.CLAIMED;
 
         assert(workExchange != address(0));
@@ -108,10 +108,8 @@ contract WorkRelationship {
         assert(_contractStatus == Evaluation.WorkRelationshipState.CLAIMED);
     }
 
-    function unAssignWorker() external onlyWorker {
-        require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED);
-        require(_contractStatus != Evaluation.WorkRelationshipState.COMPLETED);
-
+    function unAssignWorker() external onlyWorker onlyWhenState(WorkRelationshipState.CLAIMED)
+    {
         worker = address(0);
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
 
@@ -121,8 +119,10 @@ contract WorkRelationship {
 
     function checkWorkerEvaluation(
         address workerUniversalAddress,
-        Evaluation.EvaluationState memory evaluationState
-    ) external returns (bool) {
+        EvaluationState memory evaluationState
+        ) 
+        external returns (bool) 
+    {
         bool passesEvaluation = UserSummary(workerUniversalAddress)
         .evaluateUser(evaluationState);
         return passesEvaluation;
@@ -131,13 +131,13 @@ contract WorkRelationship {
     function updateTaskMetadataPointer(string memory newTaskPointerHash)
         external
         onlyOwner
+        onlyWhenState(WorkRelationshipState.UNCLAIMED)
     {
         _taskMetadataPointer = newTaskPointerHash;
     }
 
-    function updateTaskSolutionPointer(string memory newTaskPointerHash)
-        external
-        onlyWorker onlyWhen(Evaluation.WorkRelationshipState.CLAIMED)
+    function updateTaskSolutionPointer(bytes32 newTaskPointerHash)
+        internal
     {
         _taskSolutionPointer = newTaskPointerHash;
     }
@@ -146,12 +146,17 @@ contract WorkRelationship {
         external
         view
         onlyOwner
-        returns (string memory)
+        onlyWorker
+        returns (bytes32)
     {
         return _taskSolutionPointer;
     }
     
-    function submitDispute(address disputor) external{
+    function submitDispute(address disputor) 
+        external 
+        onlyWorker 
+        onlyOwner 
+    {
         WorkExchange(workExchange).disputeFunds(disputor);
     }
 
@@ -159,8 +164,13 @@ contract WorkRelationship {
         bytes32 _submission,
         uint8 _v,
         bytes32 _r,
-        bytes32 _s) onlyWorker external {
+        bytes32 _s) 
+        onlyWorker 
+        onlyWhenState(WorkRelationshipState.CLAIMED)
+        external 
+    {
         WorkExchange(workExchange).submit(_submission, _v, _r, _s);
+        this.updateTaskSolutionPointer(_submission);
     }
 
     function submitWorkEvaluation(
@@ -169,5 +179,9 @@ contract WorkRelationship {
         bytes32 _r,
         bytes32 _s) onlyOwner external {
         WorkExchange(workExchange).review(_approved, _v, _r, _s);
+    }
+
+    function resolveContract() external onlyOwner {
+        WorkExchange(workExchange).resolve();
     }
 }

@@ -10,14 +10,14 @@ const provider = new ethers.providers.JsonRpcProvider();
 // send ether and pay to change state within the blockchain.
 // For this, we need the account signer...
 const signer = provider.getSigner()
-const wallet = new ethers.Wallet('b64ffce83525dbca10c810abf1219eb671a9b1ee1d29f5cbac2fc52ac6344b78', provider);
+const wallet = new ethers.Wallet('f4bdfbd7d59eef69cb569ce2200d8c23193a0a92e928ac1b08fe92ef77d41c25', provider);
 
 
 const COMPILED_DAI_PATH = path.join(__dirname, '../../bin/src/contracts/test/')
 const daiContractAbi = JSON.parse(fs.readFileSync(COMPILED_DAI_PATH + 'Dai.abi'));
 
 console.log('Creating Dai contract instance...')
-const daiContractInstance = new ethers.Contract('0xF9B20f94A64F03e37701e044572169C5A97f2f34', daiContractAbi, signer);
+const daiContractInstance = new ethers.Contract('0x4aD26D864936Ac893EC98632D424bF4E8361926a', daiContractAbi, wallet);
 console.log('Minting Dai')
 mintDai()
 
