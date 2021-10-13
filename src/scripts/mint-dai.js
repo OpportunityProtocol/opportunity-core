@@ -17,7 +17,7 @@ const COMPILED_DAI_PATH = path.join(__dirname, '../../bin/src/contracts/test/')
 const daiContractAbi = JSON.parse(fs.readFileSync(COMPILED_DAI_PATH + 'Dai.abi'));
 
 console.log('Creating Dai contract instance...')
-const daiContractInstance = new ethers.Contract('0x4aD26D864936Ac893EC98632D424bF4E8361926a', daiContractAbi, wallet);
+const daiContractInstance = new ethers.Contract('0x68d45EE246bd52601a272623d934634761F4051F', daiContractAbi, wallet);
 console.log('Minting Dai')
 mintDai()
 

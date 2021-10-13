@@ -12,7 +12,5 @@ contract WorkExchange is DaiEscrow {
         
     }
 
-    function disputeFunds(address callee) external {
-        updateStatus(callee);
-    }
+    function disputeFunds(address callee) external { }
 }

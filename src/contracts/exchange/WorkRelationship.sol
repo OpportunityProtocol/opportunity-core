@@ -4,23 +4,9 @@ pragma solidity 0.8.7;
 
 import "../user/UserSummary.sol";
 import "./WorkExchange.sol";
+import "../libraries/Evaluation.sol";
 
 contract WorkRelationship {
-    struct EvaluationState {
-        string industry;
-        uint256 industrylevel;
-        uint256 reputation;
-    }
-
-    enum WorkRelationshipState { 
-        UNCLAIMED,
-        CLAIMED
-    }
-
-    enum ContractType {
-        NORMAL,
-        FLASH
-    }
 
     address public worker;
     address public owner;
@@ -31,8 +17,8 @@ contract WorkRelationship {
 
     uint public contractPayout;
 
-    WorkRelationshipState public _contractStatus;
-    ContractType public contractType;
+    Evaluation.WorkRelationshipState public _contractStatus;
+    Evaluation.ContractType public contractType;
 
     modifier onlyWorker() 
     {
@@ -55,20 +41,20 @@ contract WorkRelationship {
         _;
     }
 
-    modifier onlyWhenState(WorkRelationshipState status) 
+    modifier onlyWhenState(Evaluation.WorkRelationshipState status) 
     {
         require(_contractStatus == status, "This action cannot be carried out under the current contract status.");
         _;
     }
 
-    modifier onlyWhenType(ContractType currentContractType) 
+    modifier onlyWhenType(Evaluation.ContractType currentContractType) 
     {
         require(contractType == currentContractType, "This action cannot be carried out under this contract type");
         _;
     }
 
      constructor(
-         address _owner, 
+        address _owner, 
         Evaluation.ContractType _contractType, 
         string memory taskMetadataPointer, 
         uint256 _wad,
@@ -108,7 +94,7 @@ contract WorkRelationship {
         assert(_contractStatus == Evaluation.WorkRelationshipState.CLAIMED);
     }
 
-    function unAssignWorker() external onlyWorker onlyWhenState(WorkRelationshipState.CLAIMED)
+    function unAssignWorker() external onlyWorker onlyWhenState(Evaluation.WorkRelationshipState.CLAIMED)
     {
         worker = address(0);
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
@@ -119,7 +105,7 @@ contract WorkRelationship {
 
     function checkWorkerEvaluation(
         address workerUniversalAddress,
-        EvaluationState memory evaluationState
+        Evaluation.EvaluationState memory evaluationState
         ) 
         external returns (bool) 
     {
@@ -131,7 +117,7 @@ contract WorkRelationship {
     function updateTaskMetadataPointer(string memory newTaskPointerHash)
         external
         onlyOwner
-        onlyWhenState(WorkRelationshipState.UNCLAIMED)
+        onlyWhenState(Evaluation.WorkRelationshipState.UNCLAIMED)
     {
         _taskMetadataPointer = newTaskPointerHash;
     }
@@ -166,22 +152,22 @@ contract WorkRelationship {
         bytes32 _r,
         bytes32 _s) 
         onlyWorker 
-        onlyWhenState(WorkRelationshipState.CLAIMED)
+        onlyWhenState(Evaluation.WorkRelationshipState.CLAIMED)
         external 
     {
         WorkExchange(workExchange).submit(_submission, _v, _r, _s);
-        this.updateTaskSolutionPointer(_submission);
+        updateTaskSolutionPointer(_submission);
     }
 
     function submitWorkEvaluation(
         bool _approved,
         uint8 _v,
         bytes32 _r,
-        bytes32 _s) onlyOwner external {
+        bytes32 _s
+        ) 
+        onlyOwner 
+        external 
+    {
         WorkExchange(workExchange).review(_approved, _v, _r, _s);
-    }
-
-    function resolveContract() external onlyOwner {
-        WorkExchange(workExchange).resolve();
     }
 }

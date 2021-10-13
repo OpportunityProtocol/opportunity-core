@@ -21,7 +21,7 @@
     "@opengsn/provider": "^2.2.2",
     "@openzeppelin/contracts-ethereum-package": "^3.0.0",
     "@truffle/hdwallet-provider": "^1.4.0",
-    "ethers": "^5.2.0",
+    "ethers": "^5.4.7",
     "fs-extra": "^10.0.0",
     "ganache-cli": "^6.12.2",
     "gsn": "0.0.1",

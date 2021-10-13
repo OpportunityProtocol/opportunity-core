@@ -30,7 +30,7 @@ module.exports = async function(deployer) {
   await deployer.deploy(DaiToken, 1337);
   const deployedDaiToken = await DaiToken.deployed()
 
-  await deployer.deploy(MarketFactory);
+  await deployer.deploy(MarketFactory)
   await deployer.deploy(User);
 
   await deployer.link(StringUtils, UserSummary);
@@ -43,7 +43,9 @@ module.exports = async function(deployer) {
   await deployer.link(StringUtils, UserRegistration);
   await deployer.deploy(UserRegistration, userSummaryFactory.address);
 
-  //
+  await deployer.deploy(WorkRelationship, '0x74F6ff3Ae3f5EB38354FfB05867a37B7B40E6000', 0, '', 50, '0x202aADEd244Dcd52680f1782f347Abc92716893c')
+  let instance = await WorkRelationship.deployed()
+ 
   //await deployer.deploy(Dispute);
   await deployer.deploy(Controllable);
 };

@@ -3,8 +3,10 @@
 pragma solidity 0.8.7;
 
 import "./interface/IUserSummary.sol";
+import "../libraries/Evaluation.sol";
 
 contract UserSummary is IUserSummary {
+
     event UserSummaryUpdate(address universalAddress);
 
     address private _universalAddress;
@@ -61,5 +63,7 @@ contract UserSummary is IUserSummary {
     /**
      *
      */
-    function evaluateUser(Evaluation.EvaluationState memory evaluationState) external override returns(bool) {}
+    function evaluateUser(Evaluation.EvaluationState memory evaluationState) external override returns(bool) {
+        require(owner != address(0));
+    }
 }

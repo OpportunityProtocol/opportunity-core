@@ -76,6 +76,11 @@ contract DaiEscrow {
     ContractState public state;
 
     DaiToken daiToken;
+    
+    modifier onlyOwner() {
+        require(depositor == msg.sender, "Owner can only resolve contract.");
+        _;
+    }
 
     modifier onlyWhen(Status _status) 
     {
@@ -168,54 +173,57 @@ contract DaiEscrow {
         ));
 
         require(beneficiary != address(0));
-        require(beneficiary == ecrecover(digest, _v, _r, _s), "invalid-permit");
+        //require(beneficiary == ecrecover(digest, _v, _r, _s), "invalid-permit");
 
         status = Status.AwaitingReview;
     }
 
-    function review(
+    function resolve() 
+        internal
+        onlyOwner
+    {
+        require(beneficiary != address(0));
+
+        daiToken.push(beneficiary, daiToken.balanceOf(address(this)));
+        status = Status.Approved;
+        state = ContractState.Locked;
+    }
+
+       function review(
         bool _approve,
         uint8 _v,
         bytes32 _r,
         bytes32 _s
         ) 
         external 
+        onlyOwner
         onlyWhen(Status.AwaitingReview) 
     {
-        require(msg.sender == depositor, "Reviewer must be the owner of the contract and the depositor of the escrow.");
         bytes32 digest = keccak256(abi.encodePacked(
             "\x19\x01",
             domain_separator,
             keccak256(abi.encode(REVIEW_TYPEHASH, _approve))
         ));
 
-        require(depositor == ecrecover(digest, _v, _r, _s), "invalid-permit");
+        //require(depositor == ecrecover(digest, _v, _r, _s), "invalid-permit");
 
         if (_approve) {
-            resolve(beneficiary);
+            resolve();
         } else {
             status = Status.AwaitingSubmission;
         }
     }
 
-    function resolve() 
-        private 
-    {
-        require(beneficiary != address(0));
-
-        daiToken.push(beneficiary, daiToken.balanceOf(address(this)));
-        status = Status.Approved;
-        state = ContractState.Locked
-    }
-
     function getExchangeStatus() 
         public 
+        returns (Status)
     {
         return status;
     }
     
     function getExchangeState() 
         public 
+        returns (ContractState)
     {
         return state;
     }

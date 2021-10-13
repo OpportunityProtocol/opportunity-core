@@ -8,8 +8,8 @@ const signer = provider.getSigner('0x74F6ff3Ae3f5EB38354FfB05867a37B7B40E6000')
 
 const wallet = new ethers.Wallet('f4bdfbd7d59eef69cb569ce2200d8c23193a0a92e928ac1b08fe92ef77d41c25', provider)
 
-const relationshipAddress = '0xB0cD295606B20CC36dC6e7e2CC697606f8A1cf6E'
-const daiAddress = '0x4aD26D864936Ac893EC98632D424bF4E8361926a'
+const relationshipAddress = ''
+const daiAddress = '0x68d45EE246bd52601a272623d934634761F4051F'
 
 
 // The provider also allows signing transactions to
