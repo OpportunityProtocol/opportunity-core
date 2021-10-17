@@ -15,8 +15,6 @@ contract WorkRelationship {
     string public _taskMetadataPointer = "";
     bytes32 private _taskSolutionPointer = "";
 
-    uint public contractPayout;
-
     Evaluation.WorkRelationshipState public _contractStatus;
     Evaluation.ContractType public contractType;
 
@@ -57,20 +55,16 @@ contract WorkRelationship {
         address _owner, 
         Evaluation.ContractType _contractType, 
         string memory taskMetadataPointer, 
-        uint256 _wad,
         address _daiTokenAddress
-        ) payable { 
-        require(_wad != 0, "Must send more than 0 dai to this contract.");
+        ) { 
         owner = _owner;
         worker = address(0);
         contractType = _contractType;
-        contractPayout = _wad;
         _contractStatus = Evaluation.WorkRelationshipState.UNCLAIMED;
         _taskMetadataPointer = taskMetadataPointer;
 
         WorkExchange workExchangeContract = new WorkExchange(
             owner, 
-            _wad, 
             _daiTokenAddress);
         
         workExchange = address(workExchangeContract);

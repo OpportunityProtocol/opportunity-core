@@ -17,13 +17,17 @@ const COMPILED_MARKET_PATH = path.join(__dirname, '../../bin/src/contracts/marke
 const marketFactoryABI = JSON.parse(fs.readFileSync(COMPILED_MARKET_PATH + 'MarketFactory.abi'));
 
 console.log('Creating market factory contract instance...')
-const marketFactoryContractInstance = new ethers.Contract('0x41e9d48d1bf6c7dEFEF16C8F576BF39C5831fe40', marketFactoryABI, signer);
+const marketFactoryContractInstance = new ethers.Contract('0x36E47bC81F9307979E5B621bA9063D4da607D8Dc', marketFactoryABI, signer);
 console.log('Creating markets...')
 createDummyMarkets()
 
 async function createDummyMarkets() {
    try {
    await marketFactoryContractInstance.createMarket('Dummy Market One', 0);
+   await marketFactoryContractInstance.createMarket('Dummy Market Two', 0);
+   await marketFactoryContractInstance.createMarket('Dummy Market Three', 0);
+   await marketFactoryContractInstance.createMarket('Dummy Market Four', 0);
+   await marketFactoryContractInstance.createMarket('Dummy Market Five', 0);
    }catch(error) {
       console.log(error)
    }

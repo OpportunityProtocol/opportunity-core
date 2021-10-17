@@ -6,9 +6,8 @@ import "./DaiEscrow.sol";
 contract WorkExchange is DaiEscrow {
     constructor(
         address _depositor,
-        uint _wad, 
         address _daiTokenAddress) 
-    DaiEscrow(_depositor, _wad, _daiTokenAddress) {
+    DaiEscrow(_depositor, _daiTokenAddress) {
         
     }
 

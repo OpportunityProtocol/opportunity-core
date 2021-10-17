@@ -90,7 +90,6 @@ contract DaiEscrow {
 
     constructor (
         address _depositor,
-        uint _wad,
         address _daiTokenAddress
     ) 
     {
@@ -111,7 +110,6 @@ contract DaiEscrow {
         ));
 
         depositor = _depositor;
-        wad = _wad;
         daiToken = DaiToken(_daiTokenAddress);
         state = ContractState.Uninitialized;
     }
