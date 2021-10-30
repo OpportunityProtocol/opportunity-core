@@ -1,50 +1,15 @@
-# Opportunity Core
-> Backend for the Opportunity Protocol including smart contracts that power the platform.
+# Basic Sample Hardhat Project
 
-Smart contracts for Opportunity, a decentralized job market platform on the Ethereum blockchain.
+This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
 
-![](header.png)
+Try running some of the following tasks:
 
-## Install
-
-Clone the current github repo and npm install.
-
-```sh
-git clone
+```shell
+npx hardhat accounts
+npx hardhat compile
+npx hardhat clean
+npx hardhat test
+npx hardhat node
+node scripts/sample-script.js
+npx hardhat help
 ```
-
-```sh
-make install
-```
-
-## Test
-```sh
-Currently no testing setup.
-```
-
-## Release History
-* Current being developed.
-
-## Meta
-
-Elijah Hampton – [@elihampton_](https://twitter.com/elihampton_) – hamptonelijahj@gmail.com
-
-Distributed under the MIT license. See ``LICENSE`` for more information.
-
-[https://github.com/elijahhampton](https://github.com/elijahhampton)
-
-## Contributing
-
-1. Fork it (https://github.com/OpportunityProtocol/opportunity-core)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
-<!-- Markdown link & img dfn's -->
-[npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/datadog-metrics
-[npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
-[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
-[wiki]: https://github.com/yourname/yourproject/wiki

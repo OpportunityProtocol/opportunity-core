@@ -1,0 +1,45 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IBanker",
+  "sourceName": "contracts/exchange/DaiEscrow.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_erc20Contract",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_cErc20Contract",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_donor",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_numTokensToSupply",
+          "type": "uint256"
+        }
+      ],
+      "name": "supplyErc20ToCompound",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
