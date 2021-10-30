@@ -2,15 +2,21 @@ const { ethers } = require('ethers')
 const fs = require('fs')
 const path = require('path')
 
-// If you don't specify a //url//, Ethers connects to the default 
-// (i.e. ``http:/\/localhost:8545``)
-const provider = new ethers.providers.JsonRpcProvider();
+function getPrivateKeysFromMnemonic(mnemonic, numberOfPrivateKeys = 20) {
+   const result = [];
+   for (let i = 0; i < numberOfPrivateKeys; i++) {
+     result.push(ethers.Wallet.fromMnemonic(mnemonic, `m/44'/60'/0'/0/${i}`).privateKey);
+   }
+ }
 
-// The provider also allows signing transactions to
-// send ether and pay to change state within the blockchain.
-// For this, we need the account signer...
+
+const provider = new ethers.providers.JsonRpcProvider();
 const signer = provider.getSigner()
-const wallet = new ethers.Wallet.fromMnemonic(process.env.DEV_ETH_MNEMONIC)
+
+const privateKey = getPrivateKeysFromMnemonic(process.env.DEV_ETH_MNEMONIC)
+const wallet = new ethers.Wallet(privateKey[0])
+console.log('Created wallet...')
+console.log(wallet)
 
 
 const COMPILED_MARKET_PATH = path.join(__dirname, '../bin/contracts/market/')

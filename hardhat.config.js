@@ -19,14 +19,6 @@ if (!developmentMnemonic) {
   process.exit(1);
 }
 
-function getPrivateKeysFromMnemonic(mnemonic, numberOfPrivateKeys = 20) {
-  const result = [];
-  for (let i = 0; i < numberOfPrivateKeys; i++) {
-    result.push(ethers.Wallet.fromMnemonic(mnemonic, `m/44'/60'/0'/0/${i}`).privateKey);
-  }
-}
-
-
 module.exports = {
   solidity: {
     version: '0.8.7',
