@@ -1,7 +1,6 @@
 const hre = require('hardhat');
-const { TASK_NODE_CREATE_SERVER } = require('hardhat/builtin-tasks/task-names');
 const Compound = require('@compound-finance/compound-js');
-const jsonRpcUrl = 'http://localhost:8545';
+const jsonRpcUrl = process.env.MAINNET_PROVIDER_URL;
 let provider;
 
 // Amount of tokens to seed in the 0th account on localhost
@@ -27,32 +26,9 @@ const amounts = {
 
 async function main() {
   await hre.run('compile')
-  try {
-  startCompound()
-  } catch(error) {
-    console.log('BOOOOOOOOOOOOOOOOm')
-    console.log(error)
-  }
 
-  const MarketFactory = await hre.ethers.getContractFactory("MarketFactory");
-  const UserRegistration = await hre.ethers.getContractFactory('UserRegistration')
-  const UserSummaryFactory = await hre.ethers.getContractFactory('UserSummaryFactory')
-
-  const marketFactory = await MarketFactory.deploy()
-  const userSummaryFactory = await UserSummaryFactory.deploy()
-  const userRegistration = await UserRegistration.deploy(userSummaryFactory.address)
-
-  console.log('Deploying market factory...')
-  console.log('Address: ' + marketFactory.address)
-
-  console.log('Deploying UserSummaryFactory...')
-  console.log('Address: ' + userSummaryFactory.address)
-
-  console.log('Deploying user registration...')
-  console.log('Address: ' + userRegistration.address)
-
-
-
+  await deployOpportunityContracts()
+  await mintTestDai()
 }
 
 main()
@@ -61,19 +37,28 @@ main()
     console.error(error);
     process.exit(1);
   });
+
+  async function deployOpportunityContracts() {
+    const MarketFactory = await hre.ethers.getContractFactory("MarketFactory");
+    const UserRegistration = await hre.ethers.getContractFactory('UserRegistration')
+    const UserSummaryFactory = await hre.ethers.getContractFactory('UserSummaryFactory')
+  
+    const marketFactory = await MarketFactory.deploy()
+    const userSummaryFactory = await UserSummaryFactory.deploy()
+    const userRegistration = await UserRegistration.deploy(userSummaryFactory.address)
+  
+    console.log('Deploying market factory...')
+    console.log('Address: ' + marketFactory.address)
+  
+    console.log('Deploying UserSummaryFactory...')
+    console.log('Address: ' + userSummaryFactory.address)
+  
+    console.log('Deploying user registration...')
+    console.log('Address: ' + userRegistration.address)
+  }
     
   
-async function startCompound() {
-  //console.log(`\nRunning a hardhat localhost fork of mainnet at ${jsonRpcUrl}\n`);
-
-  /*const jsonRpcServer = await hre.run(TASK_NODE_CREATE_SERVER, {
-    hostname: 'localhost',
-    port: 8545,
-    provider: hre.network.provider,
-  });
-
-  await jsonRpcServer.listen();*/
-
+async function mintTestDai() {
   // Seed first account with ERC-20 tokens on localhost
   try {
       const assetsToSeed = Object.keys(amounts);
@@ -91,11 +76,9 @@ async function startCompound() {
 async function seed(asset, amount) {
   try {
   const cTokenAddress = Compound.util.getAddress('c' + asset);
-  //provider = new Compound._ethers.providers.JsonRpcProvider(jsonRpcUrl);
   provider = new hre.ethers.providers.JsonRpcProvider(jsonRpcUrl);
   const accounts = await provider.listAccounts();
 
-  console.log('@@@@@@@@@@@@@@@')
   console.log(accounts)
 
   // Impersonate this address (only works in local testnet)

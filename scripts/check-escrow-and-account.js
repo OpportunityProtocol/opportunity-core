@@ -1,8 +1,7 @@
 const { ethers } = require('ethers')
 const fs = require('fs')
 const path = require('path')
-// If you don't specify a //url//, Ethers connects to the default 
-// (i.e. ``http:/\/localhost:8545``)
+
 const provider = new ethers.providers.JsonRpcProvider('http://localhost:8545', "any");
 const signer = provider.getSigner('0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1')
 

@@ -10,7 +10,7 @@ const provider = new ethers.providers.JsonRpcProvider();
 // send ether and pay to change state within the blockchain.
 // For this, we need the account signer...
 const signer = provider.getSigner()
-const wallet = new ethers.Wallet('f4bdfbd7d59eef69cb569ce2200d8c23193a0a92e928ac1b08fe92ef77d41c25', provider);
+const wallet = new ethers.Wallet.fromMnemonic(process.env.DEV_ETH_MNEMONIC)
 
 
 const COMPILED_MARKET_PATH = path.join(__dirname, '../bin/contracts/market/')
