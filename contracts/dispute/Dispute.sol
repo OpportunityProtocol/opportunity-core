@@ -23,6 +23,8 @@ contract Dispute {
     uint immutable public startDate;
     uint immutable public constant DISPUTE_STAKE = 5;
 
+    string immutable public constant metadataPointer;
+
     SchedulerInterface public scheduler;
 
     // keccak256("initializeDispute(address aggressor)")
@@ -39,7 +41,7 @@ contract Dispute {
     uint numVotes = 0;
     DisputeStatus disputeStatus;
 
-    event DisputeCreated(address indexed _employer, address indexed _worker, address indexed _relationship);
+    event DisputeCreated(address indexed _employer, address indexed _worker, address indexed _relationship, address _dispute);
     event DisputeResolved(address indexed _relationship);
     event DisputeVote(address indexed _arbitrator, address indexed _relationship, address _vote);
 
@@ -50,7 +52,8 @@ contract Dispute {
 
     constructor(
         address _relationship,
-        address _scheduler
+        address _scheduler,
+        string _metadataPointer
     ) {
         require(_relationship != address(0));
         relationship = _relationship;
@@ -60,6 +63,7 @@ contract Dispute {
 
         WorkRelationship workRelationship = WorkRelationship(_relationship);
         scheduler = SchedulerInterface(_scheduler);
+        metadataPointer = _metadataPointer;
 
         uint8 chain_id;
         assembly {
@@ -106,7 +110,7 @@ contract Dispute {
         //TODO sign transaction as the aggressor
 
         //emit creation
-        emit DisputeCreated(owner, worker, _relationship);
+        emit DisputeCreated(owner, worker, _relationship, address(this));
     }
 
     function joinDispute(
