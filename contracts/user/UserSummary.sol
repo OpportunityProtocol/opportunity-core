@@ -4,66 +4,95 @@ pragma solidity 0.8.7;
 
 import "./interface/IUserSummary.sol";
 import "../libraries/Evaluation.sol";
+import "@openzeppelin/contracts/SafeMath.sol";
 
 contract UserSummary is IUserSummary {
 
     event UserSummaryUpdate(address universalAddress);
 
-    address private _universalAddress;
-    uint256 public _userReputation;
-    uint256 public stakedReputation;
-
-    Profile private _userProfile;
-    address[] private createdMarkets;
-    WorkerTaskGeneralDescription private _workerTaskGeneralDescription;
-    RequesterTaskGeneralDescription private _requesterTaskGeneralDescription;
-
     address public owner;
+    address public universalAddress;
 
-    constructor(address universalAddress) {
-        _universalAddress = universalAddress;
-        owner = universalAddress;
-        _userReputation = 1;
+    WorkerDescription public workerDescription;
+    EmployerDescription public employerDescription;
 
-        _workerTaskGeneralDescription.taskCompleted = 0;
-        _requesterTaskGeneralDescription.taskAssigned = 0;
+    modifier onlyOwner() {
+        require(owner == msg.sender);
+        _;
     }
 
-   /**
-     *
-     */
-    function getUserProfile() external view override returns (string[] memory, string memory, uint8) {
-        return (_userProfile.skills, _userProfile.profession, _userProfile.activityLevel);
+    modifier onlyFromRelationshipCaller(address _relationship) {
+        require(msg.sender != address(0), "The market caller must not be a null address");
+        WorkRelationship relationship = WorkRelationship(_relationship);
+        //require that user is employer or worker of this relationship
+        require(relationship.owner() == owner || relationship.worker() == worker, 
+            "User must be the employer or worker of this relationship");
+
+        //require relationship to be currently disputed (4) or approved (5)
+        require(relationship.contractStatus() == 4 || relationship.contractStatus() == 5);
+
+        Market market = Market(_market);
+        //require the market has a relationship created by this owner
+        require(market.relationshipsToOwner[_relationship] == owner());
     }
 
-   /**
-     *
-     */
-    function createMarket(address market) external {
-        createdMarkets.push(market);
-        emit UserSummaryUpdate(_universalAddress);
+    constructor() {
+        owner = msg.sender;
+        universalAddress = msg.sender;
     }
 
-    /**
-     *
-     */
-    function updateProfile(Profile memory updatedProfile, address universalAddress) external override {
-        _userProfile = updatedProfile;
-        emit UserSummaryUpdate(universalAddress);
-    }
-
-    function stakeReputation(address _fromBeneficiary, uint256 _stakedReputation) external {
-        require(_fromBeneficiary == owner);
-        require(_stakedReputation <= _userReputation, "Staked Reputation cannot be higher than your current reputation");
-
-       _userReputation = _userReputation - _stakedReputation;
-        stakedReputation += stakedReputation;
-    }
-
-    /**
-     *
-     */
-    function evaluateUser(Evaluation.EvaluationState memory evaluationState) external override returns(bool) {
+    function evaluateUser(Evaluation.EvaluationState memory evaluationState, address market) external override view returns(bool) {
         require(owner != address(0));
+
+        if (workerDescription.universalReputation >= workerDescription.universalReputation 
+        && workerDescription.marketsToReputation[evaluationState.market] >= evaluationState.marketReputation) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function increaseReputation(address _relationship, uint8 _amount) 
+    external
+    onlyFromRelationshipCaller(_relationship) {
+        //increase reputation
+        workerDescription.universalReputation = add(workerDescription.universalReputation, 1);
+        workerDescription.marketToReputation[msg.sender] = add(workerDescription.marketToReputation[msg.sender], _amount);
+    }
+
+    function decreaseReputation(address _relationship, uint8 _amount) 
+    external
+    onlyFromRelationshipCaller(_relationship) {
+        //decrease reputation
+        workerDescription.universalReputation = sub(workerDescription.universalReputation, 1);
+        workerDescription.marketToReputation[msg.sender] = sub(workerDescription.marketToReputation[msg.sender], _amount);
+    }
+
+    function increaseSuccessfulPayout(address _relationship) 
+    external
+    onlyFromRelationshipCaller(_relationship) {
+        //increase successful payout
+        employerDescription.numSuccessfulPayouts = add(employerDescription.numSuccessfulPayouts, 1);
+    }
+
+    function decreaseSuccessfulPayout(address _relationship) 
+    external
+    onlyFromRelationshipCaller(_relationship) {
+        //decrease successful payout
+        employerDescription.numSuccessfulPayouts = sub(employerDescription.numSuccessfulPayouts, 1);
+    }
+    
+    function increaseDisputeCount(address _relationship, uint8 _amount) 
+    external
+    onlyFromRelationshipCaller(_relationship) {
+        //increase dispute count
+        employerDescription.numDisputes = add(employerDescription.numDisputes, 1);
+    }
+
+    function decreaseDisputeCount(address _relationship, uint8 _amount) 
+    external
+    onlyFromRelationshhipCaller(_relationship) {
+        //decrease dispute count
+        employerDescription.numDisputes = sub(employerDescription.numDisputes, 1);
     }
 }

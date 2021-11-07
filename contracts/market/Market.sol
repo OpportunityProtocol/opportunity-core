@@ -32,6 +32,8 @@ contract Market {
 
     WorkRelationship[] _createdJobs;
 
+    mapping(address => address) public relationshipsToOwner;
+
     constructor(string memory marketName, MarketLib.MarketType marketType) {
         _marketName = marketName;
         _marketType = marketType;
@@ -47,13 +49,11 @@ contract Market {
         Evaluation.ContractType _contractType, 
         string memory taskMetadataPointer,
         address _daiTokenAddress,
-        address _cDaiTokenAddress,
-        address _banker
     ) external {
-        address owner = taskOwner;
+        address owner = taskOwner; //refactor to msg.sender
         require(owner != address(0), "Invalid task owner.");
         WorkRelationship createdJob =
-            new WorkRelationship(taskOwner, _contractType, taskMetadataPointer, _daiTokenAddress, _cDaiTokenAddress, _banker);
+            new WorkRelationship(taskOwner, _contractType, taskMetadataPointer, _daiTokenAddress);
         _createdJobs.push(createdJob);
         emit WorkRelationshipCreated(
             owner,

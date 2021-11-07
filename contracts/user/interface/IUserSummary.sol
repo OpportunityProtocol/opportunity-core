@@ -7,30 +7,25 @@ import "../../libraries/User.sol";
 import "../../libraries/StringUtils.sol";
 
 interface IUserSummary {
-    struct Profile {
-        string[] skills;
-        string profession;
-        uint8 activityLevel;
+    struct WorkerDescription {
+        uint256 universalReputation;
+        uint8 badConsistencyCount;
+
+        //mapping of markets to reputation
+        mapping(address => uint8) marketToReputation;
+
+        // Mapping of markets to evaluations
+        mapping(address => uint256) marketsToEvaluations;
     }
 
-    struct WorkerTaskGeneralDescription {
-        uint256 taskCompleted;
+    struct EmployerDescription {
+        uint256 numSuccessfulPayouts;
+        uint256 numDisputes;
 
-        // Mapping of industry ids to evaluations
-        mapping(string => uint256) industryEvaluation;
-
-        // Mapping of WorkRelationship to status
-        mapping(address => string) relationshipExchanges;
+         // Mapping of relationships to status.
+        mapping(address => uint8) relationshipExchanges;
     }
 
-    struct RequesterTaskGeneralDescription {
-        uint256 taskAssigned;
+    function evaluateUser(Evaluation.EvaluationState memory evaluationState, address market) external returns(bool);
 
-         // Mapping of WorkRelationship IDs to current WorkExchanges.
-        mapping(uint256 => address) relationshipExchanges;
-    }
-
-    function evaluateUser(Evaluation.EvaluationState memory evaluationState) external returns(bool);
-    function getUserProfile() external view returns(string[] memory, string memory, uint8);
-    function updateProfile(Profile memory updatedProfile, address universalAddress) external;
 }

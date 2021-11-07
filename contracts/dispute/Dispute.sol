@@ -3,7 +3,11 @@
 pragma solidity 0.8.7;
 
 import "../exchange/WorkRelationship.sol";
+import "../exchange/interface/IDaiToken.sol";
 import "../controller/interface/SchedulerInterface.sol";
+
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
 
 contract Dispute {
         struct Arbitrator {
@@ -17,6 +21,7 @@ contract Dispute {
     address[] public arbitrators;
 
     uint immutable public startDate;
+    uint immutable public constant DISPUTE_STAKE = 5;
 
     SchedulerInterface public scheduler;
 
@@ -104,31 +109,46 @@ contract Dispute {
         emit DisputeCreated(owner, worker, _relationship);
     }
 
-    function joinDispute() 
+    function joinDispute(
+        uint256 nonce,
+        uint256 expiry,
+        uint8 vAllow,
+        bytes32 rAllow,
+        bytes32 sAllow,
+        uint8 vDeny,
+        bytes32 rDeny,
+        bytes32 sDeny,
+    ) 
     external 
     onlyWhenStatus(DisputeStatus.AWAITING_ARBITRATORS)
     returns(int) 
     {
         require(arbitrators.length < 5, "The total number of arbitrators have been collected for this contract");
 
-        UserSummary user = new UserSummary(msg.sender);
-        //uint userReputation = user.getReputation();
+        WorkRelationship disputedRelationship = WorkRelationship(relationship);
 
-        uint reputationStake = 0;//user.stakeReputation(0);
+        /**************** *************/
+        //  Pull DAI from user account
+        /*********** ******************/
+        DaiToken daiToken = DaiToken(disputedRelationship);
 
-        if (true /* if user has the reputation to participate*/) {
-            acceptJoinRequest(msg.sender, reputationStake);
-            return -1;
-        } else {
-            return 0;
-        }
+        // Unlock buyer's Dai balance to transfer `wad` to this contract.
+        daiToken.permit(owner, address(this), nonce, expiry, true, vAllow, rAllow, sAllow);
+
+        // Transfer Dai from `buyer` to this contract.
+        daiToken.pull(owner, DISPUTE_STAKE);
+
+        // Relock Dai balance of `buyer`.
+        daiToken.permit(owner, address(this), nonce + 1, expiry, false, vDeny, rDeny, sDeny);
+
+        acceptJoinRequest(msg.sender);
     }
 
-    function acceptJoinRequest(address _requester, uint reputationStake) internal {
+    function acceptJoinRequest(address _requester) internal {
         Arbitrator memory newArbitrator = Arbitrator(address(0), address(0), false);
 
         addressToArbitrator[_requester] = newArbitrator;
-        addressToReputationStake[_requester] = reputationStake;
+        addressToReputationStake[_requester] = DISPUTE_STAKE;
         arbitrators.push(_requester);
     }
 
@@ -149,18 +169,37 @@ contract Dispute {
 
         //We ensure the votes are not equal by electing a new voter if an arbitrator fails to vote
         if (employerVotes > workerVotes) {
-            resolveRelationship(workRelationship.owner());
+            resolveDisputedRelationship(workRelationship.owner(), employerVotes);
         } else {
-            resolveRelationship(workRelationship.worker());
+            resolveDisputedRelationship(workRelationship.worker(), workerVotes);
         }
 
         disputeStatus = DisputeStatus.RESOLVED;
         emit DisputeResolved(_relationship);
     }
 
-    function resolveRelationship(address _winner) internal {
+    function resolveDisputedRelationship(address _winner, uint8 numWinnerVotes) internal {
         WorkRelationship workRelationship = WorkRelationship(relationship);
         workRelationship.resolveDisputedReward(_winner);
+
+        uint totalArbitratorPayout = 0;
+        for (uint i = 0; i < arbitrators.length; i++) {
+            totalArbitratorPayout = add(totalArbitratorPayout, addressToReputationStake[arbitrators[i]]);
+        }
+
+        uint totalWinnerSplit = div(totalArbitratorPayout, numWinnerVotes);
+
+        WorkRelationship disputedRelationship = WorkRelationship(relationship);
+        DaiToken daiToken = DaiToken(disputedRelationship);
+
+        for (uint i = 0; i < numVotes; i++) {
+            if (addressToArbitrator[arbitrators[i]].voted == true 
+                && _winner == addressToArbitrator[arbitrators[i]].vote) {
+                
+                daiToken.transfer(arbitrators[i], totalWinnerSplit);
+
+            }
+        }
     } 
 
 

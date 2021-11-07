@@ -51,12 +51,11 @@ contract WorkRelationship {
     uint public wad;
 
     DaiToken daiToken;
-    address cDaiToken;
 
     address public dispute;
 
-    string public taskMetadataPointer = "";
-    bytes32 private taskSolutionPointer = "";
+    string public taskMetadataPointer;
+    bytes32 private taskSolutionPointer;
 
     // keccak256("Work(bool _accepted)")
     bytes32 public constant WORK_TYPEHASH = 0xc35792dec8ea736e1a3478771b1f14a7472fd98ca01a9c9077ac63917f87f649;
@@ -65,6 +64,9 @@ contract WorkRelationship {
     // keccak256("Submit(bytes32 _submission)")
     bytes32 public constant SUBMIT_TYPEHASH = 0x62b607caa4d4e7fcbd31bf4c033cd30888b536567fadc83710fdf15f8d5cfc9e;
     bytes32 public immutable domain_separator;
+
+    uint8 public immutable constant LOW_MEDIAN_EVALUATION_THRESHOLD = 4.5;
+    uint8 public immutable constant HIGH_MEDIAN_EVALUATION_THRESHOLD = 5.5;
 
     ContractStatus public contractStatus;
     ContractState public contractState;
@@ -158,15 +160,10 @@ contract WorkRelationship {
         Evaluation.ContractType _contractType, 
         string memory _taskMetadataPointer,
                 address _daiTokenAddress,
-        address _cDaiTokenAddress,
-        address _banker
         ) { 
                     require(_daiTokenAddress != address(0), "Dai token address cannot be 0 when creating escrow.");
-        require(_cDaiTokenAddress != address(0), "cDai token address cannot be 0 when creating escrow.");
-        require(_banker != address(0), "Banker address cannot be 0 when creating escrow.");
 
         daiToken = DaiToken(_daiTokenAddress);
-        cDaiToken = _cDaiTokenAddress;
 
         uint8 chain_id;
         assembly {
@@ -263,23 +260,7 @@ contract WorkRelationship {
         onlyWhenStatus(ContractStatus.AwaitingWorkerApproval)
         onlyWhenOwnership(ContractOwnership.PENDING) 
         external {
-        if (_accepted == true) { //what happens if I choose to work and I don't have the reputation?
-            //stake the workers reputation by the required amount
-            
-            //TODO: Need to revert if the user cannot fulfill the reputation requirements
-            //UserSummary userSummary = UserSummary(worker);
-            uint userRep = 0; //userSummary.getReputation();
-            uint requiredReputationForStake = 0; //calculate required rep to stake based on payout.. etc
-            
-            if (true /* if user has the rep do this */) {
-                stakeReputation(requiredReputationForStake, wV, wR, wS);
-            } else {
-                 worker = address(0);
-                refundReward();
-                contractOwnership = ContractOwnership.UNCLAIMED;
-                contractStatus = ContractStatus.AwaitingWorker;
-            }
-
+        if (_accepted == true) {
             //set contract to claimed
             contractOwnership = ContractOwnership.CLAIMED;
             contractStatus = ContractStatus.AwaitingSubmission;
@@ -301,29 +282,6 @@ contract WorkRelationship {
 
         //Escrow sends money back to owner
         daiToken.transfer(owner, wad);
-
-        //TODO: unstake the reputation
-
-    }
-
-        function stakeReputation(
-            uint stake, 
-            uint8 wV, 
-            bytes32 wR, 
-            bytes32 wS) 
-            onlyWhenStatus(ContractStatus.AwaitingWorkerApproval) 
-            internal {
-        //stake the workers reputation by the required amount
-        //TODO: Do rep calculation
-       /* uint requiredReputation = 0;
-        require(stake == requiredReputation, "Worker does not have the rep necessary to accept this job.");
-
-        //TODO: sign and do erecover
-
-         //UserSummary userSummary = UserSummary(_worker);
-        //TODO: userSummary.stakeReputation(worker, stake);*/
-        contractStatus = ContractStatus.AwaitingSubmission;
-            
     }
 
     function submit(
@@ -351,6 +309,8 @@ contract WorkRelationship {
     }
 
     function review(
+        uint256 averageMarketWorkerRep,
+        uint8 _evaluationScore,
         bool _approve,
         uint8 _v,
         bytes32 _r,
@@ -369,7 +329,7 @@ contract WorkRelationship {
         //require(owner == ecrecover(digest, _v, _r, _s), "invalid-permit");
 
         if (_approve) {
-            resolve();
+            resolve(_evaluationScore, averageMarketWorkerRep);
         } else {
             contractStatus = ContractStatus.AwaitingSubmission;
         }
@@ -380,22 +340,65 @@ contract WorkRelationship {
     onlyInDisputedConditions(msg.sender)
      {
         daiToken.transfer(_beneficiary, wad);
+
+        //alter the workers reputation
+
+        //alter the employers disputes
     }
 
-    function resolveReward(address _beneficiary) 
+    function resolveReward(uint8 _evaluationScore, uint256 _averageMarketWorkerRep) 
     internal
-    onlyInDisputedConditions(msg.sender)
      {
-        daiToken.transfer(_beneficiary, wad);
+        daiToken.transfer(worker, wad);
+
+        UserSummary employerSummary = UserSummary(owner);
+        UserSummary workerSummary = UserSummary(worker);
+
+        //get worker reputation for the market this relationship is in
+        uint8 workerReputation = 0;
+
+        //alter the workers reputation according to the evaluation score
+        if (_evaluationScore > HIGH_MEDIAN_EVALUATION_THRESHOLD) {
+            workerSummary.increaseReputation(address(this), 1);
+        } else if (_evaluationScore <= HIGH_MEDIAN_EVALUATION_THRESHOLD 
+            || _evaluationScore >= LOW_MEDIAN_EVALUATION_THRESHOLD) {
+            //nothing
+        } else if (_evaluationScore <= LOW_MEDIAN_EVALUATION_THRESHOLD && workerReputation >= _averageMarketWorkerRep + 1) {
+            uint8 badConsistencyCount = workerSummary.workerDescription().badConsistencyCount();
+            if (badConsistencyCount <= 1) {
+                //decrease worker reputation by one
+                workerSummary.decreaseReputation(address(this), 1);
+            } else if (badConsistencyCount == 2) {
+                //decrease worker reputation by half the average reputation
+                uint8 decreaseAmount = 0;
+                workerSummary.decreaseReputation(address(this), decreaseAmount);
+            } else if (badConsistencyCount == 3) {
+                //decrease worker reputation count to 0
+                workerSummary.decreaseReputation(address(this), 0);
+                //reset consistency count
+                workerSummary.workerDescription().badConsistencyCount = 0;
+            } else { //if it is above 4 there is some error and we should reset it, increase it and then handle the reputation
+                //set consistency count 1
+                workerSummary.workerDescription().badConsistencyCount = 1;
+                //decrease reputation by 1
+                workerSummary.decreaseReputation(address(this), 1);
+            }
+        } else if (_evaluationScore <= LOW_MEDIAN_EVALUATION_THRESHOLD && workerReputation < _averageMarketWorkerRep) {
+            //decrease worker reputation by 1
+            workerSummary.decreaseReputation(address(this), 1);
+        }
+
+        //alter the employers successful payouts
+        employerSummary.increaseSuccessfulPayout(address(this));
     }
 
-      function resolve() 
+      function resolve(uint8 _evaluationScore, uint256 _averageMarketWorkerRep) 
         internal
         onlyOwner
     {
         require(worker != address(0));
 
-        resolveReward(worker);
+        resolveReward(_evaluationScore, _averageMarketWorkerRep);
         
         contractStatus = ContractStatus.Approved;
         contractState = ContractState.Locked;
