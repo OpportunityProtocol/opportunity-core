@@ -5,6 +5,7 @@ pragma solidity 0.8.7;
 import "../user/UserSummary.sol";
 import "../libraries/Evaluation.sol";
 import "./interface/IDaiToken.sol";
+import "../dispute/Dispute.sol";
 import "hardhat/console.sol";
 
 // / @author Vypo Mouse (Forked and modified by Elijah Hampton) - https://forum.openzeppelin.com/t/feedback-on-dai-escrow-contract-that-reimburses-a-relayer-using-uniswap/2771
@@ -80,9 +81,9 @@ contract WorkRelationship {
     }
 
   enum ContractState {
-      Initialized,
-      Uninitialized,
-      Locked
+    Uninitialized,
+    Initialized,
+    Locked
   }
 
     enum ContractOwnership { 
@@ -376,14 +377,14 @@ contract WorkRelationship {
 
     function resolveDisputedReward(address _beneficiary) 
     external
-    onlyInDisputedConditions
+    onlyInDisputedConditions(msg.sender)
      {
         daiToken.transfer(_beneficiary, wad);
     }
 
     function resolveReward(address _beneficiary) 
     internal
-    onlyInDisputedConditions
+    onlyInDisputedConditions(msg.sender)
      {
         daiToken.transfer(_beneficiary, wad);
     }
@@ -435,12 +436,11 @@ contract WorkRelationship {
         return taskSolutionPointer;
     }
 
-    function disputeRelationship() 
+    function disputeRelationship(address _scheduler) 
     external 
     onlyWhenStatus(ContractStatus.AwaitingSubmission) 
     {
-        Dispute newDispute = newDispute(address(this), owner, worker);
-        dispute = newDispute;
+        dispute = address(new Dispute(address(this), _scheduler));
 
         assert(dispute != address(0));
 

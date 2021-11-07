@@ -3,11 +3,17 @@
 pragma solidity 0.8.7;
 
 import "../exchange/WorkRelationship.sol";
-import "contracts/Interface/SchedulerInterface.sol";
+import "../controller/interface/SchedulerInterface.sol";
 
 contract Dispute {
+        struct Arbitrator {
+        address universalAddress;
+        address vote;
+        bool voted;
+    }
+    
     mapping(address => Arbitrator) public addressToArbitrator;
-    mapping(uint => address) public reputationStateToArbitratorAddress;
+    mapping(address => uint) public addressToReputationStake;
     address[] public arbitrators;
 
     uint immutable public startDate;
@@ -24,17 +30,11 @@ contract Dispute {
         RESOLVED
     }
 
-    struct Arbitrator {
-        address universalAddress;
-        address vote;
-        bool voted;
-    }
-
     address immutable relationship;
     uint numVotes = 0;
     DisputeStatus disputeStatus;
 
-    event DisputeCreated(address indexed _employer, address indexed _worker, address indexed _relationship, uint _startDate);
+    event DisputeCreated(address indexed _employer, address indexed _worker, address indexed _relationship);
     event DisputeResolved(address indexed _relationship);
     event DisputeVote(address indexed _arbitrator, address indexed _relationship, address _vote);
 
@@ -45,6 +45,7 @@ contract Dispute {
 
     constructor(
         address _relationship,
+        address _scheduler
     ) {
         require(_relationship != address(0));
         relationship = _relationship;
@@ -92,14 +93,15 @@ contract Dispute {
             ]
         );*/
 
-        initializeDispute();
-
-        emit DisputeCreated(workRelationship.owner(), workRelationship.worker(), _relationship, startDate);
+        initializeDispute(workRelationship.owner(), workRelationship.worker(), _relationship);
     }
 
-    function initializeDispute()
+    function initializeDispute(address owner, address worker, address _relationship)
     internal {
         //TODO sign transaction as the aggressor
+
+        //emit creation
+        emit DisputeCreated(owner, worker, _relationship);
     }
 
     function joinDispute() 
@@ -107,12 +109,12 @@ contract Dispute {
     onlyWhenStatus(DisputeStatus.AWAITING_ARBITRATORS)
     returns(int) 
     {
-        require(addressToArbitrator.length < 5, "The total number of arbitrators have been collected for this contract");
+        require(arbitrators.length < 5, "The total number of arbitrators have been collected for this contract");
 
         UserSummary user = new UserSummary(msg.sender);
-        uint userReputation = user.reputation();
+        //uint userReputation = user.getReputation();
 
-        //uint reputationStake = user.stakeReputation(0);
+        uint reputationStake = 0;//user.stakeReputation(0);
 
         if (true /* if user has the reputation to participate*/) {
             acceptJoinRequest(msg.sender, reputationStake);
@@ -123,10 +125,11 @@ contract Dispute {
     }
 
     function acceptJoinRequest(address _requester, uint reputationStake) internal {
-        Arbitrator newArbitrator = Arbitrator(0, false);
+        Arbitrator memory newArbitrator = Arbitrator(address(0), address(0), false);
 
         addressToArbitrator[_requester] = newArbitrator;
-        reputationStakeToArbitratorAddress[_requester] = reputationStake;
+        addressToReputationStake[_requester] = reputationStake;
+        arbitrators.push(_requester);
     }
 
     function resolveDispute(address _relationship) internal {
@@ -165,7 +168,7 @@ contract Dispute {
     external 
     onlyWhenStatus(DisputeStatus.PENDING_DECISION)
     {
-        Arbitrator voter = addressToArbitrator[msg.sender];
+        Arbitrator memory voter = addressToArbitrator[msg.sender];
         require(voter.voted == false, "You have already voted in this dispute.");
 
         voter.vote = vote;
@@ -179,9 +182,11 @@ contract Dispute {
 
     function checkDisputeArbitration() external returns(int) {
         if (startDate >= (startDate + 3 days)) {
-            for (uint i = 0; i < numVotes; i++) {
+            for (uint i = 0; i < arbitrators.length; i++) {
+                Arbitrator memory arbitratorAddress = addressToArbitrator[arbitrators[i]];
+
                 if (addressToArbitrator[arbitrators[i]].voted == false) {
-                    addressToArbitrator[arbitrators[i]] = 0;
+                    addressToArbitrator[arbitrators[i]] = Arbitrator(address(0), address(0), false);
                     delete arbitrators[i];
                 }
             }

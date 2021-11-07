@@ -3,9 +3,8 @@
 pragma solidity 0.8.7;
 
 import "./UserSummaryFactory.sol";
-import "../control/Controllable.sol";
 
-contract UserRegistration is Controllable {
+contract UserRegistration {
 
     // Mapping of universal address to summary contract address
     mapping(address => address) private _trueIdentifcations;
