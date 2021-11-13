@@ -18,17 +18,13 @@ contract UserRegistration {
         userSummaryFactory = UserSummaryFactory(userSummaryFactoryAddress);
     }
 
-    /**
-     * registerNewUser
-     * @param universalAddress Universal user address
-     */
-     function registerNewUser(address universalAddress) external returns(address) {
-        require(_trueIdentifcations[universalAddress] == address(0), "This user is already registered.");
+     function registerNewUser() external returns(address) {
+        require(_trueIdentifcations[msg.sender] == address(0), "This user is already registered.");
 
-        address userSummaryContractAddress = userSummaryFactory.createUserSummary(universalAddress);
+        address userSummaryContractAddress = userSummaryFactory.createUserSummary(msg.sender);
 
-        assignTrueUserIdentification(universalAddress, userSummaryContractAddress);
-        emit UserRegistered(universalAddress);
+        assignTrueUserIdentification(msg.sender, userSummaryContractAddress);
+        emit UserRegistered(msg.sender);
 
         return userSummaryContractAddress;
      }

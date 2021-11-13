@@ -8,14 +8,14 @@ import "../../libraries/StringUtils.sol";
 
 interface IUserSummary {
     struct WorkerDescription {
-        uint256 universalReputation;
+        uint8 universalReputation;
         uint8 badConsistencyCount;
 
         //mapping of markets to reputation
         mapping(address => uint8) marketToReputation;
 
         // Mapping of markets to evaluations
-        mapping(address => uint256) marketsToEvaluations;
+        mapping(address => uint8) marketsToEvaluations;
     }
 
     struct EmployerDescription {

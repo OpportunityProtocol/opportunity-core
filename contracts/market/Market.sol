@@ -48,7 +48,7 @@ contract Market {
         address taskOwner,
         Evaluation.ContractType _contractType, 
         string memory taskMetadataPointer,
-        address _daiTokenAddress,
+        address _daiTokenAddress
     ) external {
         address owner = taskOwner; //refactor to msg.sender
         require(owner != address(0), "Invalid task owner.");

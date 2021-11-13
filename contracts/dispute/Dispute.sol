@@ -4,8 +4,8 @@ pragma solidity 0.8.7;
 
 import "../exchange/WorkRelationship.sol";
 import "../exchange/interface/IDaiToken.sol";
+import "../libraries/Transaction.sol";
 import "../controller/interface/SchedulerInterface.sol";
-
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 
@@ -21,9 +21,11 @@ contract Dispute {
     address[] public arbitrators;
 
     uint immutable public startDate;
-    uint immutable public constant DISPUTE_STAKE = 5;
+    uint public constant DISPUTE_STAKE = 5;
 
-    string immutable public constant metadataPointer;
+    bytes32 immutable public complaintMetadataPointer;
+    bytes32 immutable public complaintResponseMetadataPointer;
+    
 
     SchedulerInterface public scheduler;
 
@@ -53,7 +55,8 @@ contract Dispute {
     constructor(
         address _relationship,
         address _scheduler,
-        string _metadataPointer
+        bytes32 _complaintMetadataPointer,
+        bytes32 _complaintResponseMetadataPointer
     ) {
         require(_relationship != address(0));
         relationship = _relationship;
@@ -63,7 +66,8 @@ contract Dispute {
 
         WorkRelationship workRelationship = WorkRelationship(_relationship);
         scheduler = SchedulerInterface(_scheduler);
-        metadataPointer = _metadataPointer;
+        complaintMetadataPointer = _complaintMetadataPointer;
+        complaintResponseMetadataPointer = _complaintResponseMetadataPointer;
 
         uint8 chain_id;
         assembly {
@@ -80,11 +84,11 @@ contract Dispute {
 
         //TODO: Complete scheduling
         /*uint endowment = scheduler.computeEndowment(
-            twentyGwei,
-            twentyGwei,
+            0,
+            0,
             200000,
             0,
-            twentyGwei
+            0
         );
 
         payment = scheduler.schedule.value(endowment)( // 0.1 ether is to pay for gas, bounty and fee
@@ -95,10 +99,10 @@ contract Dispute {
                 0,                  // The amount of wei to be sent.
                 255,                // The size of the execution window.
                 lockedUntil,        // The start of the execution window.
-                twentyGwei,    // The gasprice for the transaction (aka 20 gwei)
-                twentyGwei,    // The fee included in the transaction.
-                twentyGwei,         // The bounty that awards the executor of the transaction.
-                twentyGwei * 2     // The required amount of wei the claimer must send as deposit.
+                0,    // The gasprice for the transaction (aka 20 gwei)
+                0,    // The fee included in the transaction.
+                0,         // The bounty that awards the executor of the transaction.
+                0 * 2     // The required amount of wei the claimer must send as deposit.
             ]
         );*/
 
@@ -114,14 +118,8 @@ contract Dispute {
     }
 
     function joinDispute(
-        uint256 nonce,
-        uint256 expiry,
-        uint8 vAllow,
-        bytes32 rAllow,
-        bytes32 sAllow,
-        uint8 vDeny,
-        bytes32 rDeny,
-        bytes32 sDeny,
+        Transaction.EIP712ERC20Permit calldata allow,
+        Transaction.EIP712ERC20Permit calldata deny
     ) 
     external 
     onlyWhenStatus(DisputeStatus.AWAITING_ARBITRATORS)
@@ -134,16 +132,16 @@ contract Dispute {
         /**************** *************/
         //  Pull DAI from user account
         /*********** ******************/
-        DaiToken daiToken = DaiToken(disputedRelationship);
+        DaiToken daiToken = DaiToken(disputedRelationship.getRewardAddress());
 
         // Unlock buyer's Dai balance to transfer `wad` to this contract.
-        daiToken.permit(owner, address(this), nonce, expiry, true, vAllow, rAllow, sAllow);
+        daiToken.permit(disputedRelationship.owner(), address(this), allow.nonce, allow.expiry, true, allow.v, allow.r, allow.s);
 
         // Transfer Dai from `buyer` to this contract.
-        daiToken.pull(owner, DISPUTE_STAKE);
+        daiToken.pull(disputedRelationship.owner(), DISPUTE_STAKE);
 
         // Relock Dai balance of `buyer`.
-        daiToken.permit(owner, address(this), nonce + 1, expiry, false, vDeny, rDeny, sDeny);
+        daiToken.permit(disputedRelationship.owner(), address(this), allow.nonce + 1, deny.expiry, false, deny.v, deny.r, deny.s);
 
         acceptJoinRequest(msg.sender);
     }
@@ -157,8 +155,8 @@ contract Dispute {
     }
 
     function resolveDispute(address _relationship) internal {
-        uint employerVotes = 0;
-        uint workerVotes = 0;
+        uint8 employerVotes = 0;
+        uint8 workerVotes = 0;
 
         WorkRelationship workRelationship = WorkRelationship(_relationship);
 
@@ -188,13 +186,13 @@ contract Dispute {
 
         uint totalArbitratorPayout = 0;
         for (uint i = 0; i < arbitrators.length; i++) {
-            totalArbitratorPayout = add(totalArbitratorPayout, addressToReputationStake[arbitrators[i]]);
+            totalArbitratorPayout = SafeMath.add(totalArbitratorPayout, addressToReputationStake[arbitrators[i]]);
         }
 
-        uint totalWinnerSplit = div(totalArbitratorPayout, numWinnerVotes);
+        uint totalWinnerSplit = SafeMath.div(totalArbitratorPayout, numWinnerVotes);
 
         WorkRelationship disputedRelationship = WorkRelationship(relationship);
-        DaiToken daiToken = DaiToken(disputedRelationship);
+        DaiToken daiToken = DaiToken(disputedRelationship.getRewardAddress());
 
         for (uint i = 0; i < numVotes; i++) {
             if (addressToArbitrator[arbitrators[i]].voted == true 
@@ -207,7 +205,7 @@ contract Dispute {
     } 
 
 
-    function vote(address vote) 
+    /*function vote(address vote) 
     external 
     onlyWhenStatus(DisputeStatus.PENDING_DECISION)
     {
@@ -221,7 +219,7 @@ contract Dispute {
         if (numVotes == 5) {
             resolveDispute(relationship);
         }
-    }
+    }*/
 
     function checkDisputeArbitration() external returns(int) {
         if (startDate >= (startDate + 3 days)) {

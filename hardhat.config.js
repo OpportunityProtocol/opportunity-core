@@ -4,6 +4,8 @@
  require('@nomiclabs/hardhat-waffle');
  require('@nomiclabs/hardhat-web3');
  require('@nomiclabs/hardhat-ethers');
+ require('@openzeppelin/hardhat-upgrades');
+ 
  const ethers = require('ethers');
 
 const providerUrl = process.env.MAINNET_PROVIDER_URL;

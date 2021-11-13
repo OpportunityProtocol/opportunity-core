@@ -6,6 +6,7 @@ import "../user/UserSummary.sol";
 import "../libraries/Evaluation.sol";
 import "./interface/IDaiToken.sol";
 import "../dispute/Dispute.sol";
+import "../libraries/Relationship.sol";
 import "hardhat/console.sol";
 
 // / @author Vypo Mouse (Forked and modified by Elijah Hampton) - https://forum.openzeppelin.com/t/feedback-on-dai-escrow-contract-that-reimburses-a-relayer-using-uniswap/2771
@@ -65,22 +66,13 @@ contract WorkRelationship {
     bytes32 public constant SUBMIT_TYPEHASH = 0x62b607caa4d4e7fcbd31bf4c033cd30888b536567fadc83710fdf15f8d5cfc9e;
     bytes32 public immutable domain_separator;
 
-    uint8 public immutable constant LOW_MEDIAN_EVALUATION_THRESHOLD = 4.5;
-    uint8 public immutable constant HIGH_MEDIAN_EVALUATION_THRESHOLD = 5.5;
+    uint8 public constant LOW_MEDIAN_EVALUATION_THRESHOLD = 4;
+    uint8 public constant HIGH_MEDIAN_EVALUATION_THRESHOLD = 6;
 
-    ContractStatus public contractStatus;
+    Relationship.ContractStatus public contractStatus;
     ContractState public contractState;
     ContractOwnership public contractOwnership;
     Evaluation.ContractType public contractType;
-
-    enum ContractStatus {
-        AwaitingWorker,
-        AwaitingWorkerApproval,
-        AwaitingSubmission,
-        AwaitingReview,
-        Approved,
-        Disputed
-    }
 
   enum ContractState {
     Uninitialized,
@@ -120,13 +112,13 @@ contract WorkRelationship {
         _;
     }
 
-    modifier onlyWhenStatus(ContractStatus _statusOptionOne) 
+    modifier onlyWhenStatus(Relationship.ContractStatus _statusOptionOne) 
     {
         require(contractStatus == _statusOptionOne, "This action cannot be carried out under the current contract status.");
         _;
     }
 
-    modifier onlyWhenEitherStatus(ContractStatus _statusOptionOne, ContractStatus _statusOptionTwo) 
+    modifier onlyWhenEitherStatus(Relationship.ContractStatus _statusOptionOne, Relationship.ContractStatus _statusOptionTwo) 
     {
         require(contractStatus == _statusOptionOne || contractStatus == _statusOptionTwo, "This action cannot be carried out under the current contract status.");
         _;
@@ -151,7 +143,7 @@ contract WorkRelationship {
     }
 
     modifier onlyInDisputedConditions(address sender) {
-        require(ContractStatus.Disputed == contractStatus && sender == dispute, "The contract cannot be resolved under these conditions.");
+        require(Relationship.ContractStatus.Disputed == contractStatus && sender == dispute, "The contract cannot be resolved under these conditions.");
         _;
     }
 
@@ -159,7 +151,7 @@ contract WorkRelationship {
         address _owner, 
         Evaluation.ContractType _contractType, 
         string memory _taskMetadataPointer,
-                address _daiTokenAddress,
+                address _daiTokenAddress
         ) { 
                     require(_daiTokenAddress != address(0), "Dai token address cannot be 0 when creating escrow.");
 
@@ -184,7 +176,7 @@ contract WorkRelationship {
         contractType = _contractType;
         contractOwnership = ContractOwnership.UNCLAIMED;
         contractState = ContractState.Uninitialized;
-        contractStatus = ContractStatus.AwaitingWorker;
+        contractStatus = Relationship.ContractStatus.AwaitingWorker;
 
         taskMetadataPointer = _taskMetadataPointer;
     }
@@ -204,7 +196,7 @@ contract WorkRelationship {
         external 
         onlyOwner
         onlyWhenState(ContractState.Uninitialized)
-        onlyWhenStatus(ContractStatus.AwaitingWorker)
+        onlyWhenStatus(Relationship.ContractStatus.AwaitingWorker)
     {
         require(_newWorker != address(0), "Worker address must not be 0 when assigning new worker.");
         require(_wad != 0, "Dai amount cannot be equal to 0.");
@@ -219,7 +211,7 @@ contract WorkRelationship {
         dispute = address(0);
 
         contractOwnership = ContractOwnership.PENDING;
-        contractStatus = ContractStatus.AwaitingWorkerApproval;
+        contractStatus = Relationship.ContractStatus.AwaitingWorkerApproval;
 
         assert(worker == _newWorker);
         assert(contractOwnership == ContractOwnership.PENDING);
@@ -257,18 +249,18 @@ contract WorkRelationship {
         bytes32 wS) 
         onlyWorker 
         onlyWhenState(ContractState.Initialized)
-        onlyWhenStatus(ContractStatus.AwaitingWorkerApproval)
+        onlyWhenStatus(Relationship.ContractStatus.AwaitingWorkerApproval)
         onlyWhenOwnership(ContractOwnership.PENDING) 
         external {
         if (_accepted == true) {
             //set contract to claimed
             contractOwnership = ContractOwnership.CLAIMED;
-            contractStatus = ContractStatus.AwaitingSubmission;
+            contractStatus = Relationship.ContractStatus.AwaitingSubmission;
         } else {
             worker = address(0);
             refundReward();
             contractOwnership = ContractOwnership.UNCLAIMED;
-            contractStatus = ContractStatus.AwaitingWorker;
+            contractStatus = Relationship.ContractStatus.AwaitingWorker;
         }
     }
 
@@ -276,7 +268,7 @@ contract WorkRelationship {
     internal
     onlyWorker
     onlyWhenOwnership(ContractOwnership.PENDING) 
-    onlyWhenStatus(ContractStatus.AwaitingWorkerApproval)
+    onlyWhenStatus(Relationship.ContractStatus.AwaitingWorkerApproval)
     {
         require(wad != uint(0), "There is no DAI to transfer back to the owner");
 
@@ -292,7 +284,7 @@ contract WorkRelationship {
         ) 
         external 
         onlyWorker
-        onlyWhenStatus(ContractStatus.AwaitingSubmission) 
+        onlyWhenStatus(Relationship.ContractStatus.AwaitingSubmission) 
     {
         bytes32 digest = keccak256(abi.encodePacked(
             "\x19\x01",
@@ -305,7 +297,7 @@ contract WorkRelationship {
 
         updateTaskSolutionPointer(_submission);
 
-        contractStatus = ContractStatus.AwaitingReview;
+        contractStatus = Relationship.ContractStatus.AwaitingReview;
     }
 
     function review(
@@ -318,7 +310,7 @@ contract WorkRelationship {
         ) 
         external 
         onlyOwner
-        onlyWhenStatus(ContractStatus.AwaitingReview)
+        onlyWhenStatus(Relationship.ContractStatus.AwaitingReview)
     {
         bytes32 digest = keccak256(abi.encodePacked(
             "\x19\x01",
@@ -331,7 +323,7 @@ contract WorkRelationship {
         if (_approve) {
             resolve(_evaluationScore, averageMarketWorkerRep);
         } else {
-            contractStatus = ContractStatus.AwaitingSubmission;
+            contractStatus = Relationship.ContractStatus.AwaitingSubmission;
         }
     }
 
@@ -363,8 +355,9 @@ contract WorkRelationship {
         } else if (_evaluationScore <= HIGH_MEDIAN_EVALUATION_THRESHOLD 
             || _evaluationScore >= LOW_MEDIAN_EVALUATION_THRESHOLD) {
             //nothing
-        } else if (_evaluationScore <= LOW_MEDIAN_EVALUATION_THRESHOLD && workerReputation >= _averageMarketWorkerRep + 1) {
-            uint8 badConsistencyCount = workerSummary.workerDescription().badConsistencyCount();
+        } else if (_evaluationScore <= LOW_MEDIAN_EVALUATION_THRESHOLD 
+            && workerReputation >= _averageMarketWorkerRep + 1) {
+            uint8 badConsistencyCount = workerSummary.getBadConsistencyCount();
             if (badConsistencyCount <= 1) {
                 //decrease worker reputation by one
                 workerSummary.decreaseReputation(address(this), 1);
@@ -376,10 +369,10 @@ contract WorkRelationship {
                 //decrease worker reputation count to 0
                 workerSummary.decreaseReputation(address(this), 0);
                 //reset consistency count
-                workerSummary.workerDescription().badConsistencyCount = 0;
+                workerSummary.setBadConsistencyCount(0);
             } else { //if it is above 4 there is some error and we should reset it, increase it and then handle the reputation
                 //set consistency count 1
-                workerSummary.workerDescription().badConsistencyCount = 1;
+                workerSummary.setBadConsistencyCount(1);
                 //decrease reputation by 1
                 workerSummary.decreaseReputation(address(this), 1);
             }
@@ -400,18 +393,19 @@ contract WorkRelationship {
 
         resolveReward(_evaluationScore, _averageMarketWorkerRep);
         
-        contractStatus = ContractStatus.Approved;
+        contractStatus = Relationship.ContractStatus.Approved;
         contractState = ContractState.Locked;
     }
 
     function checkWorkerEvaluation(
         address workerUniversalAddress,
-        Evaluation.EvaluationState memory evaluationState
+        Evaluation.EvaluationState memory evaluationState,
+        address _market
         ) 
         external returns (bool) 
     {
         bool passesEvaluation = UserSummary(workerUniversalAddress)
-        .evaluateUser(evaluationState);
+        .evaluateUser(evaluationState, _market);
         return passesEvaluation;
     }
 
@@ -439,14 +433,22 @@ contract WorkRelationship {
         return taskSolutionPointer;
     }
 
-    function disputeRelationship(address _scheduler) 
-    external 
-    onlyWhenStatus(ContractStatus.AwaitingSubmission) 
+    function disputeRelationship(
+        address _scheduler,         
+        bytes32 _complaintMetadataPointer,
+        bytes32 _complaintResponseMetadataPointer) 
+        external 
+        onlyWhenStatus(Relationship.ContractStatus.AwaitingSubmission) 
     {
-        dispute = address(new Dispute(address(this), _scheduler));
+        dispute = address(new Dispute(address(this), _scheduler, _complaintMetadataPointer, _complaintResponseMetadataPointer));
 
         assert(dispute != address(0));
 
-        contractStatus = ContractStatus.Disputed;
+        contractStatus = Relationship.ContractStatus.Disputed;
+    }
+
+    function getRewardAddress() external returns(address) {
+        require(address(daiToken) != address(0), "Reward address cannot be 0");
+        return address(daiToken);
     }
 }
