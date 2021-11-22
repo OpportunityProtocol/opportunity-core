@@ -327,6 +327,15 @@ contract WorkRelationship {
         }
     }
 
+    function resolveTiedDisputedReward() 
+    external 
+    onlyInDisputedConditions(msg.sender) {
+        uint fairSplit = wad / 2;
+        
+        daiToken.transfer(owner, fairSplit);
+        daiToken.transfer(worker, fairSplit);
+    }
+
     function resolveDisputedReward(address _beneficiary) 
     external
     onlyInDisputedConditions(msg.sender)
