@@ -4,7 +4,6 @@ pragma solidity 0.8.7;
 
 import "../exchange/WorkRelationship.sol";
 import "../exchange/interface/IDaiToken.sol";
-import "./interface/IProcessResults.sol";
 import "../libraries/Transaction.sol";
 import "../controller/interface/SchedulerInterface.sol";
 
@@ -29,6 +28,7 @@ contract Dispute {
     event NewRound(address indexed dispute, uint256 indexed round);
     event RevealVote(address sender, bytes32 revealHash, uint8 random);
     event CommitVote(address sender, bytes32 dataHash, uint64 block);
+    event VoteProcessed(address indexed voter, address dispute);
 
     struct Arbitrator {
         address universalAddress;
@@ -48,6 +48,8 @@ contract Dispute {
     uint8 public round;
     uint256 public votingRoundStart;
     uint8 public numVotes;
+    uint256 public votingStartDate;
+    uint256 public immutable DISPUTE_STAKE;
 
     bytes32 public immutable complaintMetadataPointer;
     bytes32 public immutable complaintResponseMetadataPointer;
@@ -79,11 +81,13 @@ contract Dispute {
         address _relationship,
         bytes32 _complaintMetadataPointer,
         bytes32 _complaintResponseMetadataPointer,
-        string _processId
+        string memory _processId
     ) {
         require(_relationship != address(0));
         relationship = _relationship;
-        processId = _processId;
+        processId = address(0);//_processId;
+        VOCDONI_PROCESS = address(0);
+        VOCDONI_RESULTS = address(0);
         disputeStatus = DisputeStatus.AWAITING_ARBITRATORS;
         startDate = block.timestamp;
         votingRoundStart = block.timestamp;
@@ -92,10 +96,15 @@ contract Dispute {
         complaintMetadataPointer = _complaintMetadataPointer;
         complaintResponseMetadataPointer = _complaintResponseMetadataPointer;
 
+<<<<<<< HEAD
         WorkRelationship workRelationship = WorkRelationship(_relationship);
 
         //calculate dispute stake
         stake = 0;
+=======
+        //calculate dispute stake
+        DISPUTE_STAKE = 0;
+>>>>>>> 6422ac472e89b75392e3d367d874c1efa6c93e5f
 
         //emit creation
         emit DisputeCreated(
@@ -104,8 +113,12 @@ contract Dispute {
             _relationship,
             _processId
         );
+<<<<<<< HEAD
 
         emit ArbitrationWindowOpened();
+=======
+        //emit ArbitrationWindowOpened();
+>>>>>>> 6422ac472e89b75392e3d367d874c1efa6c93e5f
     }
 
     /**
@@ -159,6 +172,10 @@ contract Dispute {
         );
 
         acceptJoinRequest(msg.sender);
+
+        if (block.timestamp >= startDate + 7 days && arbitrators.length >= 5) {
+            disputeStatus = DisputeStatus.PENDING_DECISION;
+        }
     }
 
     /**
@@ -229,6 +246,7 @@ contract Dispute {
         disputeStatus = DisputeStatus.RESOLVED;
     }
 
+<<<<<<< HEAD
     /**
      * Anyone can call check dispute.  If someone calls check dispute who is not an arbitrator
      * then it must be after the recognized voting period has ended and in this case the dispute is
@@ -255,6 +273,58 @@ contract Dispute {
     }
 
     function verifyArbitrationCount() external returns (int256) {}
+=======
+    function revealVote() internal {}
+
+    function getStake() external {}
+
+    function vote() external {
+        address voter = msg.sender;
+
+        Arbitr
+    }
+
+
+    /****************** REVISIT IF NEEDED OR ERASE  *******************/
+
+    //check if the dispute has ended
+    //eac should call this 3 days after arb window closes
+    function checkDispute() external onlyWhenStatus(DisputeStatus.PENDING_DECISION) {
+        //get status
+      /*  uint status = 0;
+
+        //if status is resolved
+        if (status == 0) {
+        bytes memory payload = abi.encodeWithSignature("getResults(bytes32)", processId);
+        (bool success, bytes memory returnData) = address(VOCDONI_RESULTS).call(payload);
+        require(success);
+
+        uint256 optionOneVotes = returnData.tally[0][0];
+        uint256 optionTwoVotes = returnData.tally[0][1];
+
+        if (optionOneVotes > optionTwoVotes) {
+            resolveDisputedRelationship(returnData.tally[0][0]);
+        } else if (optionTwoVotes < optionOneVotes) {
+            resolveDisputedRelationship(returnData.tally[0][1]);
+        } else {
+            resolveDisputedRelationship(0);
+        }
+        }*/
+    }
+
+    function verifyArbitrationCount() external onlyEAC returns (int256) {
+        // if we are past the three day arbitration window
+       /* if (startDate >= (startDate + 7 days)) {
+            //change status to pending decision when we get 5 or more arbitrators
+            if (arbitrators.length >= 5) {
+                uint256 endowment = scheduler.computeEndowment(
+                    0,
+                    0,
+                    200000,
+                    0,
+                    0
+                );
+>>>>>>> 6422ac472e89b75392e3d367d874c1efa6c93e5f
 
     function getHash(bytes32 data) public view returns(bytes32){
         return keccak256(abi.encodePacked(address(this), data));
@@ -269,6 +339,7 @@ contract Dispute {
         emit CommitVote(msg.sender, addressToArbitrator[msg.sender].vote,addressToArbitrator[msg.sender].blockNumber);
     }
 
+<<<<<<< HEAD
     function resetDispute() internal {}
 
     /**
@@ -298,5 +369,25 @@ contract Dispute {
 
         emit RevealVote(msg.sender, revealHash, random);
         console.log("Random: ", random);
+=======
+                payment = scheduler.schedule.value(endowment)( // 0.1 ether is to pay for gas, bounty and fee
+                    this, // send to self
+                    verifyArbitrationCount, // and trigger fallback function
+                    [
+                        200000, // The amount of gas to be sent with the transaction.
+                        0, // The amount of wei to be sent.
+                        255, // The size of the execution window.
+                        block.number + 7 days, // The start of the execution window.
+                        0, // The gasprice for the transaction (aka 20 gwei)
+                        0, // The fee included in the transaction.
+                        0, // The bounty that awards the executor of the transaction.
+                        0 * 2 // The required amount of wei the claimer must send as deposit.
+                    ]
+                );
+
+                verifyRoundCount += 1;
+            }
+        }*/
+>>>>>>> 6422ac472e89b75392e3d367d874c1efa6c93e5f
     }
 }
