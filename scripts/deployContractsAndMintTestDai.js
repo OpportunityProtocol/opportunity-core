@@ -1,7 +1,8 @@
 const hre = require('hardhat');
 const Compound = require('@compound-finance/compound-js');
 const { TASK_NODE_CREATE_SERVER } = require('hardhat/builtin-tasks/task-names');
-const jsonRpcUrl = 'http://localhost:8545' //process.env.MAINNET_PROVIDER_URL;
+const { NETWORK, CHAIN_ID } = require('../config');
+const jsonRpcUrl = 'http://localhost:8545'
 let provider;
 
 // Amount of tokens to seed in the 0th account on localhost
@@ -12,7 +13,7 @@ const amounts = {
   // 'aave': 25,
   // 'bat': 100,
   // 'comp': 25,
-  'dai': 100,
+  'dai': 500,
   // 'link': 25,
   // 'mkr': 2,
   // 'sushi': 25,
@@ -83,15 +84,16 @@ async function mintTestDai() {
 // but this will work with any Ethereum address with a lot of tokens
 async function seed(asset, amount) {
   try {
-  const cTokenAddress = Compound.util.getAddress('c' + asset);
-  provider = new hre.ethers.providers.JsonRpcProvider(jsonRpcUrl);
+
+  const cTokenAddress = Compound.util.getAddress('c' + asset, NETWORK);
+  provider = new hre.ethers.providers.JsonRpcProvider(jsonRpcUrl, { chainId: CHAIN_ID });
   console.log(provider)
   const accounts = await provider.listAccounts()
 
   console.log(accounts)
 
   // Impersonate this address (only works in local testnet)
-  console.log('Impersonating address on localhost... ', Compound.util.getAddress('c' + asset))
+  console.log('Impersonating address on localhost... ', Compound.util.getAddress('c' + asset, NETWORK))
   await hre.network.provider.request({
     method: 'hardhat_impersonateAccount',
     params: [ cTokenAddress ],
@@ -105,7 +107,7 @@ async function seed(asset, amount) {
   const gasPrice = '0'; // only works in the localhost dev environment
   // const gasPrice = await provider.getGasPrice();
   const transferTrx = await Compound.eth.trx(
-    Compound.util.getAddress(asset),
+    Compound.util.getAddress(asset, NETWORK),
     'function transfer(address, uint256) public returns (bool)',
     [ accounts[0], numbTokensToSeed ],
     { provider: signer, gasPrice }
@@ -113,7 +115,7 @@ async function seed(asset, amount) {
   await transferTrx.wait(1)
 
   const balanceOf = await Compound.eth.read(
-    Compound.util.getAddress(asset),
+    Compound.util.getAddress(asset, NETWORK),
     'function balanceOf(address) public returns (uint256)',
     [ accounts[0] ],
     { provider }

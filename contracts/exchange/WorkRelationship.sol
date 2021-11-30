@@ -449,9 +449,9 @@ contract WorkRelationship {
         external 
         onlyWhenStatus(Relationship.ContractStatus.AwaitingSubmission) 
     {
-        dispute = address(new Dispute(address(this), _scheduler, _complaintMetadataPointer, _complaintResponseMetadataPointer));
+        //dispute = address(new Dispute(address(this), _scheduler, _complaintMetadataPointer, _complaintResponseMetadataPointer));
 
-        assert(dispute != address(0));
+        //assert(dispute != address(0));
 
         contractStatus = Relationship.ContractStatus.Disputed;
     }

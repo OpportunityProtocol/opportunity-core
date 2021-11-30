@@ -7,10 +7,12 @@
  require('@openzeppelin/hardhat-upgrades');
  
  const ethers = require('ethers');
+const { CHAIN_ID } = require('./config');
 
 const providerUrl = process.env.MAINNET_PROVIDER_URL;
 const developmentMnemonic = process.env.DEV_ETH_MNEMONIC;
 
+console.log(providerUrl)
 if (!providerUrl) {
   console.error('Missing JSON RPC provider URL as environment variable `MAINNET_PROVIDER_URL`\n');
   process.exit(1);
@@ -34,23 +36,23 @@ module.exports = {
   networks: {
     hardhat: {
       forking: {
-        url: "https://eth-mainnet.alchemyapi.io/v2/7d2CRio84usjQwU8tRPG75rqV1wJmX_W",
+        url: providerUrl,
         accounts: {
           mnemonic: developmentMnemonic
         },
-        chainId: 1
+        chainId: CHAIN_ID
       },
       gasPrice: 0,
       initialBaseFeePerGas: 0,
       accounts: {
         mnemonic: developmentMnemonic,
       },
-      chainId: 1
+      chainId: CHAIN_ID
     },
     localhost: {
-      chainId: 1,
+      chainId: CHAIN_ID,
       forking: {
-        url: "https://eth-mainnet.alchemyapi.io/v2/7d2CRio84usjQwU8tRPG75rqV1wJmX_W",
+        url: providerUrl,
         accounts: {
           mnemonic: developmentMnemonic
         }

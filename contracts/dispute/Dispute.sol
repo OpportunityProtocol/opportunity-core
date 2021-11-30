@@ -4,7 +4,6 @@ pragma solidity 0.8.7;
 
 import "../exchange/WorkRelationship.sol";
 import "../exchange/interface/IDaiToken.sol";
-import "./interface/IProcessResults.sol";
 import "../libraries/Transaction.sol";
 import "../controller/interface/SchedulerInterface.sol";
 
@@ -26,6 +25,7 @@ contract Dispute {
         address indexed _dispute,
         uint256 _amount
     );
+    event VoteProcessed(address indexed voter, address dispute);
 
     struct Arbitrator {
         address universalAddress;
@@ -38,22 +38,17 @@ contract Dispute {
     address[] public arbitrators;
 
     uint256 public immutable startDate;
+    uint256 public votingStartDate;
     uint256 public immutable DISPUTE_STAKE;
 
     bytes32 public immutable complaintMetadataPointer;
     bytes32 public immutable complaintResponseMetadataPointer;
 
-    address public immutable VOCDONI_PROCESS = "processes.vocdoni.eth";
-    address public immutable VOCDONI_RESULTS = "results.vocdoni.eth";
+    address public immutable VOCDONI_PROCESS;// = "processes.vocdoni.eth";
+    address public immutable VOCDONI_RESULTS;// = "results.vocdoni.eth";
 
     uint8 verifyRoundCount;
     SchedulerInterface public scheduler;
-
-    struct ProcessResults {
-        uint32[][] tally; // The tally for every question, option and value
-        uint32 height; // The amount of valid envelopes registered
-        bool defined;
-    }
 
     enum DisputeStatus {
         AWAITING_ARBITRATORS,
@@ -81,11 +76,13 @@ contract Dispute {
         address _scheduler,
         bytes32 _complaintMetadataPointer,
         bytes32 _complaintResponseMetadataPointer,
-        string _processId
+        string memory _processId
     ) {
         require(_relationship != address(0));
         relationship = _relationship;
-        processId = _processId;
+        processId = address(0);//_processId;
+        VOCDONI_PROCESS = address(0);
+        VOCDONI_RESULTS = address(0);
         disputeStatus = DisputeStatus.AWAITING_ARBITRATORS;
 
         startDate = block.timestamp;
@@ -98,8 +95,6 @@ contract Dispute {
         //calculate dispute stake
         DISPUTE_STAKE = 0;
 
-        WorkRelationship workRelationship = WorkRelationship(_relationship);
-
         //emit creation
         emit DisputeCreated(
             workRelationship.owner(),
@@ -107,7 +102,7 @@ contract Dispute {
             _relationship,
             address(this)
         );
-        emit ArbitrationWindowOpened();
+        //emit ArbitrationWindowOpened();
     }
 
     function joinDispute(
@@ -153,6 +148,10 @@ contract Dispute {
         );
 
         acceptJoinRequest(msg.sender);
+
+        if (block.timestamp >= startDate + 7 days && arbitrators.length >= 5) {
+            disputeStatus = DisputeStatus.PENDING_DECISION;
+        }
     }
 
     //exit a dispute as long as the dispute is in awaiting arbitration phase
@@ -217,11 +216,24 @@ contract Dispute {
          disputeStatus = DisputeStatus.RESOLVED;
     }
 
+    function revealVote() internal {}
+
+    function getStake() external {}
+
+    function vote() external {
+        address voter = msg.sender;
+
+        Arbitr
+    }
+
+
+    /****************** REVISIT IF NEEDED OR ERASE  *******************/
+
     //check if the dispute has ended
     //eac should call this 3 days after arb window closes
-    function checkDispute() external onlyWhen(DisputeStatus.PENDING_DECISION) {
+    function checkDispute() external onlyWhenStatus(DisputeStatus.PENDING_DECISION) {
         //get status
-        uint status = 0;
+      /*  uint status = 0;
 
         //if status is resolved
         if (status == 0) {
@@ -239,12 +251,12 @@ contract Dispute {
         } else {
             resolveDisputedRelationship(0);
         }
-        }
+        }*/
     }
 
     function verifyArbitrationCount() external onlyEAC returns (int256) {
         // if we are past the three day arbitration window
-        if (startDate >= (startDate + 7 days)) {
+       /* if (startDate >= (startDate + 7 days)) {
             //change status to pending decision when we get 5 or more arbitrators
             if (arbitrators.length >= 5) {
                 uint256 endowment = scheduler.computeEndowment(
@@ -285,7 +297,7 @@ contract Dispute {
 
                 payment = scheduler.schedule.value(endowment)( // 0.1 ether is to pay for gas, bounty and fee
                     this, // send to self
-                    verifyArbitratorCount, // and trigger fallback function
+                    verifyArbitrationCount, // and trigger fallback function
                     [
                         200000, // The amount of gas to be sent with the transaction.
                         0, // The amount of wei to be sent.
@@ -300,6 +312,6 @@ contract Dispute {
 
                 verifyRoundCount += 1;
             }
-        }
+        }*/
     }
 }

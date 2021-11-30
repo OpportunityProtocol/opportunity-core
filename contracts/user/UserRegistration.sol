@@ -18,7 +18,7 @@ contract UserRegistration {
         userSummaryFactory = UserSummaryFactory(userSummaryFactoryAddress);
     }
 
-     function registerNewUser() external returns(address) {
+    function registerNewUser() external returns(address) {
         require(_trueIdentifcations[msg.sender] == address(0), "This user is already registered.");
 
         address userSummaryContractAddress = userSummaryFactory.createUserSummary(msg.sender);
