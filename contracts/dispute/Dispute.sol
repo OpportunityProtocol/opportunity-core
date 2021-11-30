@@ -15,7 +15,7 @@ contract Dispute {
         address indexed _relationship,
         address _dispute
     );
-    event DisputeResolved(address indexed _relationship);
+    event DisputeResolved(address indexed _relationship, uint8 round);
     event StakingWindowOpened(address indexed _dispute);
     event StakingWindowClosed(address indexed _dispute);
     event ArbitrationWindowOpened(address indexed _dispute);
@@ -26,34 +26,38 @@ contract Dispute {
         address indexed _dispute,
         uint256 _amount
     );
+    event NewRound(address indexed dispute, uint256 indexed round);
+    event RevealVote(address sender, bytes32 revealHash, uint8 random);
+    event CommitVote(address sender, bytes32 dataHash, uint64 block);
 
     struct Arbitrator {
         address universalAddress;
-        address vote;
+        bytes32 vote;
+        uint64 blockNumber;
         bool voted;
-    }
+        bool revealed
+    };
 
     mapping(address => Arbitrator) public addressToArbitrator;
-    mapping(address => uint256) public addressToReputationStake;
     address[] public arbitrators;
 
+    address immutable aggressor;
     uint256 public immutable startDate;
-    uint256 public immutable DISPUTE_STAKE;
+    uint256 public stake;
+
+    uint8 public round;
+    uint256 public votingRoundStart;
+    uint8 public numVotes;
 
     bytes32 public immutable complaintMetadataPointer;
     bytes32 public immutable complaintResponseMetadataPointer;
 
-    address public immutable VOCDONI_PROCESS = "processes.vocdoni.eth";
-    address public immutable VOCDONI_RESULTS = "results.vocdoni.eth";
+    address immutable relationship;
+    address immutable processId;
 
-    uint8 verifyRoundCount;
-    SchedulerInterface public scheduler;
+    uint8 constant NUM_JURY_MEMBERS = 5;
 
-    struct ProcessResults {
-        uint32[][] tally; // The tally for every question, option and value
-        uint32 height; // The amount of valid envelopes registered
-        bool defined;
-    }
+    DisputeStatus disputeStatus;
 
     enum DisputeStatus {
         AWAITING_ARBITRATORS,
@@ -61,24 +65,18 @@ contract Dispute {
         RESOLVED
     }
 
-    address immutable relationship;
-    address immutable processId;
-
-    uint256 numVotes = 0;
-    DisputeStatus disputeStatus;
-
     modifier onlyWhenStatus(DisputeStatus _disputeStatus) {
         require(_disputeStatus == disputeStatus);
         _;
     }
 
-    modifier onlyEAC() {
+    modifier onlyArbitrator() {
         _;
     }
 
+
     constructor(
         address _relationship,
-        address _scheduler,
         bytes32 _complaintMetadataPointer,
         bytes32 _complaintResponseMetadataPointer,
         string _processId
@@ -87,29 +85,35 @@ contract Dispute {
         relationship = _relationship;
         processId = _processId;
         disputeStatus = DisputeStatus.AWAITING_ARBITRATORS;
-
         startDate = block.timestamp;
+        votingRoundStart = block.timestamp;
+        aggressor = msg.sender;
 
-        WorkRelationship workRelationship = WorkRelationship(_relationship);
-        scheduler = SchedulerInterface(_scheduler);
         complaintMetadataPointer = _complaintMetadataPointer;
         complaintResponseMetadataPointer = _complaintResponseMetadataPointer;
 
-        //calculate dispute stake
-        DISPUTE_STAKE = 0;
-
         WorkRelationship workRelationship = WorkRelationship(_relationship);
+
+        //calculate dispute stake
+        stake = 0;
 
         //emit creation
         emit DisputeCreated(
             workRelationship.owner(),
             workRelationship.worker(),
             _relationship,
-            address(this)
+            _processId
         );
+
         emit ArbitrationWindowOpened();
     }
 
+    /**
+     * Anyone can use the joinDispute method to join a dispute.  The number of arbitrators has to
+     * be less than 5 to join.
+     *
+     *
+     */
     function joinDispute(
         Transaction.EIP712ERC20Permit calldata allow,
         Transaction.EIP712ERC20Permit calldata deny
@@ -118,6 +122,8 @@ contract Dispute {
         onlyWhenStatus(DisputeStatus.AWAITING_ARBITRATORS)
         returns (int256)
     {
+        require(arbitrators.length < NUM_JURY_MEMBERS);
+
         WorkRelationship disputedRelationship = WorkRelationship(relationship);
 
         /**************** *************/
@@ -155,9 +161,14 @@ contract Dispute {
         acceptJoinRequest(msg.sender);
     }
 
-    //exit a dispute as long as the dispute is in awaiting arbitration phase
+    /**
+     * Any arbitrator can call this method to leave a dispute.  This method can only
+     * be called when we are in the arbitrator period.
+     *
+     */
     function exitDispute()
         external
+        onlyArbitrator()
         onlyWhenStatus(DisputeStatus.AWAITING_ARBITRATORS)
     {}
 
@@ -172,6 +183,7 @@ contract Dispute {
         addressToReputationStake[_requester] = DISPUTE_STAKE;
         arbitrators.push(_requester);
     }
+
 
     function resolveDisputedRelationship(address _winner) internal {
         WorkRelationship workRelationship = WorkRelationship(relationship);
@@ -214,92 +226,77 @@ contract Dispute {
 
         emit StakeResolved(address(this));
         emit DisputeResolved(relationship);
-         disputeStatus = DisputeStatus.RESOLVED;
+        disputeStatus = DisputeStatus.RESOLVED;
     }
 
-    //check if the dispute has ended
-    //eac should call this 3 days after arb window closes
-    function checkDispute() external onlyWhen(DisputeStatus.PENDING_DECISION) {
-        //get status
-        uint status = 0;
+    /**
+     * Anyone can call check dispute.  If someone calls check dispute who is not an arbitrator
+     * then it must be after the recognized voting period has ended and in this case the dispute is
+     * reset for another round.  If it is called by an arbitrator then we automatically resolve the dispute.
+     * We know it is the last arbitrator to reveal because checkDispute can only be called by an arbitrator
+     * if all of the votes have been revealed.
+     */
+    function checkDispute() public onlyWhen(DisputeStatus.PENDING_DECISION) {
+        //if a non arbitrator calls check and it is one day after the voting period then we reset
+        if (addressToArbitrator[msg.sender] == address(0)) {
+            require(block.timestamp >= (votingRoundStart + 8 days));
 
-        //if status is resolved
-        if (status == 0) {
-        bytes memory payload = abi.encodeWithSignature("getResults(bytes32)", processId);
-        (bool success, bytes memory returnData) = address(VOCDONI_RESULTS).call(payload);
-        require(success);
-
-        uint256 optionOneVotes = returnData.tally[0][0];
-        uint256 optionTwoVotes = returnData.tally[0][1];
-
-        if (optionOneVotes > optionTwoVotes) {
-            resolveDisputedRelationship(returnData.tally[0][0]);
-        } else if (optionTwoVotes < optionOneVotes) {
-            resolveDisputedRelationship(returnData.tally[0][1]);
-        } else {
-            resolveDisputedRelationship(0);
+            resetDispute();
         }
+
+        if (addressToArbitrator[msg.sender] != address(0)) {
+            require(numVotes == arbitrators.length);
+
+            //count votes
+
+            //resolve the winner
+            resolveDisputedRelationship();
         }
     }
 
-    function verifyArbitrationCount() external onlyEAC returns (int256) {
-        // if we are past the three day arbitration window
-        if (startDate >= (startDate + 7 days)) {
-            //change status to pending decision when we get 5 or more arbitrators
-            if (arbitrators.length >= 5) {
-                uint256 endowment = scheduler.computeEndowment(
-                    0,
-                    0,
-                    200000,
-                    0,
-                    0
-                );
+    function verifyArbitrationCount() external returns (int256) {}
 
-                payment = scheduler.schedule.value(endowment)( // 0.1 ether is to pay for gas, bounty and fee
-                    this, // send to self
-                    checkDispute, // and trigger fallback function
-                    [
-                        200000, // The amount of gas to be sent with the transaction.
-                        0, // The amount of wei to be sent.
-                        255, // The size of the execution window.
-                        (block.number + 7 days), // The start of the execution window.
-                        0, // The gasprice for the transaction (aka 20 gwei)
-                        0, // The fee included in the transaction.
-                        0, // The bounty that awards the executor of the transaction.
-                        0 * 2 // The required amount of wei the claimer must send as deposit.
-                    ]
-                );
+    function getHash(bytes32 data) public view returns(bytes32){
+        return keccak256(abi.encodePacked(address(this), data));
+    }
 
-                disputeStatus = DisputeStatus.PENDING_DECISION;
-                emit ArbitrationWindowClosed();
-            } else {
-                //reschedule to check again in 7 days instead of the normal three to save gas
-                //TODO: set scheduler to call veryify in 7 days
-                uint256 endowment = scheduler.computeEndowment(
-                    0,
-                    0,
-                    200000,
-                    0,
-                    0
-                );
+    function commit(bytes32 dataHash, uint64 block_number) public {
+        require(block_number > block.number,"This vote has already been revealed.");
+        addressToArbitrator[msg.sender].vote = dataHash;
+        addressToArbitrator[msg.sender].blockNumber = block_number;
+        addressToArbitrator[msg.sender].revealed = false;
+        console.log(block.number, block_number);
+        emit CommitVote(msg.sender, addressToArbitrator[msg.sender].vote,addressToArbitrator[msg.sender].blockNumber);
+    }
 
-                payment = scheduler.schedule.value(endowment)( // 0.1 ether is to pay for gas, bounty and fee
-                    this, // send to self
-                    verifyArbitratorCount, // and trigger fallback function
-                    [
-                        200000, // The amount of gas to be sent with the transaction.
-                        0, // The amount of wei to be sent.
-                        255, // The size of the execution window.
-                        block.number + 7 days, // The start of the execution window.
-                        0, // The gasprice for the transaction (aka 20 gwei)
-                        0, // The fee included in the transaction.
-                        0, // The bounty that awards the executor of the transaction.
-                        0 * 2 // The required amount of wei the claimer must send as deposit.
-                    ]
-                );
+    function resetDispute() internal {}
 
-                verifyRoundCount += 1;
-            }
+    /**
+     * The reveal method reveals an arbitrators vote.  An arbitrator can call reveal as long as the dispute
+     * is still in the voting period.  If the dispute is past the voting period then we reset the dispute
+     * for another round.  If the dispute is not past the voting period we allow an arbitrator to reveal.
+     * Once the last arbitrator reveals then checkDispute is called to resolve the dispute.
+     */
+    function reveal(bytes32 revealHash) onlyArbitrator() public {
+        if (block.timestamp >= votingRoundStart + 7 days) {
+            resetDispute();
         }
+
+        require(addressToArbitrator[msg.sender].revealed == false, "CommitReveal::reveal: This vote has already been revealed.");
+        require(getHash(revealHash) == addressToArbitrator[msg.sender].vote, "CommitReveal::reveal: The revealed hash does not match the vote for this hash.");
+
+        addressToArbitrator[msg.sender].revealed = true;
+
+        bytes32 blockHash = blockhash(addressToArbitrator[msg.sender].blockNumber);
+        uint8 random = uint8(uint(keccak256(abi.encodePacked(blockHash, revealHash)))) % max;
+        numVotes++;
+
+        //after the last person reveals their vote settle the dispute
+        if (numVotes == arbitrators.length) {
+            checkDispute();
+        }
+
+        emit RevealVote(msg.sender, revealHash, random);
+        console.log("Random: ", random);
     }
 }
