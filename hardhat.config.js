@@ -9,8 +9,9 @@
  const ethers = require('ethers');
 const { CHAIN_ID } = require('./config');
 
-const providerUrl = process.env.MAINNET_PROVIDER_URL;
+const providerUrl = "https://eth-rinkeby.alchemyapi.io/v2/_Z0mhNCo6N0S7ewye1pRUxJgdB1iY2gC" //process.env.MAINNET_PROVIDER_URL;
 const developmentMnemonic = process.env.DEV_ETH_MNEMONIC;
+console.log(developmentMnemonic)
 
 console.log(providerUrl)
 if (!providerUrl) {
@@ -33,9 +34,29 @@ module.exports = {
       },
   },
   },
+  defaultNetwork: 'hardhat',
   networks: {
     hardhat: {
       forking: {
+        
+        url: providerUrl,
+        accounts: {
+          mnemonic: developmentMnemonic
+        },
+        chainId: CHAIN_ID
+      },
+      gasPrice: 0,
+      initialBaseFeePerGas: 0,
+      accounts: {
+        mnemonic: developmentMnemonic,
+      },
+      chainId: CHAIN_ID
+    },
+    ganache: {
+      defaultBalanceEther: 10,
+      url: providerUrl,
+      forking: {
+        
         url: providerUrl,
         accounts: {
           mnemonic: developmentMnemonic

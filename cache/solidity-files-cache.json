@@ -36,8 +36,8 @@
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/dispute/Dispute.sol": {
-      "lastModificationDate": 1637643408258,
-      "contentHash": "08a589228b3b2155a607c4af436bd55e",
+      "lastModificationDate": 1638655277747,
+      "contentHash": "aa692e953f6069b83150532e88b5cd75",
       "sourceName": "contracts/dispute/Dispute.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -64,8 +64,7 @@
       "imports": [
         "../exchange/WorkRelationship.sol",
         "../exchange/interface/IDaiToken.sol",
-        "../libraries/Transaction.sol",
-        "../controller/interface/SchedulerInterface.sol"
+        "../libraries/Transaction.sol"
       ],
       "versionPragmas": [
         "0.8.7"

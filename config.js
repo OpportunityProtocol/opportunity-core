@@ -1,5 +1,5 @@
-const CHAIN_ID = 1
-const NETWORK = 'mainnet'
+const CHAIN_ID = 4
+const NETWORK = 'rinkeby'
 
 module.exports = {
     CHAIN_ID,

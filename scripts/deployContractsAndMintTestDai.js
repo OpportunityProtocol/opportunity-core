@@ -2,6 +2,7 @@ const hre = require('hardhat');
 const Compound = require('@compound-finance/compound-js');
 const { TASK_NODE_CREATE_SERVER } = require('hardhat/builtin-tasks/task-names');
 const { NETWORK, CHAIN_ID } = require('../config');
+require("@nomiclabs/hardhat-ganache");
 const jsonRpcUrl = 'http://localhost:8545'
 let provider;
 
@@ -13,7 +14,7 @@ const amounts = {
   // 'aave': 25,
   // 'bat': 100,
   // 'comp': 25,
-  'dai': 500,
+  'dai': 100,
   // 'link': 25,
   // 'mkr': 2,
   // 'sushi': 25,
@@ -84,45 +85,50 @@ async function mintTestDai() {
 // but this will work with any Ethereum address with a lot of tokens
 async function seed(asset, amount) {
   try {
+    provider = new hre.ethers.providers.JsonRpcProvider(jsonRpcUrl, { chainId: CHAIN_ID });
+    console.log(provider)
+    const accounts = await provider.listAccounts()
+    console.log(accounts)
 
-  const cTokenAddress = Compound.util.getAddress('c' + asset, NETWORK);
-  provider = new hre.ethers.providers.JsonRpcProvider(jsonRpcUrl, { chainId: CHAIN_ID });
-  console.log(provider)
-  const accounts = await provider.listAccounts()
+    for (let i = 0; i < accounts.length; i++) {
 
-  console.log(accounts)
+      const cTokenAddress = Compound.util.getAddress('c' + asset, NETWORK);
 
-  // Impersonate this address (only works in local testnet)
-  console.log('Impersonating address on localhost... ', Compound.util.getAddress('c' + asset, NETWORK))
-  await hre.network.provider.request({
-    method: 'hardhat_impersonateAccount',
-    params: [ cTokenAddress ],
-  });
+      // Impersonate this address (only works in local testnet)
+      console.log('Impersonating address on localhost... ', Compound.util.getAddress('c' + asset, NETWORK))
+      await hre.network.provider.request({
+        method: 'hardhat_impersonateAccount',
+        params: [ cTokenAddress ],
+      });
+    
+      // Number of underlying tokens to mint, scaled up so it is an integer
+      const numbTokensToSeed = (amount * Math.pow(10, Compound.decimals[asset])).toString()
+    
+      const signer = provider.getSigner(cTokenAddress)
 
-  // Number of underlying tokens to mint, scaled up so it is an integer
-  const numbTokensToSeed = (amount * Math.pow(10, Compound.decimals[asset])).toString()
+      const gasPrice = '0'; // only works in the localhost dev environment
+      // const gasPrice = await provider.getGasPrice();
+      const transferTrx = await Compound.eth.trx(
+        Compound.util.getAddress(asset, NETWORK),
+        'function transfer(address, uint256) public returns (bool)',
+        [ accounts[i], numbTokensToSeed ],
+        { provider: signer, gasPrice }
+      );
+      await transferTrx.wait(1)
+    
+      const balanceOf = await Compound.eth.read(
+        Compound.util.getAddress(asset, NETWORK),
+        'function balanceOf(address) public returns (uint256)',
+        [ accounts[i] ],
+        { provider }
+      );
+    
+      const tokens = +balanceOf / Math.pow(10, Compound.decimals[asset])
+      console.log('account: ' + accounts[i] + '::::' + asset + ' amount in first localhost account wallet:', tokens)
+    }
 
-  const signer = provider.getSigner(cTokenAddress)
 
-  const gasPrice = '0'; // only works in the localhost dev environment
-  // const gasPrice = await provider.getGasPrice();
-  const transferTrx = await Compound.eth.trx(
-    Compound.util.getAddress(asset, NETWORK),
-    'function transfer(address, uint256) public returns (bool)',
-    [ accounts[0], numbTokensToSeed ],
-    { provider: signer, gasPrice }
-  );
-  await transferTrx.wait(1)
 
-  const balanceOf = await Compound.eth.read(
-    Compound.util.getAddress(asset, NETWORK),
-    'function balanceOf(address) public returns (uint256)',
-    [ accounts[0] ],
-    { provider }
-  );
-
-  const tokens = +balanceOf / Math.pow(10, Compound.decimals[asset])
-  console.log(asset + ' amount in first localhost account wallet:', tokens)
   } catch(error) {
     console.log(error)
   }
