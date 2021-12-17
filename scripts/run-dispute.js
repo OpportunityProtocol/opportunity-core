@@ -9,13 +9,13 @@ const { EntityMetadata, EntityMetadataTemplate, INewProcessErc20Params, ProcessM
 const { CensusErc20Api } = require('@vocdoni/census')
 const { ProcessContractParameters,
     ProcessEnvelopeType,
-    ProcessMode,} = require('@vocdoni/contract-wrappers')
+    ProcessMode} = require('@vocdoni/contract-wrappers')
 
     const abi = JSON.stringify([{"inputs":[{"internalType":"uint256","name":"chainId_","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"src","type":"address"},{"indexed":true,"internalType":"address","name":"guy","type":"address"},{"indexed":false,"internalType":"uint256","name":"wad","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":true,"inputs":[{"indexed":true,"internalType":"bytes4","name":"sig","type":"bytes4"},{"indexed":true,"internalType":"address","name":"usr","type":"address"},{"indexed":true,"internalType":"bytes32","name":"arg1","type":"bytes32"},{"indexed":true,"internalType":"bytes32","name":"arg2","type":"bytes32"},{"indexed":false,"internalType":"bytes","name":"data","type":"bytes"}],"name":"LogNote","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"src","type":"address"},{"indexed":true,"internalType":"address","name":"dst","type":"address"},{"indexed":false,"internalType":"uint256","name":"wad","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":true,"inputs":[],"name":"DOMAIN_SEPARATOR","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"PERMIT_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"usr","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"usr","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"guy","type":"address"}],"name":"deny","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"usr","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"mint","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"src","type":"address"},{"internalType":"address","name":"dst","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"move","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"nonces","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"holder","type":"address"},{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"nonce","type":"uint256"},{"internalType":"uint256","name":"expiry","type":"uint256"},{"internalType":"bool","name":"allowed","type":"bool"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"permit","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"usr","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"pull","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"usr","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"push","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"guy","type":"address"}],"name":"rely","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"dst","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"src","type":"address"},{"internalType":"address","name":"dst","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"version","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"wards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"}])
 const daiABI = JSON.parse(abi);
 
 
-    const tokenAddress = '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea'
+const tokenAddress = '0x5592ec0cfb4dbc12d3ab100b257153436a1f0fea'
 
 
 async function connectGateways(){
@@ -310,24 +310,44 @@ console.log(totalVotes)
 }
 
 
-async function runDispute() {
+async function runDispute(relationshipAddress) {
+    /* Setup */
+
+    //set accounts
     const provider = new ethers.providers.JsonRpcProvider()
-    const signer = provider.getSigner()
-
-    /* Setup Vocdoni */
-
-    const gwPool = await connectGateways()
-
+    const employerSigner = provider.getSigner(5)
+    console.log('Employer address: ' + employerSigner.getAddress())
+    const workerSigner = provider.getSigner(6)
+    console.log('Worker address: ' + workerSigner.getAddress())
     const entityWallet = new ethers.Wallet("0x6370fd033278c143179d81c5526140625662b8daa446c22ee2d73db3707e620c", provider)
-
-    await entityWallet.getBalance().then(val => {
-        console.log('balancee:::' + val)
-    })
     console.log("Entity ID", entityWallet.address)
 
-    console.log('ensure')
+    //create dispute
+    const disputeInterface = require('../artifacts/contracts/dispute/Dispute.sol/Dispute.json')
+
+    const disputeAbi = disputeInterface.abi
+    const disputeBytecode = disputeInterface.bytecode
+    const contractFactory = new ethers.ContractFactory(abi, bytecode, signer)
+
+    const ipfsComplaintHash = 'Jd87KSDF'
+    const otherIpfsComplaintHash = 'yO9e8hK3'
+    const disputeContract = await contractFactory.deploy(relationshipAddress, ipfsComplaintHash, otherIpfsComplaintHash);
+    const contractAddress = disputeContract.address
+
+    console.log('Dispute contract deployed at address: ' + contractAddress)
+
+    //gather N arbitrators
+    
+
+
+    //setup vocdoni
+    const gwPool = await connectGateways()
+
+    /* Setup Vocdoni */
     await ensureEntityMetadata(entityWallet, gwPool)
-console.log('ensure over')
+    console.log('ensureEntityMetadata() completed..')
+
+
       // Create a new voting process
       const result = await launchNewVote(entityWallet, gwPool)
       console.log('Result:')
@@ -356,21 +376,10 @@ console.log('ensure over')
       await submitVotes(processId, processParams, processMetadata, [], gwPool)
   
       await checkVoteResults(processId, processMetadata, gwPool)
-
-
-    /*const disputeInterface = require('../artifacts/contracts/dispute/Dispute.sol/Dispute.json')
-
-    const disputeAbi = disputeInterface.abi
-    const disputeBytecode = disputeInterface.bytecode
-    const contractFactory = new ethers.ContractFactory(abi, bytecode, signer)
-
-    const ipfsComplaintHash = 'Jd87KSDF'
-    const otherIpfsComplaintHash = 'yO9e8hK3'
-    const disputeContract = await contractFactory.deploy('0x', );
-    const contractAddress = disputeContract.address*/
-
-
-
 }
 
+
+//set relationship address before running
+//market created from scripts and relationship created by UI.. then run script
+const relationshipAddress = ''
 runDispute()

@@ -13,9 +13,16 @@ import "@openzeppelin/contracts/utils/math/SafeCast.sol";
 contract UserSummary is IUserSummary {
 
     event UserSummaryUpdate(address universalAddress);
+    event DisputeInvolvement(
+        address indexed _employer,
+        address indexed _worker,
+        address indexed _relationship,
+        address _dispute
+    );
 
     address public owner;
     address public universalAddress;
+
 
     WorkerDescription public workerDescription;
     EmployerDescription public employerDescription;
@@ -24,6 +31,7 @@ contract UserSummary is IUserSummary {
         require(owner == msg.sender);
         _;
     }
+
 
     modifier onlyFromRelationshipCaller(address _relationship) {
         require(msg.sender != address(0), "The market caller must not be a null address");
@@ -45,6 +53,11 @@ contract UserSummary is IUserSummary {
     constructor(address universalAddress) {
         owner = universalAddress;
         universalAddress = universalAddress;
+    }
+
+    function disputedContractParticipation(address dispute) onlyFromRelationshipCaller(msg.sender) external {
+        WorkRelationship relationship = WorkRelationship(msg.sender);
+        emit DisputeInvolvement(relationship.owner(), relationship.worker(), relationship, dispute);
     }
 
     function evaluateUser(Evaluation.EvaluationState memory evaluationState, address market) external override view returns(bool) {

@@ -70,6 +70,23 @@ module.exports = {
       },
       chainId: CHAIN_ID
     },
+    rinkeby: {
+      url: providerUrl,
+      forking: {
+        
+        url: providerUrl,
+        accounts: {
+          mnemonic: developmentMnemonic
+        },
+        chainId: 4
+      },
+      gasPrice: 0,
+      initialBaseFeePerGas: 0,
+      accounts: {
+        mnemonic: developmentMnemonic,
+      },
+      chainId: 4
+    },
     localhost: {
       chainId: CHAIN_ID,
       forking: {

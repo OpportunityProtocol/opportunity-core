@@ -29,7 +29,7 @@ createDummyMarkets()
 
 async function createDummyMarkets() {
    try {
-   await marketFactoryContractInstance.createMarket('Dummy Market One', 0);
+   await marketFactoryContractInstance.createMarket('Dummy Market One', 0)
    await marketFactoryContractInstance.createMarket('Dummy Market Two', 0);
    await marketFactoryContractInstance.createMarket('Dummy Market Three', 0);
    await marketFactoryContractInstance.createMarket('Dummy Market Four', 0);

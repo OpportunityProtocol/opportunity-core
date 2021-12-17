@@ -1,4 +1,5 @@
 const hre = require('hardhat');
+const ethers = require('@nomiclabs/hardhat-ethers')
 const Compound = require('@compound-finance/compound-js');
 const { TASK_NODE_CREATE_SERVER } = require('hardhat/builtin-tasks/task-names');
 const { NETWORK, CHAIN_ID } = require('../config');
@@ -26,7 +27,6 @@ const amounts = {
   // 'zrx': 100
 };
 
-
 async function main() {
   const jsonRpcServer = await hre.run(TASK_NODE_CREATE_SERVER, {
     hostname: 'localhost',
@@ -37,8 +37,8 @@ async function main() {
   await jsonRpcServer.listen();
 
   await hre.run('compile')
-  await mintTestDai()
   await deployOpportunityContracts()
+  await mintTestDai()
 }
 
 main()
@@ -49,11 +49,16 @@ main()
   });
 
   async function deployOpportunityContracts() {
-    const MarketFactory = await hre.ethers.getContractFactory("MarketFactory");
-    const UserRegistration = await hre.ethers.getContractFactory('UserRegistration')
-    const UserSummaryFactory = await hre.ethers.getContractFactory('UserSummaryFactory')
-    const ParticipationToken = await hre.ethers.getContractFactory('ParticipationToken')
-  
+
+    //please don't change the signer
+    const rProvider = new hre.ethers.providers.JsonRpcProvider(jsonRpcUrl, { chainId: CHAIN_ID });
+    const rSigner = rProvider.getSigner('0x1dF62f291b2E969fB0849d99D9Ce41e2F137006e')
+
+    const MarketFactory = await hre.ethers.getContractFactory("MarketFactory", rSigner)
+    const UserRegistration = await hre.ethers.getContractFactory('UserRegistration', rSigner)
+    const UserSummaryFactory = await hre.ethers.getContractFactory('UserSummaryFactory', rSigner)
+    const ParticipationToken = await hre.ethers.getContractFactory('ParticipationToken', rSigner)
+
     console.log('Deploying market factory...')
     const marketFactory = await MarketFactory.deploy()
     console.log('Address: ' + marketFactory.address)
@@ -90,9 +95,7 @@ async function mintTestDai() {
 async function seed(asset, amount) {
   try {
     provider = new hre.ethers.providers.JsonRpcProvider(jsonRpcUrl, { chainId: CHAIN_ID });
-    console.log(provider)
     const accounts = await provider.listAccounts()
-    console.log(accounts)
 
     for (let i = 0; i < accounts.length; i++) {
 

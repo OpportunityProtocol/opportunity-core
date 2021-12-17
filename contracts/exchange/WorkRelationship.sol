@@ -445,15 +445,24 @@ contract WorkRelationship {
     function disputeRelationship(
         address _scheduler,         
         bytes32 _complaintMetadataPointer,
-        bytes32 _complaintResponseMetadataPointer) 
+        bytes32 _complaintResponseMetadataPointer,
+        address userRegistrationAddress
+        ) 
         external 
+        onlyOwner
+        onlyWorker
         onlyWhenStatus(Relationship.ContractStatus.AwaitingSubmission) 
     {
-        //dispute = address(new Dispute(address(this), _scheduler, _complaintMetadataPointer, _complaintResponseMetadataPointer));
+        dispute = address(new Dispute(address(this), _complaintMetadataPointer, _complaintResponseMetadataPointer));
 
-        //assert(dispute != address(0));
+        assert(dispute != address(0));
 
         contractStatus = Relationship.ContractStatus.Disputed;
+
+        UserRegistration registration = UserRegistration(userRegistrationAddress);
+        address userSummary = registration._trueIdentifcations[msg.sender];
+
+        userSummary.disputedContractParticipation(dispute);
     }
 
     function getRewardAddress() external returns(address) {
