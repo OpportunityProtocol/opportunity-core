@@ -35,10 +35,10 @@
         "SchedulerInterface"
       ]
     },
-    "/Users/elijahhampton/git/opportunity-core/contracts/dispute/Dispute.sol": {
-      "lastModificationDate": 1638655277747,
-      "contentHash": "aa692e953f6069b83150532e88b5cd75",
-      "sourceName": "contracts/dispute/Dispute.sol",
+    "/Users/elijahhampton/git/opportunity-core/contracts/exchange/interface/IBanker.sol": {
+      "lastModificationDate": 1635619082856,
+      "contentHash": "3328642ef6a06d3756942e70e53d4bc5",
+      "sourceName": "contracts/exchange/interface/IBanker.sol",
       "solcConfig": {
         "version": "0.8.7",
         "settings": {
@@ -61,58 +61,10 @@
           }
         }
       },
-      "imports": [
-        "../exchange/WorkRelationship.sol",
-        "../exchange/interface/IDaiToken.sol",
-        "../libraries/Transaction.sol"
-      ],
-      "versionPragmas": [
-        "0.8.7"
-      ],
+      "imports": [],
+      "versionPragmas": [],
       "artifacts": [
-        "Dispute"
-      ]
-    },
-    "/Users/elijahhampton/git/opportunity-core/contracts/exchange/WorkRelationship.sol": {
-      "lastModificationDate": 1637643335897,
-      "contentHash": "458063ddc0d03684550c9b8aca23b17e",
-      "sourceName": "contracts/exchange/WorkRelationship.sol",
-      "solcConfig": {
-        "version": "0.8.7",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "../user/UserSummary.sol",
-        "../libraries/Evaluation.sol",
-        "./interface/IDaiToken.sol",
-        "../dispute/Dispute.sol",
-        "../libraries/Relationship.sol",
-        "hardhat/console.sol"
-      ],
-      "versionPragmas": [
-        "0.8.7"
-      ],
-      "artifacts": [
-        "CErc20",
-        "WorkRelationship"
+        "IBanker"
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/exchange/interface/IDaiToken.sol": {
@@ -147,10 +99,10 @@
         "DaiToken"
       ]
     },
-    "/Users/elijahhampton/git/opportunity-core/contracts/libraries/Transaction.sol": {
-      "lastModificationDate": 1636504911811,
-      "contentHash": "884be41ffd670a7ddea0b19dee48b3dd",
-      "sourceName": "contracts/libraries/Transaction.sol",
+    "/Users/elijahhampton/git/opportunity-core/contracts/exchange/WorkRelationship.sol": {
+      "lastModificationDate": 1641017238782,
+      "contentHash": "e21e31a0cd79e06e19df259b6c083b39",
+      "sourceName": "contracts/exchange/WorkRelationship.sol",
       "solcConfig": {
         "version": "0.8.7",
         "settings": {
@@ -173,15 +125,24 @@
           }
         }
       },
-      "imports": [],
-      "versionPragmas": [],
+      "imports": [
+        "../user/UserSummary.sol",
+        "../libraries/Evaluation.sol",
+        "./interface/IDaiToken.sol",
+        "../libraries/Relationship.sol",
+        "hardhat/console.sol"
+      ],
+      "versionPragmas": [
+        "0.8.7"
+      ],
       "artifacts": [
-        "Transaction"
+        "CErc20",
+        "WorkRelationship"
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/user/UserSummary.sol": {
-      "lastModificationDate": 1636504173292,
-      "contentHash": "bcd389e172d6712614dc27dfe2c534c2",
+      "lastModificationDate": 1639778118067,
+      "contentHash": "f397fe75530e8642ad90451e906fc3c2",
       "sourceName": "contracts/user/UserSummary.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -256,8 +217,8 @@
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/libraries/Relationship.sol": {
-      "lastModificationDate": 1636481127929,
-      "contentHash": "6d09c403446975946d1be57e5d1dd936",
+      "lastModificationDate": 1639778141617,
+      "contentHash": "afeee7c1e2b2d3d380622a86d2b5ca70",
       "sourceName": "contracts/libraries/Relationship.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -324,8 +285,8 @@
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/user/interface/IUserSummary.sol": {
-      "lastModificationDate": 1636479772608,
-      "contentHash": "b2d9e50b67bff5ff0dca5ab54af72b1a",
+      "lastModificationDate": 1639778140629,
+      "contentHash": "f15d3e9a496692c21e355fce8c6f525f",
       "sourceName": "contracts/user/interface/IUserSummary.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -362,8 +323,8 @@
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/market/Market.sol": {
-      "lastModificationDate": 1636827912573,
-      "contentHash": "56cf0fe8fb70397e1dc1ad2c62067d4d",
+      "lastModificationDate": 1640907646108,
+      "contentHash": "0087778512382f85521a04451978eaab",
       "sourceName": "contracts/market/Market.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -572,8 +533,8 @@
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/market/MarketFactory.sol": {
-      "lastModificationDate": 1635619082859,
-      "contentHash": "7e75cd53f6001fe9169530ea8b3bbe19",
+      "lastModificationDate": 1640835809406,
+      "contentHash": "eb4369cdd5846b50bc8d986a00a50cb2",
       "sourceName": "contracts/market/MarketFactory.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -599,7 +560,8 @@
       },
       "imports": [
         "./Market.sol",
-        "../libraries/MarketLib.sol"
+        "../libraries/MarketLib.sol",
+        "hardhat/console.sol"
       ],
       "versionPragmas": [
         "0.8.7"
@@ -680,72 +642,6 @@
       "artifacts": [
         "IParticipation",
         "UserRegistration"
-      ]
-    },
-    "/Users/elijahhampton/git/opportunity-core/contracts/exchange/interface/IBanker.sol": {
-      "lastModificationDate": 1635619082856,
-      "contentHash": "3328642ef6a06d3756942e70e53d4bc5",
-      "sourceName": "contracts/exchange/interface/IBanker.sol",
-      "solcConfig": {
-        "version": "0.8.7",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [],
-      "artifacts": [
-        "IBanker"
-      ]
-    },
-    "/Users/elijahhampton/git/opportunity-core/contracts/Migrations.sol": {
-      "lastModificationDate": 1635619082851,
-      "contentHash": "50b3b1dc92806dc8f604fc8c5c65518f",
-      "sourceName": "contracts/Migrations.sol",
-      "solcConfig": {
-        "version": "0.8.7",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        ">=0.4.22 <0.9.0"
-      ],
-      "artifacts": [
-        "Migrations"
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
@@ -922,6 +818,72 @@
       "versionPragmas": [],
       "artifacts": [
         "ParticipationToken"
+      ]
+    },
+    "/Users/elijahhampton/git/opportunity-core/contracts/libraries/Transaction.sol": {
+      "lastModificationDate": 1636504911811,
+      "contentHash": "884be41ffd670a7ddea0b19dee48b3dd",
+      "sourceName": "contracts/libraries/Transaction.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [],
+      "artifacts": [
+        "Transaction"
+      ]
+    },
+    "/Users/elijahhampton/git/opportunity-core/contracts/Migrations.sol": {
+      "lastModificationDate": 1635619082851,
+      "contentHash": "50b3b1dc92806dc8f604fc8c5c65518f",
+      "sourceName": "contracts/Migrations.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "Migrations"
       ]
     }
   }

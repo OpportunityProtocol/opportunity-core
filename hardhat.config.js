@@ -9,7 +9,7 @@
  const ethers = require('ethers');
 const { CHAIN_ID } = require('./config');
 
-const providerUrl = "https://eth-rinkeby.alchemyapi.io/v2/_Z0mhNCo6N0S7ewye1pRUxJgdB1iY2gC" //process.env.MAINNET_PROVIDER_URL;
+const providerUrl = process.env.MAINNET_PROVIDER_URL; //"https://eth-rinkeby.alchemyapi.io/v2/_Z0mhNCo6N0S7ewye1pRUxJgdB1iY2gC"
 const developmentMnemonic = process.env.DEV_ETH_MNEMONIC;
 console.log(developmentMnemonic)
 

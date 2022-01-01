@@ -4,13 +4,14 @@ pragma solidity 0.8.7;
 
 import "./Market.sol";
 import "../libraries/MarketLib.sol";
+import "hardhat/console.sol";
 
 contract MarketFactory {
     event MarketCreated(address indexed _market, uint256 indexed index, address owner, 
         string marketName);
     event MarketDestroyed(address indexed _marketAddress);
 
-    Market[] private _createdMarkets;
+    address[] public _createdMarkets;
     mapping(string => Market) idsToMarkets;
 
     /**
@@ -21,7 +22,8 @@ contract MarketFactory {
         Market createdMarket = new Market(marketName, marketType);
         //idsToMarkets[marketId] = marketName;
 
-        _createdMarkets.push(createdMarket);
+        console.log('Market created at address: ', address(createdMarket));
+        _createdMarkets.push(address(createdMarket));
         emit MarketCreated(address(createdMarket), _createdMarkets.length, msg.sender, marketName);
     }
 
@@ -38,5 +40,9 @@ contract MarketFactory {
      */
      function getNumMarkets() public view returns (uint256) {
          return _createdMarkets.length;
+     }
+
+     function getMarkets() public view returns (address[] memory) {
+         return _createdMarkets;
      }
 }

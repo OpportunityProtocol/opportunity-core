@@ -37,8 +37,8 @@ async function main() {
   await jsonRpcServer.listen();
 
   await hre.run('compile')
-  await deployOpportunityContracts()
   await mintTestDai()
+  await deployOpportunityContracts()
 }
 
 main()
@@ -49,15 +49,10 @@ main()
   });
 
   async function deployOpportunityContracts() {
-
-    //please don't change the signer
-    const rProvider = new hre.ethers.providers.JsonRpcProvider(jsonRpcUrl, { chainId: CHAIN_ID });
-    const rSigner = rProvider.getSigner('0x1dF62f291b2E969fB0849d99D9Ce41e2F137006e')
-
-    const MarketFactory = await hre.ethers.getContractFactory("MarketFactory", rSigner)
-    const UserRegistration = await hre.ethers.getContractFactory('UserRegistration', rSigner)
-    const UserSummaryFactory = await hre.ethers.getContractFactory('UserSummaryFactory', rSigner)
-    const ParticipationToken = await hre.ethers.getContractFactory('ParticipationToken', rSigner)
+    const MarketFactory = await hre.ethers.getContractFactory("MarketFactory")
+    const UserRegistration = await hre.ethers.getContractFactory('UserRegistration')
+    const UserSummaryFactory = await hre.ethers.getContractFactory('UserSummaryFactory')
+    const ParticipationToken = await hre.ethers.getContractFactory('ParticipationToken')
 
     console.log('Deploying market factory...')
     const marketFactory = await MarketFactory.deploy()

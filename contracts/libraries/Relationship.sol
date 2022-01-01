@@ -6,7 +6,6 @@ library Relationship {
         AwaitingWorkerApproval,
         AwaitingSubmission,
         AwaitingReview,
-        Approved,
-        Disputed
+        Approved
     }
 }

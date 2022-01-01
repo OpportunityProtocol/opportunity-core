@@ -5,7 +5,6 @@ pragma solidity 0.8.7;
 import "../user/UserSummary.sol";
 import "../libraries/Evaluation.sol";
 import "./interface/IDaiToken.sol";
-import "../dispute/Dispute.sol";
 import "../libraries/Relationship.sol";
 import "hardhat/console.sol";
 
@@ -49,11 +48,10 @@ contract WorkRelationship {
 
     address public worker;
     address public owner;
+    address public market;
     uint public wad;
 
-    DaiToken daiToken;
-
-    address public dispute;
+    DaiToken public daiToken;
 
     string public taskMetadataPointer;
     bytes32 private taskSolutionPointer;
@@ -74,6 +72,8 @@ contract WorkRelationship {
     ContractOwnership public contractOwnership;
     Evaluation.ContractType public contractType;
 
+    uint acceptanceTimestamp;
+
   enum ContractState {
     Uninitialized,
     Initialized,
@@ -89,6 +89,11 @@ contract WorkRelationship {
     enum ContractType {
         NORMAL,
         FLASH
+    }
+
+    modifier onlyContractParticipants() {
+        require(msg.sender == worker || msg.sender == owner, "Only the contract participants may call this function.");
+        _;
     }
 
     modifier onlyWorker() 
@@ -142,43 +147,36 @@ contract WorkRelationship {
         _;
     }
 
-    modifier onlyInDisputedConditions(address sender) {
-        require(Relationship.ContractStatus.Disputed == contractStatus && sender == dispute, "The contract cannot be resolved under these conditions.");
-        _;
-    }
-
      constructor(
-        address _owner, 
-        Evaluation.ContractType _contractType, 
-        string memory _taskMetadataPointer,
-                address _daiTokenAddress
+            Evaluation.ContractType _contractType, 
+            string memory _taskMetadataPointer,
+            address _daiTokenAddress
         ) { 
-                    require(_daiTokenAddress != address(0), "Dai token address cannot be 0 when creating escrow.");
+            require(_daiTokenAddress != address(0), "Dai token address cannot be 0 when creating escrow.");
+            daiToken = DaiToken(_daiTokenAddress);
+            market = msg.sender;
+            
+            uint8 chain_id;
+            assembly {
+                chain_id := chainid()
+            }
 
-        daiToken = DaiToken(_daiTokenAddress);
+            console.log('Chain id: %s', chain_id);
 
-        uint8 chain_id;
-        assembly {
-            chain_id := chainid()
-        }
-
-
-        domain_separator = keccak256(abi.encode(
+            domain_separator = keccak256(abi.encode(
             keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),
             keccak256(bytes("Work Relationship")),
             keccak256(bytes("1")),
             chain_id,
             address(this)
-        ));
+            ));
 
-        owner = _owner;
-
-        contractType = _contractType;
-        contractOwnership = ContractOwnership.UNCLAIMED;
-        contractState = ContractState.Uninitialized;
-        contractStatus = Relationship.ContractStatus.AwaitingWorker;
-
-        taskMetadataPointer = _taskMetadataPointer;
+            owner = tx.origin;
+            contractType = _contractType;
+            contractOwnership = ContractOwnership.UNCLAIMED;
+            contractState = ContractState.Uninitialized;
+            contractStatus = Relationship.ContractStatus.AwaitingWorker;
+            taskMetadataPointer = _taskMetadataPointer;
     }
 
     function assignNewWorker(
@@ -204,15 +202,16 @@ contract WorkRelationship {
         uint256 userBalance = daiToken.balanceOf(owner);
         if (userBalance < _wad) { revert(); }
 
+        wad = _wad;
+
         initialize(nonce, expiry, eV, eR, eS, vDeny, rDeny, sDeny);
 
-        wad = _wad;
         worker = _newWorker;
-        dispute = address(0);
 
         contractOwnership = ContractOwnership.PENDING;
         contractStatus = Relationship.ContractStatus.AwaitingWorkerApproval;
 
+        acceptanceTimestamp = block.timestamp;
         assert(worker == _newWorker);
         assert(contractOwnership == ContractOwnership.PENDING);
     }
@@ -231,6 +230,15 @@ contract WorkRelationship {
         ) 
         internal
     {
+        console.log(nonce);
+        console.log(v);
+        //console.log(r);
+        //console.log(s);
+        console.log(vDeny);
+        //console.log(rDeny);
+       // console.log(sDeny);
+        console.log(expiry);
+        
         // Unlock buyer's Dai balance to transfer `wad` to this contract.
         daiToken.permit(owner, address(this), nonce, expiry, true, v, r, s);
 
@@ -256,6 +264,9 @@ contract WorkRelationship {
             //set contract to claimed
             contractOwnership = ContractOwnership.CLAIMED;
             contractStatus = Relationship.ContractStatus.AwaitingSubmission;
+            
+            employerSummary.increaseContractsEntered();
+            workerSummary.increaseContractsEntered();
         } else {
             worker = address(0);
             refundReward();
@@ -264,16 +275,34 @@ contract WorkRelationship {
         }
     }
 
-    function refundReward() 
-    internal
+    function refundReward() internal returns(bool) {
+        const success = daiToken.transfer(owner, wad);
+        assert(success == true);
+    }
+
+    function refundUnclaimedContract() external 
+    onlyOwner
+    onlyWhenOwnership(ContractoOwnership.UNCLAIMED)
+    {
+        refundReward();
+    }
+
+    function releaseJob() external
     onlyWorker
-    onlyWhenOwnership(ContractOwnership.PENDING) 
-    onlyWhenStatus(Relationship.ContractStatus.AwaitingWorkerApproval)
+    onlyWhenOwnership(ContractOwnership.CLAIMED) 
+    onlyWhenStatus(Relationship.ContractStatus.AwaitingSubmission)
     {
         require(wad != uint(0), "There is no DAI to transfer back to the owner");
+        refundReward()
+    }
 
-        //Escrow sends money back to owner
-        daiToken.transfer(owner, wad);
+    function claimStalledContract() external 
+    onlyOwner
+    onlyWhenOwnership(ContractOwnership.CLAIMED) 
+    {
+        require(numSubmissions >= 1);
+        require(acceptanceTimestamp >= (block.timestamp + 90 days));
+        refundReward();
     }
 
     function submit(
@@ -296,7 +325,6 @@ contract WorkRelationship {
         //require(worker == ecrecover(digest, _v, _r, _s), "invalid-permit");
 
         updateTaskSolutionPointer(_submission);
-
         contractStatus = Relationship.ContractStatus.AwaitingReview;
     }
 
@@ -321,36 +349,18 @@ contract WorkRelationship {
         //require(owner == ecrecover(digest, _v, _r, _s), "invalid-permit");
 
         if (_approve) {
-            resolve(_evaluationScore, averageMarketWorkerRep);
+            resolve();
         } else {
             contractStatus = Relationship.ContractStatus.AwaitingSubmission;
         }
     }
 
-    function resolveTiedDisputedReward() 
-    external 
-    onlyInDisputedConditions(msg.sender) {
-        uint fairSplit = wad / 2;
-        
-        daiToken.transfer(owner, fairSplit);
-        daiToken.transfer(worker, fairSplit);
-    }
 
-    function resolveDisputedReward(address _beneficiary) 
-    external
-    onlyInDisputedConditions(msg.sender)
-     {
-        daiToken.transfer(_beneficiary, wad);
-
-        //alter the workers reputation
-
-        //alter the employers disputes
-    }
-
-    function resolveReward(uint8 _evaluationScore, uint256 _averageMarketWorkerRep) 
+    function resolveReward() 
     internal
      {
-        daiToken.transfer(worker, wad);
+        bool success = daiToken.transfer(worker, wad);
+        assert(success == true);
 
         UserSummary employerSummary = UserSummary(owner);
         UserSummary workerSummary = UserSummary(worker);
@@ -358,50 +368,17 @@ contract WorkRelationship {
         //get worker reputation for the market this relationship is in
         uint8 workerReputation = 0;
 
-        //alter the workers reputation according to the evaluation score
-        if (_evaluationScore > HIGH_MEDIAN_EVALUATION_THRESHOLD) {
-            workerSummary.increaseReputation(address(this), 1);
-        } else if (_evaluationScore <= HIGH_MEDIAN_EVALUATION_THRESHOLD 
-            || _evaluationScore >= LOW_MEDIAN_EVALUATION_THRESHOLD) {
-            //nothing
-        } else if (_evaluationScore <= LOW_MEDIAN_EVALUATION_THRESHOLD 
-            && workerReputation >= _averageMarketWorkerRep + 1) {
-            uint8 badConsistencyCount = workerSummary.getBadConsistencyCount();
-            if (badConsistencyCount <= 1) {
-                //decrease worker reputation by one
-                workerSummary.decreaseReputation(address(this), 1);
-            } else if (badConsistencyCount == 2) {
-                //decrease worker reputation by half the average reputation
-                uint8 decreaseAmount = 0;
-                workerSummary.decreaseReputation(address(this), decreaseAmount);
-            } else if (badConsistencyCount == 3) {
-                //decrease worker reputation count to 0
-                workerSummary.decreaseReputation(address(this), 0);
-                //reset consistency count
-                workerSummary.setBadConsistencyCount(0);
-            } else { //if it is above 4 there is some error and we should reset it, increase it and then handle the reputation
-                //set consistency count 1
-                workerSummary.setBadConsistencyCount(1);
-                //decrease reputation by 1
-                workerSummary.decreaseReputation(address(this), 1);
-            }
-        } else if (_evaluationScore <= LOW_MEDIAN_EVALUATION_THRESHOLD && workerReputation < _averageMarketWorkerRep) {
-            //decrease worker reputation by 1
-            workerSummary.decreaseReputation(address(this), 1);
-        }
-
         //alter the employers successful payouts
-        employerSummary.increaseSuccessfulPayout(address(this));
+        employerSummary.increaseContractsCompleted();
+        workerSummary.increaseContractsCompleted();
     }
 
-      function resolve(uint8 _evaluationScore, uint256 _averageMarketWorkerRep) 
+      function resolve() 
         internal
         onlyOwner
     {
         require(worker != address(0));
-
-        resolveReward(_evaluationScore, _averageMarketWorkerRep);
-        
+        resolveReward();
         contractStatus = Relationship.ContractStatus.Approved;
         contractState = ContractState.Locked;
     }
@@ -440,29 +417,6 @@ contract WorkRelationship {
         returns (bytes32)
     {
         return taskSolutionPointer;
-    }
-
-    function disputeRelationship(
-        address _scheduler,         
-        bytes32 _complaintMetadataPointer,
-        bytes32 _complaintResponseMetadataPointer,
-        address userRegistrationAddress
-        ) 
-        external 
-        onlyOwner
-        onlyWorker
-        onlyWhenStatus(Relationship.ContractStatus.AwaitingSubmission) 
-    {
-        dispute = address(new Dispute(address(this), _complaintMetadataPointer, _complaintResponseMetadataPointer));
-
-        assert(dispute != address(0));
-
-        contractStatus = Relationship.ContractStatus.Disputed;
-
-        UserRegistration registration = UserRegistration(userRegistrationAddress);
-        address userSummary = registration._trueIdentifcations[msg.sender];
-
-        userSummary.disputedContractParticipation(dispute);
     }
 
     function getRewardAddress() external returns(address) {

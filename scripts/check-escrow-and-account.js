@@ -7,7 +7,7 @@ const signer = provider.getSigner('0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1')
 
 const wallet = new ethers.Wallet('0x4f3edf983ac636a65a842ce7c78d9aa706d3b113bce9c46f30d7d21715b23b1d', provider)
 
-const relationshipAddress = "0x0abE4113B72aD98e8Fc7181233E3a0E0F50d5792"
+const relationshipAddress = "0x4aCC2df5547492e2b3eD786aDa137588e9a1d51F"
 const daiAddress = '0x6b175474e89094c44da98b954eedeac495271d0f'
 
 
@@ -33,8 +33,18 @@ async function checkRelationshipStatus() {
     const accountBalance = await daiContractInstance.functions.balanceOf('0x90F8bf6A479f320ead074411a4B0e7944Ea8c9C1')
     console.log('The balance of the account is: ' + accountBalance)
 
+    const relationshipBalance = await daiContractInstance.functions.balanceOf(relationshipAddress)
+    console.log('The balance of the relationship is: ' + relationshipBalance)
+
+    
 
     const workRelationshipContractInstance = new ethers.Contract(relationshipAddress, workRelationshipABI).connect(wallet)
+
+    let exchangePayout
+    await workRelationshipContractInstance.functions.wad().then(value => {
+        exchangePayout = value
+    })
+    console.log('The payout in work exchange is: ' + exchangePayout)
 
     console.log('Checking the worker and owner of the work relationship contract...')
 
@@ -76,40 +86,5 @@ async function checkRelationshipStatus() {
     console.log('Contract State: ' + contractState)
     console.log('Contract ownership: ' + contractOwnership)
     console.log('Contract Payout: ' + contractPayout)
-
-
-
-
-    let exchangePayout
-    await workRelationshipContractInstance.functions.wad().then(value => {
-        exchangePayout = value
-    })
-    console.log('The payout in work exchange is: ' + exchangePayout)
-
-
-    console.log('Checking DaiEscrow balance..')
-   let daiBalanceFromRelationship
-   await daiContractInstance.functions.balanceOf(workRelationshipContractInstance.address.toString()).then(value => {
-       daiBalanceFromRelationship = value
-   })
-    console.log('Dai Escrow Address Balance From Relationship: ' + daiBalanceFromRelationship)
-
-    let taskMetadataPointer = ''
-    let taskSolutionPointer = ''
-    console.log('Checking submission value')
-    await workRelationshipContractInstance.functions.taskMetadataPointer().then(value => {
-        taskMetadataPointer = value
-    })
-
-    await workRelationshipContractInstance.getTaskSolutionPointer().then(value => {
-        taskSolutionPointer = value
-    })
-
-    console.log('Metadata Pointer: ' + taskMetadataPointer)
-    console.log('Task solution pointer: ' + taskSolutionPointer)
-
-    console.log('Checking cToken Balance')
-
-
 
 }

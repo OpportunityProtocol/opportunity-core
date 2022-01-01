@@ -7,25 +7,9 @@ import "../../libraries/User.sol";
 import "../../libraries/StringUtils.sol";
 
 interface IUserSummary {
-    struct WorkerDescription {
-        uint8 universalReputation;
-        uint8 badConsistencyCount;
-
-        //mapping of markets to reputation
-        mapping(address => uint8) marketToReputation;
-
-        // Mapping of markets to evaluations
-        mapping(address => uint8) marketsToEvaluations;
-    }
-
-    struct EmployerDescription {
-        uint256 numSuccessfulPayouts;
-        uint256 numDisputes;
-
-         // Mapping of relationships to status.
-        mapping(address => uint8) relationshipExchanges;
-    }
-
-    function evaluateUser(Evaluation.EvaluationState memory evaluationState, address market) external returns(bool);
-
+    address public owner;
+    uint256 contractsEntered;
+    uint256 contractsCompleted;
+    uint256 universalReputation;
+    mapping(address => uint256) marketsToReputation;
 }
