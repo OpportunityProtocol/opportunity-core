@@ -2,7 +2,7 @@
 
 
 ## Deployment ##
-Deploy contracts to a network on localhost:8545 with hardhat by running
+Deploy contracts to a network on localhost:8545 with hardhat and mint test dai to your local accounts by running
 
 ```shell
 node /scripts/deployContractsAndMintTestDai.js.
