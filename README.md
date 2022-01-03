@@ -1,15 +1,17 @@
-# Basic Sample Hardhat Project
+# Smart Contract Module for Opportunity.  (Decentralized freelancing markets)
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
 
-Try running some of the following tasks:
+## Deployment ##
+Deploy contracts to a network on localhost:8545 with hardhat and mint test dai to your local accounts by running
 
 ```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
+node /scripts/deployContractsAndMintTestDai.js.
 ```
+
+You can deploy fake markets by running
+```shell
+node /scripts/create-dummy-markets.js
+```
+
+## Testing ##
+Testing is done through Hardhat.  All test can be found in /test
