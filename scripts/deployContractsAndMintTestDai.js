@@ -51,23 +51,13 @@ main()
   async function deployOpportunityContracts() {
     const MarketFactory = await hre.ethers.getContractFactory("MarketFactory")
     const UserRegistration = await hre.ethers.getContractFactory('UserRegistration')
-    const UserSummaryFactory = await hre.ethers.getContractFactory('UserSummaryFactory')
-    const ParticipationToken = await hre.ethers.getContractFactory('ParticipationToken')
-
+    
     console.log('Deploying market factory...')
     const marketFactory = await MarketFactory.deploy()
     console.log('Address: ' + marketFactory.address)
 
-    console.log('Deploying UserSummaryFactory...')
-    const userSummaryFactory = await UserSummaryFactory.deploy()
-    console.log('Address: ' + userSummaryFactory.address)
-
-    console.log('Deploying participation token...')
-    const participationToken = await ParticipationToken.deploy('Participation', 'PTN', userSummaryFactory.address)
-    console.log('Address: ' + participationToken.address)
-    
     console.log('Deploying user registration...')
-    const userRegistration = await UserRegistration.deploy(userSummaryFactory.address, participationToken.address)
+    const userRegistration = await UserRegistration.deploy()
     console.log('Address: ' + userRegistration.address)
   }
     

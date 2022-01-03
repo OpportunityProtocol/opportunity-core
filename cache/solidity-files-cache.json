@@ -100,8 +100,8 @@
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/exchange/WorkRelationship.sol": {
-      "lastModificationDate": 1641017238782,
-      "contentHash": "e21e31a0cd79e06e19df259b6c083b39",
+      "lastModificationDate": 1641172621137,
+      "contentHash": "bddcdc927c60f7638400988bc999f566",
       "sourceName": "contracts/exchange/WorkRelationship.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -127,22 +127,23 @@
       },
       "imports": [
         "../user/UserSummary.sol",
+        "../libraries/User.sol",
         "../libraries/Evaluation.sol",
         "./interface/IDaiToken.sol",
         "../libraries/Relationship.sol",
+        "../user/UserRegistration.sol",
         "hardhat/console.sol"
       ],
       "versionPragmas": [
         "0.8.7"
       ],
       "artifacts": [
-        "CErc20",
         "WorkRelationship"
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/user/UserSummary.sol": {
-      "lastModificationDate": 1639778118067,
-      "contentHash": "f397fe75530e8642ad90451e906fc3c2",
+      "lastModificationDate": 1641081069244,
+      "contentHash": "feae19ac406292aacc7aedf91cec006a",
       "sourceName": "contracts/user/UserSummary.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -170,7 +171,9 @@
         "./interface/IUserSummary.sol",
         "../libraries/Evaluation.sol",
         "../libraries/Relationship.sol",
+        "../libraries/User.sol",
         "../exchange/WorkRelationship.sol",
+        "./UserRegistration.sol",
         "../market/Market.sol",
         "@openzeppelin/contracts/utils/math/SafeMath.sol",
         "@openzeppelin/contracts/utils/math/SafeCast.sol"
@@ -180,6 +183,42 @@
       ],
       "artifacts": [
         "UserSummary"
+      ]
+    },
+    "/Users/elijahhampton/git/opportunity-core/contracts/libraries/User.sol": {
+      "lastModificationDate": 1641079823114,
+      "contentHash": "d2e01ae50be85d9434d1cc77fe79ee95",
+      "sourceName": "contracts/libraries/User.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./StringUtils.sol"
+      ],
+      "versionPragmas": [
+        "0.8.7"
+      ],
+      "artifacts": [
+        "User"
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/libraries/Evaluation.sol": {
@@ -250,6 +289,43 @@
         "Relationship"
       ]
     },
+    "/Users/elijahhampton/git/opportunity-core/contracts/user/UserRegistration.sol": {
+      "lastModificationDate": 1641078056622,
+      "contentHash": "22bc5a58fc2af9258f95078b5672b6ab",
+      "sourceName": "contracts/user/UserRegistration.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./UserSummaryFactory.sol",
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol"
+      ],
+      "versionPragmas": [
+        "0.8.7"
+      ],
+      "artifacts": [
+        "UserRegistration"
+      ]
+    },
     "/Users/elijahhampton/git/opportunity-core/node_modules/hardhat/console.sol": {
       "lastModificationDate": 1636180749522,
       "contentHash": "cc4777addd464ea56fa35b1c45df0591",
@@ -285,8 +361,8 @@
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/user/interface/IUserSummary.sol": {
-      "lastModificationDate": 1639778140629,
-      "contentHash": "f15d3e9a496692c21e355fce8c6f525f",
+      "lastModificationDate": 1641079728986,
+      "contentHash": "640073f359e79f4199a43fbe52969c68",
       "sourceName": "contracts/user/interface/IUserSummary.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -323,8 +399,8 @@
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/market/Market.sol": {
-      "lastModificationDate": 1640907646108,
-      "contentHash": "0087778512382f85521a04451978eaab",
+      "lastModificationDate": 1641170479766,
+      "contentHash": "42fd1fdb815e4d69431fc4d1acac15fa",
       "sourceName": "contracts/market/Market.sol",
       "solcConfig": {
         "version": "0.8.7",
@@ -428,42 +504,6 @@
         "SafeCast"
       ]
     },
-    "/Users/elijahhampton/git/opportunity-core/contracts/libraries/User.sol": {
-      "lastModificationDate": 1635619082857,
-      "contentHash": "0b4237349fcea440c293bc7615db1a29",
-      "sourceName": "contracts/libraries/User.sol",
-      "solcConfig": {
-        "version": "0.8.7",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./StringUtils.sol"
-      ],
-      "versionPragmas": [
-        "0.8.7"
-      ],
-      "artifacts": [
-        "User"
-      ]
-    },
     "/Users/elijahhampton/git/opportunity-core/contracts/libraries/StringUtils.sol": {
       "lastModificationDate": 1635619082857,
       "contentHash": "ad37bcc0a0a7473b4682aab1916c0e01",
@@ -496,6 +536,76 @@
       ],
       "artifacts": [
         "StringUtils"
+      ]
+    },
+    "/Users/elijahhampton/git/opportunity-core/contracts/user/UserSummaryFactory.sol": {
+      "lastModificationDate": 1641074591898,
+      "contentHash": "68ad351819be0d1505d9cc7df8872ade",
+      "sourceName": "contracts/user/UserSummaryFactory.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [
+        "./UserSummary.sol"
+      ],
+      "versionPragmas": [
+        "0.8.7"
+      ],
+      "artifacts": [
+        "UserSummaryFactory"
+      ]
+    },
+    "/Users/elijahhampton/git/opportunity-core/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+      "lastModificationDate": 1638666508300,
+      "contentHash": "5f4c7678e2e69875dbd2ec01d3d288c1",
+      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+      "solcConfig": {
+        "version": "0.8.7",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "IERC20"
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/contracts/libraries/MarketLib.sol": {
@@ -568,114 +678,6 @@
       ],
       "artifacts": [
         "MarketFactory"
-      ]
-    },
-    "/Users/elijahhampton/git/opportunity-core/contracts/user/UserSummaryFactory.sol": {
-      "lastModificationDate": 1638668381960,
-      "contentHash": "be20ac8775d13a7b09cd1014bdfa55a5",
-      "sourceName": "contracts/user/UserSummaryFactory.sol",
-      "solcConfig": {
-        "version": "0.8.7",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./UserSummary.sol"
-      ],
-      "versionPragmas": [
-        "0.8.7"
-      ],
-      "artifacts": [
-        "UserSummaryFactory"
-      ]
-    },
-    "/Users/elijahhampton/git/opportunity-core/contracts/user/UserRegistration.sol": {
-      "lastModificationDate": 1638668772423,
-      "contentHash": "19f17b5225457c50b2c0113bb6aa98ad",
-      "sourceName": "contracts/user/UserRegistration.sol",
-      "solcConfig": {
-        "version": "0.8.7",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [
-        "./UserSummaryFactory.sol",
-        "@openzeppelin/contracts/token/ERC20/IERC20.sol"
-      ],
-      "versionPragmas": [
-        "0.8.7"
-      ],
-      "artifacts": [
-        "IParticipation",
-        "UserRegistration"
-      ]
-    },
-    "/Users/elijahhampton/git/opportunity-core/node_modules/@openzeppelin/contracts/token/ERC20/IERC20.sol": {
-      "lastModificationDate": 1638666508300,
-      "contentHash": "5f4c7678e2e69875dbd2ec01d3d288c1",
-      "sourceName": "@openzeppelin/contracts/token/ERC20/IERC20.sol",
-      "solcConfig": {
-        "version": "0.8.7",
-        "settings": {
-          "optimizer": {
-            "enabled": true,
-            "runs": 200
-          },
-          "outputSelection": {
-            "*": {
-              "*": [
-                "abi",
-                "evm.bytecode",
-                "evm.deployedBytecode",
-                "evm.methodIdentifiers"
-              ],
-              "": [
-                "ast"
-              ]
-            }
-          }
-        }
-      },
-      "imports": [],
-      "versionPragmas": [
-        "^0.8.0"
-      ],
-      "artifacts": [
-        "IERC20"
       ]
     },
     "/Users/elijahhampton/git/opportunity-core/node_modules/@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol": {

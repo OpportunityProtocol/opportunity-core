@@ -15,7 +15,7 @@ contract UserRegistration is UserSummaryFactory {
     function registerNewUser() external returns(address) {
         require(_trueIdentifcations[msg.sender] == address(0), "This user is already registered.");
 
-        address userSummaryContractAddress = createUserSummary(msg.sender);
+        address userSummaryContractAddress = this.createUserSummary(msg.sender);
 
         assignTrueUserIdentification(msg.sender, userSummaryContractAddress);
         emit UserRegistered(msg.sender);

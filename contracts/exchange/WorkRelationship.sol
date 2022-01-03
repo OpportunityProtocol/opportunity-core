@@ -3,46 +3,12 @@
 pragma solidity 0.8.7;
 
 import "../user/UserSummary.sol";
+import "../libraries/User.sol";
 import "../libraries/Evaluation.sol";
 import "./interface/IDaiToken.sol";
 import "../libraries/Relationship.sol";
+import "../user/UserRegistration.sol";
 import "hardhat/console.sol";
-
-// / @author Vypo Mouse (Forked and modified by Elijah Hampton) - https://forum.openzeppelin.com/t/feedback-on-dai-escrow-contract-that-reimburses-a-relayer-using-uniswap/2771
-// / @title DaiEscrow
-// / @notice Holds Dai tokens in escrow until the buyer and seller agree to
-// /         release them.
-// / @dev First construct the contract, specifying the buyer and seller addresses.
-// /      Then `initialize` the contract with signatures for Dai's `permit`. This
-// /      transfers Dai from the buyer to the escrow contract.
-// /
-// /      When the seller has completed their responsibilities, the seller
-// /      calls `submit` on their behalf.
-// /
-// /      Once `submit` has been called, the buyer has ~30 days to call `review`.
-// /      If the buyer does not call `review`, anyone may call `reviewPastDue` to
-// /      release the funds to the seller.
-// /
-// /      When `review` is called, the buyer may choose to approve the submission
-// /      or not approve it. If the submission is approved, the funds are released
-// /      to the seller. If the buyer does not approve, the funds are locked
-// /      forever.
-
-interface CErc20 {
-    function mint(uint256) external returns (uint256);
-
-    function exchangeRateCurrent() external returns (uint256);
-
-    function supplyRatePerBlock() external returns (uint256);
-
-    function redeem(uint) external returns (uint);
-
-    function redeemUnderlying(uint) external returns (uint);
-
-    function balanceOf(address owner) external view returns (uint);
-
-    function balanceOfUnderlying(address owner) external returns (uint);
-}
 
 contract WorkRelationship {
 
@@ -64,15 +30,16 @@ contract WorkRelationship {
     bytes32 public constant SUBMIT_TYPEHASH = 0x62b607caa4d4e7fcbd31bf4c033cd30888b536567fadc83710fdf15f8d5cfc9e;
     bytes32 public immutable domain_separator;
 
-    uint8 public constant LOW_MEDIAN_EVALUATION_THRESHOLD = 4;
-    uint8 public constant HIGH_MEDIAN_EVALUATION_THRESHOLD = 6;
 
     Relationship.ContractStatus public contractStatus;
     ContractState public contractState;
     ContractOwnership public contractOwnership;
     Evaluation.ContractType public contractType;
 
-    uint acceptanceTimestamp;
+    uint256 acceptanceTimestamp;
+    uint8 numSubmissions;
+
+    UserRegistration registrar;
 
   enum ContractState {
     Uninitialized,
@@ -148,6 +115,7 @@ contract WorkRelationship {
     }
 
      constructor(
+            address _registrar,
             Evaluation.ContractType _contractType, 
             string memory _taskMetadataPointer,
             address _daiTokenAddress
@@ -155,7 +123,9 @@ contract WorkRelationship {
             require(_daiTokenAddress != address(0), "Dai token address cannot be 0 when creating escrow.");
             daiToken = DaiToken(_daiTokenAddress);
             market = msg.sender;
-            
+            numSubmissions = 0;
+            registrar = UserRegistration(_registrar);
+    
             uint8 chain_id;
             assembly {
                 chain_id := chainid()
@@ -180,7 +150,7 @@ contract WorkRelationship {
     }
 
     function assignNewWorker(
-        address payable _newWorker, 
+        address _newWorker, 
         uint _wad,
         uint256 nonce,
         uint256 expiry,
@@ -197,6 +167,7 @@ contract WorkRelationship {
         onlyWhenStatus(Relationship.ContractStatus.AwaitingWorker)
     {
         require(_newWorker != address(0), "Worker address must not be 0 when assigning new worker.");
+        //require(_newWorker != owner, "You cannot work your own contract."); //COMMENTED FOR DEBUGGING
         require(_wad != 0, "Dai amount cannot be equal to 0.");
 
         uint256 userBalance = daiToken.balanceOf(owner);
@@ -261,12 +232,15 @@ contract WorkRelationship {
         onlyWhenOwnership(ContractOwnership.PENDING) 
         external {
         if (_accepted == true) {
+            UserSummary employerSummary = UserSummary(registrar.getTrueIdentification(owner));
+            UserSummary workerSummary = UserSummary(registrar.getTrueIdentification(worker));
+
             //set contract to claimed
             contractOwnership = ContractOwnership.CLAIMED;
             contractStatus = Relationship.ContractStatus.AwaitingSubmission;
             
-            employerSummary.increaseContractsEntered();
-            workerSummary.increaseContractsEntered();
+            employerSummary.increaseContractsEntered(User.UserInterface.Employer);
+            workerSummary.increaseContractsEntered(User.UserInterface.Worker);
         } else {
             worker = address(0);
             refundReward();
@@ -276,13 +250,13 @@ contract WorkRelationship {
     }
 
     function refundReward() internal returns(bool) {
-        const success = daiToken.transfer(owner, wad);
+        bool success = daiToken.transfer(owner, wad);
         assert(success == true);
     }
 
     function refundUnclaimedContract() external 
     onlyOwner
-    onlyWhenOwnership(ContractoOwnership.UNCLAIMED)
+    onlyWhenOwnership(ContractOwnership.UNCLAIMED)
     {
         refundReward();
     }
@@ -293,7 +267,7 @@ contract WorkRelationship {
     onlyWhenStatus(Relationship.ContractStatus.AwaitingSubmission)
     {
         require(wad != uint(0), "There is no DAI to transfer back to the owner");
-        refundReward()
+        refundReward();
     }
 
     function claimStalledContract() external 
@@ -326,6 +300,7 @@ contract WorkRelationship {
 
         updateTaskSolutionPointer(_submission);
         contractStatus = Relationship.ContractStatus.AwaitingReview;
+        numSubmissions++;
     }
 
     function review(
@@ -355,44 +330,29 @@ contract WorkRelationship {
         }
     }
 
+    function resolve() 
+    internal
+    onlyOwner
+    {
+        require(worker != address(0));
+        contractStatus = Relationship.ContractStatus.Approved;
+        contractState = ContractState.Locked;
+        resolveReward();
+    }
+
 
     function resolveReward() 
     internal
-     {
+    {
+        UserSummary employerSummary = UserSummary(registrar.getTrueIdentification(owner));
+        UserSummary workerSummary = UserSummary(registrar.getTrueIdentification(owner));
+        
+        //alter the employers successful payouts
+        employerSummary.increaseContractsCompleted(User.UserInterface.Employer);
+        workerSummary.increaseContractsCompleted(User.UserInterface.Worker);
+
         bool success = daiToken.transfer(worker, wad);
         assert(success == true);
-
-        UserSummary employerSummary = UserSummary(owner);
-        UserSummary workerSummary = UserSummary(worker);
-
-        //get worker reputation for the market this relationship is in
-        uint8 workerReputation = 0;
-
-        //alter the employers successful payouts
-        employerSummary.increaseContractsCompleted();
-        workerSummary.increaseContractsCompleted();
-    }
-
-      function resolve() 
-        internal
-        onlyOwner
-    {
-        require(worker != address(0));
-        resolveReward();
-        contractStatus = Relationship.ContractStatus.Approved;
-        contractState = ContractState.Locked;
-    }
-
-    function checkWorkerEvaluation(
-        address workerUniversalAddress,
-        Evaluation.EvaluationState memory evaluationState,
-        address _market
-        ) 
-        external returns (bool) 
-    {
-        bool passesEvaluation = UserSummary(workerUniversalAddress)
-        .evaluateUser(evaluationState, _market);
-        return passesEvaluation;
     }
 
     function updateTaskMetadataPointer(string memory newTaskPointerHash)

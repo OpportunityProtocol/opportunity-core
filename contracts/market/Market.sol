@@ -32,15 +32,16 @@ contract Market {
     }
 
     function createJob(
+        address _registrar,
         Evaluation.ContractType _contractType, 
         string memory taskMetadataPointer,
         address _daiTokenAddress
     ) external {
-        require(owner != address(0), "Invalid task owner.");
+        require(msg.sender != address(0), "Invalid task owner.");
         address owner = msg.sender;
         
         WorkRelationship createdJob =
-            new WorkRelationship(_contractType, taskMetadataPointer, _daiTokenAddress);
+            new WorkRelationship(_registrar, _contractType, taskMetadataPointer, _daiTokenAddress);
 
         createdJobs.push(address(createdJob));
         relationshipsToOwner[owner].push(address(createdJob));
@@ -54,7 +55,7 @@ contract Market {
         emit NewMarketParticipant(owner);
     }
 
-    function getNumJobs() public view returns (uint256) {
+    function getNumRelationshipsCreated() public view returns (uint256) {
         return createdJobs.length;
     }
 
