@@ -240,15 +240,15 @@ contract WorkRelationship {
      * @param wS
      */
     function work(
-        bool _accepted, 
-        uint8 wV, 
-        bytes32 wR, 
-        bytes32 wS) 
-        onlyWorker 
-        onlyWhenState(ContractState.Initialized)
-        onlyWhenStatus(Relationship.ContractStatus.AwaitingWorkerApproval)
-        onlyWhenOwnership(ContractOwnership.PENDING) 
-        external {
+    bool _accepted, 
+    uint8 wV, 
+    bytes32 wR, 
+    bytes32 wS) 
+    onlyWorker 
+    onlyWhenState(ContractState.Initialized)
+    onlyWhenStatus(Relationship.ContractStatus.AwaitingWorkerApproval)
+    onlyWhenOwnership(ContractOwnership.PENDING) 
+    external {
         require(msg.sender == worker, "Only the address designated to be the worker may call this function.");
 
         if (_accepted == true) {
