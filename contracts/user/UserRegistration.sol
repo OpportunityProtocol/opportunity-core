@@ -5,33 +5,45 @@ pragma solidity 0.8.7;
 import "./UserSummaryFactory.sol";
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
+/**
+ * UserRegistration
+ * Factory and registrar contract for users
+ */
 contract UserRegistration is UserSummaryFactory {
-    // Mapping of universal address to summary contract address
-    mapping(address => address) private _trueIdentifcations;
-
     event UserRegistered(address indexed universalAddress);
     event UserAssignedTrueIdentification(address indexed universalAddress, address indexed userSummaryContractAddress);
 
-    function registerNewUser() external returns(address) {
-        require(_trueIdentifcations[msg.sender] == address(0), "This user is already registered.");
+    mapping(address => address) public _trueIdentifcations;
 
-        address userSummaryContractAddress = this.createUserSummary(msg.sender);
+    /**
+     * registerNewUser
+     * Registers a new users and assigns a true identification 
+     * based on the UserSummary contract created
+     */
+    function registerNewUser() external {
+        require(_trueIdentifcations[msg.sender] == address(0), "A user has already been registered with this address.");
+
+        address userSummaryContractAddress = this._createUserSummary(msg.sender);
 
         assignTrueUserIdentification(msg.sender, userSummaryContractAddress);
         emit UserRegistered(msg.sender);
-
-        return userSummaryContractAddress;
      }
 
     /**
      * assignTrueUserIdentification
+     * @param universalAddress The address the register transaction was sent from
+     * @param summaryContractAddress The address of the user summary contract deplyoed
      */
-    function assignTrueUserIdentification(address universalAddress, address summaryContractAddress) internal {
-        _trueIdentifcations[universalAddress] = summaryContractAddress;
-        assert(_trueIdentifcations[universalAddress] == summaryContractAddress);
-        emit UserAssignedTrueIdentification(universalAddress, summaryContractAddress);
+    function assignTrueUserIdentification(address _universalAddress, address _summaryContractAddress) internal {
+        _trueIdentifcations[_universalAddress] = _summaryContractAddress;
+        assert(_trueIdentifcations[_universalAddress] == _summaryContractAddress);
+        emit UserAssignedTrueIdentification(_universalAddress, _summaryContractAddress);
     }
-
+    /**
+     * getTrueIdentification
+     * @param universalAddress The address of the user's wallet
+     * @return Returns the user summary address mapped to the user's wallet
+     */
     function getTrueIdentification(address universalAddress) external view returns(address) {
         return _trueIdentifcations[universalAddress];
     }

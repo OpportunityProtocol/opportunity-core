@@ -21,29 +21,51 @@ contract UserSummary is IUserSummary {
     WorkerDescription workerDescription;
 
     modifier onlyOwner() {
-        require(owner == msg.sender);
+        require(owner == msg.sender, "Only the owner of this contract can call this function.");
         _;
     }
 
-    modifier onlyFromRelationshipCaller(address _relationship) {
+    modifier onlyFromApprovedRelationshipCaller(address _relationship) {
         require(msg.sender != address(0), "The market caller must not be a null address");
         WorkRelationship relationship = WorkRelationship(_relationship);
-        //require that user is employer or worker of this relationship
+    
         require(relationship.owner() == owner || relationship.worker() == owner, 
             "User must be the employer or worker of this relationship");
 
-        //require relationship to be currently approved (5)
-        require(relationship.contractStatus() == Relationship.ContractStatus.Approved 
-        || relationship.contractStatus() == Relationship.ContractStatus.AwaitingSubmission, "This function can only be called by a relationship in the approved or awaiting submission state.");
+        require(relationship.contractStatus() == Relationship.ContractStatus.Approved, 
+            "This function can only be called by a relationship in the approved state.");
 
         //check to see if this relationship is a valid relationship in markets
         Market market = Market(relationship.market()); 
         for (uint256 i = 0; i < market.getNumRelationshipsCreated(); i++) {
-            if (market.getWorkRelationships()[i] == _relationship) {
-                break;
-            }
+        if (market.getWorkRelationships()[i] == _relationship) {
+            break;
+        }
 
-            revert();
+        revert();
+        }
+        _;
+
+    }
+
+    modifier onlyFromAwaitingSubmissionRelationshipCaller(address _relationship) {
+        require(msg.sender != address(0), "The market caller must not be a null address");
+        WorkRelationship relationship = WorkRelationship(_relationship);
+
+        require(relationship.owner() == owner || relationship.worker() == owner, 
+            "User must be the employer or worker of this relationship");
+
+        require(relationship.contractStatus() == Relationship.ContractStatus.AwaitingSubmission, 
+            "This function can only be called by a relationship in the approved or awaiting submission state.");
+
+        //check to see if this relationship is a valid relationship in markets
+        Market market = Market(relationship.market()); 
+        for (uint256 i = 0; i < market.getNumRelationshipsCreated(); i++) {
+        if (market.getWorkRelationships()[i] == _relationship) {
+            break;
+        }
+
+        revert();
         }
         _;
     }
@@ -52,9 +74,14 @@ contract UserSummary is IUserSummary {
         owner = universalAddress;
     }
 
+    /**
+     * increaseContractsCompleted
+     * Increases the number of contracts completed for this user
+     * @param userInterface The current interface of the user
+     */
     function increaseContractsCompleted(User.UserInterface userInterface) 
     external
-    onlyFromRelationshipCaller(msg.sender) {
+    onlyFromApprovedRelationshipCaller(msg.sender) {
         if (userInterface == User.UserInterface.Worker) {
             workerDescription.contractsCompleted++;
         } else if (userInterface == User.UserInterface.Employer) {
@@ -62,9 +89,14 @@ contract UserSummary is IUserSummary {
         } else {}
     }
 
+    /**
+     * decreaseContractsCompleted
+     * Decreases the number of contracts completed for this user
+     * @param userInterface The current interface of the user
+     */
     function decreaseContractCompleted(User.UserInterface userInterface) 
     external
-    onlyFromRelationshipCaller(msg.sender) {
+    onlyFromApprovedRelationshipCaller(msg.sender) {
         if (userInterface == User.UserInterface.Worker) {
             workerDescription.contractsCompleted--;
         } else if (userInterface == User.UserInterface.Employer) {
@@ -72,9 +104,14 @@ contract UserSummary is IUserSummary {
         } else {}
     }
 
+    /**
+     * increaseReputation
+     * Increases the reputation completed for this user
+     * @param userInterface The current interface of the user
+     */
     function increaseReputation(User.UserInterface userInterface) 
     external
-    onlyFromRelationshipCaller(msg.sender) {
+    onlyFromApprovedRelationshipCaller(msg.sender) {
         if (userInterface == User.UserInterface.Worker) {
             workerDescription.universalReputation++;
         } else if (userInterface == User.UserInterface.Employer) {
@@ -82,9 +119,14 @@ contract UserSummary is IUserSummary {
         } else {}
     }
 
+    /**
+     * decreaseReputation
+     * Decreases the reputation completed for this user
+     * @param userInterface The current interface of the user
+     */
     function decreaseReputation(User.UserInterface userInterface) 
     external
-    onlyFromRelationshipCaller(msg.sender) {
+    onlyFromApprovedRelationshipCaller(msg.sender) {
         if (userInterface == User.UserInterface.Worker) {
             workerDescription.universalReputation--;
         } else if (userInterface == User.UserInterface.Employer) {
@@ -92,10 +134,14 @@ contract UserSummary is IUserSummary {
         } else {}
     }
     
-
+    /**
+     * increaseContractsEntered
+     * Increases the number of contracts entered for this user
+     * @param userInterface The current interface of the user
+     */
     function increaseContractsEntered(User.UserInterface userInterface)
     external
-    onlyFromRelationshipCaller(msg.sender)
+    onlyFromAwaitingSubmissionRelationshipCaller(msg.sender)
     {
         if (userInterface == User.UserInterface.Worker) {
             workerDescription.contractsEntered++;
@@ -104,9 +150,14 @@ contract UserSummary is IUserSummary {
         } else {}
     }
     
+    /**
+     * decreaseContractsEntered
+     * Decreases the number of contracts entered for this user
+     * @param userInterface The current interface of the user
+     */
     function decreaseContractsEntered(User.UserInterface userInterface)
     external
-    onlyFromRelationshipCaller(msg.sender)
+    onlyFromAwaitingSubmissionRelationshipCaller(msg.sender)
     {
         if (userInterface == User.UserInterface.Worker) {
             workerDescription.contractsEntered--;
@@ -115,9 +166,13 @@ contract UserSummary is IUserSummary {
         } else {}
     }
 
+    /**
+     * Increases the value of tips this user has receieved
+     * @param value The value of the tip receieved by the user
+     */
     function increaseTips(uint value)
     external
-    onlyFromRelationshipCaller(msg.sender) {
+    onlyFromApprovedRelationshipCaller(msg.sender) {
         workerDescription.tipsEarned += value;
     }
 }
