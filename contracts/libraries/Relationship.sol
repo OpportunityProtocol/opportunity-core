@@ -4,7 +4,6 @@ library Relationship {
         enum ContractStatus {
         AwaitingWorker,
         AwaitingWorkerApproval,
-        AwaitingSubmission,
         AwaitingReview,
         Approved
     }

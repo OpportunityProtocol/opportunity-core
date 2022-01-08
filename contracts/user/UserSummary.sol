@@ -48,7 +48,7 @@ contract UserSummary is IUserSummary {
 
     }
 
-    modifier onlyFromAwaitingSubmissionRelationshipCaller(address _relationship) {
+    /*modifier onlyFromAwaitingSubmissionRelationshipCaller(address _relationship) {
         require(msg.sender != address(0), "The market caller must not be a null address");
         WorkRelationship relationship = WorkRelationship(_relationship);
 
@@ -68,7 +68,7 @@ contract UserSummary is IUserSummary {
         revert();
         }
         _;
-    }
+    }*/
 
     constructor(address universalAddress) {
         owner = universalAddress;
@@ -134,37 +134,6 @@ contract UserSummary is IUserSummary {
         } else {}
     }
     
-    /**
-     * increaseContractsEntered
-     * Increases the number of contracts entered for this user
-     * @param userInterface The current interface of the user
-     */
-    function increaseContractsEntered(User.UserInterface userInterface)
-    external
-    onlyFromAwaitingSubmissionRelationshipCaller(msg.sender)
-    {
-        if (userInterface == User.UserInterface.Worker) {
-            workerDescription.contractsEntered++;
-        } else if (userInterface == User.UserInterface.Employer) {
-            employerDescription.contractsEntered++;
-        } else {}
-    }
-    
-    /**
-     * decreaseContractsEntered
-     * Decreases the number of contracts entered for this user
-     * @param userInterface The current interface of the user
-     */
-    function decreaseContractsEntered(User.UserInterface userInterface)
-    external
-    onlyFromAwaitingSubmissionRelationshipCaller(msg.sender)
-    {
-        if (userInterface == User.UserInterface.Worker) {
-            workerDescription.contractsEntered--;
-        } else if (userInterface == User.UserInterface.Employer) {
-            employerDescription.contractsEntered--;
-        } else {}
-    }
 
     /**
      * Increases the value of tips this user has receieved

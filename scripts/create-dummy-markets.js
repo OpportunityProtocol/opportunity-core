@@ -14,7 +14,7 @@ const COMPILED_MARKET_PATH = path.join(__dirname, '../bin/contracts/market/')
 const marketFactoryABI = JSON.parse(fs.readFileSync(COMPILED_MARKET_PATH + 'MarketFactory.abi'));
 
 console.log('Creating market factory contract instance...')
-const marketFactoryContractInstance = new ethers.Contract('0x9fd244e5972F28e2F133bd3dAA5A6691C8E6d1c7', marketFactoryABI, signer);
+const marketFactoryContractInstance = new ethers.Contract('0xA31Ea4553E82e08b3F411B29C009ECd45AE1738B', marketFactoryABI, signer);
 console.log('Creating markets...')
 createDummyMarkets()
 

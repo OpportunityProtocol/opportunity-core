@@ -23,7 +23,7 @@ contract UserRegistration is UserSummaryFactory {
     function registerNewUser() external {
         require(_trueIdentifcations[msg.sender] == address(0), "A user has already been registered with this address.");
 
-        address userSummaryContractAddress = this._createUserSummary(msg.sender);
+        address userSummaryContractAddress = _createUserSummary(msg.sender);
 
         assignTrueUserIdentification(msg.sender, userSummaryContractAddress);
         emit UserRegistered(msg.sender);
@@ -31,8 +31,8 @@ contract UserRegistration is UserSummaryFactory {
 
     /**
      * assignTrueUserIdentification
-     * @param universalAddress The address the register transaction was sent from
-     * @param summaryContractAddress The address of the user summary contract deplyoed
+     * @param _universalAddress The address the register transaction was sent from
+     * @param _summaryContractAddress The address of the user summary contract deplyoed
      */
     function assignTrueUserIdentification(address _universalAddress, address _summaryContractAddress) internal {
         _trueIdentifcations[_universalAddress] = _summaryContractAddress;

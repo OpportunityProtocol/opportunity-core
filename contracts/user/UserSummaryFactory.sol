@@ -17,7 +17,7 @@ contract UserSummaryFactory {
      * @param universalAddress The wallet address of the user
      @ @return Returns the address of the user summary created
      */
-    function _createUserSummary(address universalAddress) private returns(address) {
+    function _createUserSummary(address universalAddress) internal returns(address) {
         UserSummary userSummary = new UserSummary(universalAddress);
         _userSummaries.push(userSummary);
 

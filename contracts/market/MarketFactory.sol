@@ -16,7 +16,7 @@ contract MarketFactory {
     event MarketDestroyed(address indexed _marketAddress);
 
     address[] public _createdMarkets;
-    mapping(uint256 => Market) idsToMarkets;
+    mapping(uint256 => address) idsToMarkets;
 
     /**
      * Creates a Market contract based on the market name and type.  The market contract will generate and assign
@@ -28,8 +28,9 @@ contract MarketFactory {
         Market createdMarket = new Market(_marketName, _marketType);
 
         console.log('Market created at address: ', address(createdMarket));
-        uint256 marketId = _createdMarkets.push(address(createdMarket)) - 1;
-        idsToMarkets[marketId] = _marketName;
+        _createdMarkets.push(address(createdMarket));
+        uint256 marketId = _createdMarkets.length - 1;
+        idsToMarkets[marketId] = address(createdMarket);
 
         emit MarketCreated(address(createdMarket), _createdMarkets.length, msg.sender, _marketName);
     }
