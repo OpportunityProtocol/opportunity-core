@@ -2,7 +2,8 @@
 pragma solidity 0.8.7;
 
 import "../libraries/Evaluation.sol";
-import "../exchange/WorkRelationship.sol";
+import "../exchange/interface/Relationship.sol";
+import "../exchange/FlatRateRelationship.sol";
 import "../libraries/MarketLib.sol";
 
 /**
@@ -40,7 +41,7 @@ contract Market {
      * @param _taskMetadataPointer The pointer to the metadata of the job saved on IPFS
      * @param _daiTokenAddress Token address of DAI according to which network is being used
      */
-    function createJob(
+    function createFlatRateJob(
         address _registrar,
         Evaluation.ContractType _contractType, 
         string memory _taskMetadataPointer,
@@ -48,8 +49,8 @@ contract Market {
     ) external {
         require(msg.sender != address(0), "The owner of the job cannot be set to a null address");
         
-        WorkRelationship createdJob =
-            new WorkRelationship(_registrar, _contractType, _taskMetadataPointer, _daiTokenAddress);
+        Relationship createdJob =
+            new FlatRateRelationship(_registrar, _contractType, _taskMetadataPointer, _daiTokenAddress);
 
         createdJobs.push(address(createdJob));
         relationshipsToOwner[msg.sender].push(address(createdJob));

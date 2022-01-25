@@ -1,6 +1,6 @@
 pragma solidity 0.8.7;
 
-library Relationship {
+library RelationshipLibrary {
         enum ContractStatus {
         AwaitingWorker,
         AwaitingWorkerApproval,

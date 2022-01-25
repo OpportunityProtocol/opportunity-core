@@ -4,9 +4,9 @@ pragma solidity 0.8.7;
 
 import "./interface/IUserSummary.sol";
 import "../libraries/Evaluation.sol";
-import "../libraries/Relationship.sol";
+import "../libraries/RelationshipLibrary.sol";
 import "../libraries/User.sol";
-import "../exchange/WorkRelationship.sol";
+import "../exchange/interface/Relationship.sol";
 import "./UserRegistration.sol";
 import "../market/Market.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
@@ -27,12 +27,12 @@ contract UserSummary is IUserSummary {
 
     modifier onlyFromApprovedRelationshipCaller(address _relationship) {
         require(msg.sender != address(0), "The market caller must not be a null address");
-        WorkRelationship relationship = WorkRelationship(_relationship);
+        Relationship relationship = Relationship(_relationship);
     
         require(relationship.owner() == owner || relationship.worker() == owner, 
             "User must be the employer or worker of this relationship");
 
-        require(relationship.contractStatus() == Relationship.ContractStatus.Approved, 
+        require(relationship.contractStatus() == RelationshipLibrary.ContractStatus.Approved, 
             "This function can only be called by a relationship in the approved state.");
 
         //check to see if this relationship is a valid relationship in markets
@@ -47,28 +47,6 @@ contract UserSummary is IUserSummary {
         _;
 
     }
-
-    /*modifier onlyFromAwaitingSubmissionRelationshipCaller(address _relationship) {
-        require(msg.sender != address(0), "The market caller must not be a null address");
-        WorkRelationship relationship = WorkRelationship(_relationship);
-
-        require(relationship.owner() == owner || relationship.worker() == owner, 
-            "User must be the employer or worker of this relationship");
-
-        require(relationship.contractStatus() == Relationship.ContractStatus.AwaitingSubmission, 
-            "This function can only be called by a relationship in the approved or awaiting submission state.");
-
-        //check to see if this relationship is a valid relationship in markets
-        Market market = Market(relationship.market()); 
-        for (uint256 i = 0; i < market.getNumRelationshipsCreated(); i++) {
-        if (market.getWorkRelationships()[i] == _relationship) {
-            break;
-        }
-
-        revert();
-        }
-        _;
-    }*/
 
     constructor(address universalAddress) {
         owner = universalAddress;
