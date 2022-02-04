@@ -1,35 +1,51 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity 0.8.7;
 
-import "../user/UserSummary.sol";
-import "../libraries/User.sol";
-import "../libraries/Evaluation.sol";
 import "../libraries/RelationshipLibrary.sol";
 import "./interface/IDaiToken.sol";
-import "../user/UserRegistration.sol";
 import "hardhat/console.sol";
 
 contract FlatRateRelationship is Relationship {
+    ContractType contractType = ContractType.FlatRate;
+
+    error InvalidStatus();
+
     constructor(
-        address _registrar,
-        Evaluation.ContractType _contractType,
+        uint256 _relationshipID,
+        address _daiTokenAddress,
+        address _relationshipEscrow,
         string memory _taskMetadataPointer,
-        address _daiTokenAddress
     ) {
         require(
             _daiTokenAddress != address(0),
             "Dai token address cannot be 0 when creating escrow."
         );
-        require(
-            _registrar != address(0),
-            "The address of the registrar for this contract cannot be set to 0."
-        );
+
+        relationshipID = _relationshipID;
         daiToken = DaiToken(_daiTokenAddress);
-        registrar = UserRegistration(_registrar);
+        _relationshipEscrow = RelationshipEscrow(_relationshipEscrow);
         market = msg.sender;
         owner = tx.origin;
 
+
+        uint8 chain_id;
+        assembly {
+            chain_id := chainid()
+        }
+
+        domain_separator = keccak256(
+            abi.encode(
+                keccak256(
+                    "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
+                ),
+                keccak256(bytes("FlatRateRelationship")),
+                keccak256(bytes("1")),
+                chain_id,
+                address(this)
+            )
+        );
+
+        contractType = Evaluation.ContractType.FlatRate;
         contractOwnership = ContractOwnership.UNCLAIMED;
         contractState = ContractState.Uninitialized;
         contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
@@ -38,130 +54,108 @@ contract FlatRateRelationship is Relationship {
         emit ContractStatusUpdated(address(this), uint8(contractStatus));
     }
 
-    /**
-     * initialize
-     * Initializes the contract by pulling the dai from the employers account
-     * @param nonce //
-     * @param expiry //
-     * @param v //
-     * @param r //
-     * @param s  //
-     * @param vDeny //
-     * @param rDeny //
-     * @param sDeny  //
-     */
     function initialize(
-        uint256 nonce,
-        uint256 expiry,
-        uint8 v,
-        bytes32 r,
-        bytes32 s,
-        uint8 vDeny,
-        bytes32 rDeny,
-        bytes32 sDeny
+        uint256 _nonce,
+        uint256 _expiry,
+        uint8 _vAllow,
+        bytes32 _rAllow,
+        bytes32 _sAllow,
+        uint8 _vDeny,
+        bytes32 _rDeny,
+        bytes32 _sDeny,
+        string memory _extraData
     ) internal override {
-        // Unlock buyer's Dai balance to transfer `wad` to this contract.
-        daiToken.permit(owner, address(this), nonce, expiry, true, v, r, s);
-
-        // Transfer Dai from `buyer` to this contract.
-        daiToken.pull(owner, wad);
-
-        // Relock Dai balance of `buyer`.
-        daiToken.permit(
+        relationshipEscrow.initialize(
             owner,
-            address(this),
-            nonce + 1,
-            expiry,
-            false,
-            vDeny,
-            rDeny,
-            sDeny
+            worker,
+            _extraData,
+            wad,
+            _nonce,
+            _expiry,
+            _vAllow,
+            _rAllow,
+            _sAllow,
+            _vDeny,
+            _rDeny,
+            _sDeny
         );
+
         contractState = ContractState.Initialized;
     }
 
-    /**
-     * refundReward
-     * Transfers the payout back to the employer
-     */
-    function refundReward() override internal {
+    function assignNewWorker(
+        address _newWorker,
+        uint256 _wad,
+        uint256 _nonce,
+        uint256 _expiry,
+        uint8 _vAllow,
+        bytes32 _rAllow,
+        bytes32 _sAllow,
+        uint8 _vDeny,
+        bytes32 _rDeny,
+        bytes32 _sDeny
+    ) external virtual {
         require(
-            wad != uint256(0),
-            "There is no DAI to transfer back to the owner"
+            _newWorker != address(0),
+            "Worker address must not be 0 when assigning new worker."
         );
-        bool success = daiToken.transfer(owner, wad);
-        assert(success == true);
+        require(_newWorker != owner, "You cannot work your own contract."); //COMMENTED FOR DEBUGGING
+        require(_wad != 0, "The payout amount for this contract cannot be 0.");
+        require(
+            daiToken.balanceOf(owner) >= _wad,
+            "You do not have enough DAI to pay the specified amount."
+        );
+
+        wad = _wad;
+        worker = _newWorker;
+
+        initialize(
+            nonce,
+            expiry,
+            _vAllow,
+            _rAllow,
+            _sAllow,
+            _vDeny,
+            _rDeny,
+            _sDeny
+        );
+
+        contractOwnership = ContractOwnership.PENDING;
+        contractStatus = RelationshipLibrary
+            .ContractStatus
+            .AwaitingWorkerApproval;
+        acceptanceTimestamp = block.timestamp;
+
+        emit ContractStatusUpdated(address(this), uint8(contractStatus));
     }
 
-    /**
-     * refundUnclaimedContract
-     * Returns the payout to the employer as long as no one has claimed the contract
-     * and been made the worker
-     */
-    function refundUnclaimedContract()
+    function releaseJob()
         external
         override
-        onlyOwner
-        onlyWhenOwnership(ContractOwnership.UNCLAIMED)
-    {
-        refundReward();
-    }
-
-    /**
-     * releaseJob
-     * Returns the payout to the employer and releases the job.  Worker must have officially been
-     * made the worker by calling work() to call this function.
-     *
-     */
-    function releaseJob()
-    override
-        external
         onlyWorker
         onlyWhenOwnership(ContractOwnership.CLAIMED)
     {
         worker = address(0);
-        //taskSolutionPointer = "";
         acceptanceTimestamp = 0;
-        //numSubmissions = 0;
 
         contractState = ContractState.Uninitialized;
         contractOwnership = ContractOwnership.UNCLAIMED;
         contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
         emit ContractStatusUpdated(address(this), uint8(contractStatus));
-        refundReward();
+
+        relationshipEscrow.reclaimUnclaimedFunds();
     }
 
-    /**
-     * claimStalledContract
-     * Allows the employer to reclaim the payout if 60 days
-     * have passed and no submissions have been made.
-     */
-    function claimStalledContract()
-    override
-        external
-        onlyOwner
-        onlyWhenOwnership(ContractOwnership.CLAIMED)
-    {
-        //require(numSubmissions >= 1);
-        require(acceptanceTimestamp >= (block.timestamp + 60 days));
-        refundReward();
-    }
-
-    /**
-     * resolve()
-     * Resolves the contract and transfers the payout to the worker.
-     */
     function resolve()
-    override
         external
+        override
         onlyOwner
         onlyWhenStatus(RelationshipLibrary.ContractStatus.AwaitingReview)
     {
-        require(worker != address(0));
         require(owner != address(0));
+        require(worker != address(0));
 
-        bool success = daiToken.transfer(worker, wad);
-        assert(success == true);
+        relationshipEscrow.releaseFunds(wad);
 
         contractStatus = RelationshipLibrary.ContractStatus.Approved;
         contractState = ContractState.Locked;
@@ -170,16 +164,60 @@ contract FlatRateRelationship is Relationship {
         emit ContractStatusUpdated(address(this), uint8(contractStatus));
     }
 
-    /**
-     * Allows the employer to update the task metadata as long as this contract is in the
-     * unclaimed state
-     */
-    function updateTaskMetadataPointer(string memory newTaskPointerHash)
-    override
+    function updateTaskMetadataPointer(string memory _newTaskPointerHash)
         external
+        override
         onlyOwner
         onlyWhenOwnership(ContractOwnership.UNCLAIMED)
     {
-        taskMetadataPointer = newTaskPointerHash;
+        taskMetadataPointer = _newTaskPointerHash;
     }
+
+    function notifyContract(uint256 _data) external onlyFromRelationshipEscrow {
+        if (_data == 0) {
+            contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
+        } else if (_data == 1) {
+            contractStatus = RelationshipLibrary
+                .ContractStatus
+                .AwaitingWorkerApproval;
+        } else if (_data == 2) {
+            contractStatus = RelationshipLibrary.ContractStatus.AwaitingReview;
+        } else if (_data == 3) {
+            contractStatus = RelationshipLibrary.ContractStatus.Approved;
+        } else if (_data == 4) {
+            contractStatus = RelationshipLibrary.ContractStatus.Reclaimed;
+        } else if (_data == 5) {
+            contractStatus = RelationshipLibrary.ContractStatus.Disputed;
+        } else revert InvalidStatus();
+    }
+}
+
+function work(bool _accepted)
+    external
+    virtual
+    onlyWorker
+    onlyWhenState(ContractState.Initialized)
+    onlyWhenStatus(RelationshipLibrary.ContractStatus.AwaitingWorkerApproval)
+    onlyWhenOwnership(ContractOwnership.PENDING)
+{
+    require(
+        msg.sender == worker,
+        "Only the address designated to be the worker may call this function."
+    );
+
+    if (_accepted == true) {
+        //set contract to claimed
+        contractOwnership = ContractOwnership.CLAIMED;
+        contractStatus = RelationshipLibrary.ContractStatus.AwaitingReview;
+
+        emit EnteredContract(owner, worker, address(this));
+    } else {
+        contractOwnership = ContractOwnership.UNCLAIMED;
+        contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
+
+        worker = address(0);
+        relationshipEscrow.reclaimUnclaimedFunds();
+    }
+
+    emit ContractStatusUpdated(address(this), uint8(contractStatus));
 }

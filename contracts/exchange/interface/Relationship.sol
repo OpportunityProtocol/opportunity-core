@@ -2,11 +2,11 @@ pragma solidity 0.8.7;
 
 import "./IDaiToken.sol";
 import "../../user/UserSummary.sol";
-import "../../libraries/User.sol";
 import "../../libraries/Evaluation.sol";
 import "../../libraries/RelationshipLibrary.sol";
 import "../../user/UserRegistration.sol";
 import "hardhat/console.sol";
+
 
 abstract contract Relationship {
     event EnteredContract(
@@ -28,8 +28,10 @@ abstract contract Relationship {
     address public owner;
     address public market;
     uint256 public wad;
+    uint256 public acceptanceTimestamp;
+    uint256 public relationshipID;
     string public taskMetadataPointer;
-    uint256 acceptanceTimestamp;
+    bytes32 public immutable domain_separator;
 
     DaiToken public daiToken;
 
@@ -39,6 +41,7 @@ abstract contract Relationship {
     Evaluation.ContractType public contractType;
 
     UserRegistration registrar;
+    RelationshipEscrow relationshipEscrow;
 
     enum ContractState {
         Uninitialized,
@@ -60,7 +63,7 @@ abstract contract Relationship {
         _;
     }
 
-    modifier onlyWorker() virtual {
+    modifier onlyWorker() {
         require(
             msg.sender == worker,
             "Only the worker of this contract may call this function."
@@ -68,7 +71,7 @@ abstract contract Relationship {
         _;
     }
 
-    modifier onlyOwner() virtual {
+    modifier onlyOwner() {
         require(
             msg.sender == owner,
             "Only the owner of this contract may call this function."
@@ -76,8 +79,7 @@ abstract contract Relationship {
         _;
     }
 
-    modifier onlyWhenStatus(RelationshipLibrary.ContractStatus _statusOptionOne)
-        virtual {
+    modifier onlyWhenStatus(RelationshipLibrary.ContractStatus _statusOptionOne) {
         require(
             contractStatus == _statusOptionOne,
             "This action cannot be carried out under the current contract status."
@@ -88,7 +90,7 @@ abstract contract Relationship {
     modifier onlyWhenEitherStatus(
         RelationshipLibrary.ContractStatus _statusOptionOne,
         RelationshipLibrary.ContractStatus _statusOptionTwo
-    ) virtual {
+    ) {
         require(
             contractStatus == _statusOptionOne ||
                 contractStatus == _statusOptionTwo,
@@ -97,15 +99,15 @@ abstract contract Relationship {
         _;
     }
 
-    modifier onlyWhenType(Evaluation.ContractType currentContractType) virtual {
+    modifier onlyWhenType(Evaluation.ContractType _currentContractType) {
         require(
-            contractType == currentContractType,
+            contractType == _currentContractType,
             "This action cannot be carried out under this contract type"
         );
         _;
     }
 
-    modifier onlyWhenOwnership(ContractOwnership _ownership) virtual {
+    modifier onlyWhenOwnership(ContractOwnership _ownership) {
         require(
             contractOwnership == _ownership,
             "Cannot invoke this escrow function with the current contract status."
@@ -113,7 +115,7 @@ abstract contract Relationship {
         _;
     }
 
-    modifier onlyWhenState(ContractState _state) virtual {
+    modifier onlyWhenState(ContractState _state) {
         require(
             contractState == _state,
             "Cannot invoke this escrow function with the current contract state."
@@ -121,18 +123,37 @@ abstract contract Relationship {
         _;
     }
 
-    function assignNewWorker(
+    function work(bool _accepted) external virtual;
+    function resolve() external virtual;
+    function refundUnclaimedContract() external virtual;
+    function reclaimClaimedFunds() external virtual;
+    function releaseJob() external virtual;
+    function notifyContract(uint256 _data) external virtual;
+
+    function initialize(
+        uint256 _nonce,
+        uint256 _expiry,
+        uint8 _vAllow,
+        bytes32 _rAllow,
+        bytes32 _sAllow,
+        uint8 _vDeny,
+        bytes32 _rDeny,
+        bytes32 _sDeny,
+        string memory _extraData
+    ) internal virtual;
+
+        function assignNewWorker(
         address _newWorker,
         uint256 _wad,
-        uint256 nonce,
-        uint256 expiry,
-        uint8 eV,
-        bytes32 eR,
-        bytes32 eS,
-        uint8 vDeny,
-        bytes32 rDeny,
-        bytes32 sDeny
-    ) external {
+        uint256 _nonce,
+        uint256 _expiry,
+        uint8 _vAllow,
+        bytes32 _rAllow,
+        bytes32 _sAllow,
+        uint8 _vDeny,
+        bytes32 _rDeny,
+        bytes32 _sDeny
+    ) external virtual {
         require(
             _newWorker != address(0),
             "Worker address must not be 0 when assigning new worker."
@@ -145,9 +166,9 @@ abstract contract Relationship {
         );
 
         wad = _wad;
-        initialize(nonce, expiry, eV, eR, eS, vDeny, rDeny, sDeny);
-
         worker = _newWorker;
+        
+        initialize(_nonce, _expiry, _vAllow, _rAllow, _sAllow, _vDeny, _rDeny, _sDeny);
 
         contractOwnership = ContractOwnership.PENDING;
         contractStatus = RelationshipLibrary
@@ -158,63 +179,11 @@ abstract contract Relationship {
         emit ContractStatusUpdated(address(this), uint8(contractStatus));
     }
 
-    function work(
-        bool _accepted,
-        uint8 wV,
-        bytes32 wR,
-        bytes32 wS
-    )
+    function updateTaskMetadataPointer(string memory _newTaskPointerHash)
         external
-        onlyWorker
-        onlyWhenState(ContractState.Initialized)
-        onlyWhenStatus(
-            RelationshipLibrary.ContractStatus.AwaitingWorkerApproval
-        )
-        onlyWhenOwnership(ContractOwnership.PENDING)
+        onlyOwner
+        onlyWhenOwnership(ContractOwnership.UNCLAIMED)
     {
-        require(
-            msg.sender == worker,
-            "Only the address designated to be the worker may call this function."
-        );
-
-        if (_accepted == true) {
-            //set contract to claimed
-            contractOwnership = ContractOwnership.CLAIMED;
-            contractStatus = RelationshipLibrary.ContractStatus.AwaitingReview;
-
-            emit EnteredContract(owner, worker, address(this));
-        } else {
-            worker = address(0);
-            refundReward();
-            contractOwnership = ContractOwnership.UNCLAIMED;
-            contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
-        }
-
-        emit ContractStatusUpdated(address(this), uint8(contractStatus));
+        taskMetadataPointer = _newTaskPointerHash;
     }
-
-    function refundReward() internal virtual;
-
-    function refundUnclaimedContract() external virtual;
-
-    function releaseJob() external virtual;
-
-    function claimStalledContract() external virtual;
-
-    function resolve() external virtual;
-
-    function updateTaskMetadataPointer(string memory newTaskPointerHash)
-        external
-        virtual;
-
-    function initialize(
-        uint256 nonce,
-        uint256 expiry,
-        uint8 v,
-        bytes32 r,
-        bytes32 s,
-        uint8 vDeny,
-        bytes32 rDeny,
-        bytes32 sDeny
-    ) internal virtual;
 }

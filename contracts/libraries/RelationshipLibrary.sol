@@ -5,6 +5,8 @@ library RelationshipLibrary {
         AwaitingWorker,
         AwaitingWorkerApproval,
         AwaitingReview,
-        Approved
+        Approved,
+        Reclaimed,
+        Disputed
     }
 }
