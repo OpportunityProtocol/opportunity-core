@@ -1,4 +1,4 @@
-# Smart Contract Module for Opportunity.  (Decentralized freelancing markets)
+# Smart Contract Module for Opportunity.  (Decentralized job markets)
 
 
 ## Deployment ##
