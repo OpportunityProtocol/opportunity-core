@@ -3,24 +3,19 @@ pragma solidity 0.8.7;
 import "../dispute/interface/IArbitrable.sol";
 import "../dispute/interface/IEvidence.sol";
 import "./interface/IDaiToken.sol";
+import "./interface/Relationship.sol";
 import "../libraries/RelationshipLibrary.sol";
 
 contract RelationshipEscrow is IArbitrable, IEvidence {
-    IArbitrator arbitrator;
+    IArbitrator immutable arbitrator;
 
     constructor(address _arbitrator) {
-        arbitrator = _arbitrator;
+        arbitrator = IArbitrator(_arbitrator);
     }
 
     enum RulingOptions {
-        EmployerWins,
-        WorkerWins
-    }
-
-    enum ContractType {
-        FlatRate,
-        Milestone,
-        Stream
+        PayerWins,
+        PayeeWins
     }
 
     enum ContractState {
@@ -34,6 +29,13 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         PENDING,
         CLAIMED
     }
+    
+    enum EscrowStatus {
+        Initial,
+        Reclaimed,
+        Disputed,
+        Resolved
+    }
 
     error InvalidStatus();
     error ReleasedTooEarly();
@@ -45,11 +47,12 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
     error InsufficientPayment(uint256 _available, uint256 _required);
     error InvalidRuling(uint256 _ruling, uint256 _numberOfChoices);
 
-    struct RelationshipEscrowDeteails {
-        address payable payer;
-        address payable payee;
+    struct RelationshipEscrowDetails {
+        address payer;
+        address payee;
         IArbitrator arbitrator;
-        Status status;
+        EscrowStatus status;
+        address relationshipAddress;
         uint256 value;
         uint256 disputeID;
         uint256 createdAt;
@@ -62,12 +65,12 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
     uint256 constant numberOfRulingOptions = 2;
     uint256 public constant arbitrationFeeDepositPeriod = 3 minutes; // Timeframe is short on purpose to be able to test it quickly. Not for production use.
     mapping(uint256 => uint256) public disputeIDtoRelationshipID;
-    IDaiToken daiToken;
+    DaiToken daiToken;
     RelationshipEscrowDetails[] public relationshipEscrowDetails;
 
     function initialize(
         address _payer,
-        address payable _payee,
+        address _payee,
         string memory _metaevidence,
         uint256 _wad,
         uint256 _nonce,
@@ -79,8 +82,8 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         bytes32 _rDeny,
         bytes32 _sDeny
     ) external {
-        Relationship relationship = new Relationship(msg.sender);
-        require(relationship.contractState == ContractState.Unitialized);
+        Relationship relationship = Relationship(msg.sender);
+        require(uint256(relationship.contractState()) == uint256(ContractState.Uninitialized));
 
         emit MetaEvidence(relationshipEscrowDetails.length, _metaevidence);
 
@@ -89,9 +92,11 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         ] = RelationshipEscrowDetails({
             payer: _payer,
             payee: _payee,
-            status: Status.Initial,
+            arbitrator: arbitrator,
+            status: EscrowStatus.Initial,
+            relationshipAddress: msg.sender,
             value: _wad,
-            disputeID: keccak256(relationshipID),
+            disputeID: relationship.relationshipID(),
             createdAt: block.timestamp,
             reclaimedAt: 0,
             payerFeeDeposit: 0,
@@ -100,7 +105,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         });
 
         // Unlock buyer's Dai balance to transfer `wad` to this contract.
-        daiToken.permit(_payer, address(this), nonce, expiry, true, v, r, s);
+        daiToken.permit(_payer, address(this), _nonce, _expiry, true, _vAllow, _rAllow, _sAllow);
 
         // Transfer Dai from `buyer` to this contract.
         daiToken.pull(_payer, _wad);
@@ -109,17 +114,26 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         daiToken.permit(
             _payer,
             address(this),
-            nonce + 1,
-            expiry,
+            _nonce + 1,
+            _expiry,
             false,
-            vDeny,
-            rDeny,
-            sDeny
+            _vDeny,
+            _rDeny,
+            _sDeny
         );
     }
 
+    function surrenderFunds() external {
+        Relationship relationship = Relationship(msg.sender);
+        require(tx.origin == relationship.worker());
+
+        RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[relationship.relationshipID()];
+
+        daiToken.transfer(escrowDetails.payer, escrowDetails.value);
+    }
+
     function releaseFunds(uint256 _amount) external {
-        Relationship relationship = new Relationship(msg.sender);
+        Relationship relationship = Relationship(msg.sender);
         require(tx.origin == relationship.owner());
 
         RelationshipEscrowDetails
@@ -127,11 +141,11 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
                 relationship.relationshipID()
             ];
 
-        if (relationship.contractState != ContractState.Initialized) {
+        if (uint256(relationship.contractState()) != uint256(ContractState.Initialized)) {
             revert InvalidStatus();
         }
 
-        escrowDetails.status = Approved;
+        escrowDetails.status = EscrowStatus.Resolved;
 
         daiToken.transfer(escrowDetails.payee, _amount);
         escrowDetails.value = escrowDetails.value - _amount;
@@ -139,8 +153,9 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
 
     function reclaimUnclaimedFunds() external {
         Relationship relationship = Relationship(msg.sender);
-        require(relationship.contractOwnership == ContractOwnership.UNCLAIMED);
+        require(uint256(relationship.contractOwnership()) == uint256(ContractOwnership.UNCLAIMED));
 
+        RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[relationship.relationshipID()];
         daiToken.transfer(escrowDetails.payer, escrowDetails.value);
         escrowDetails.value = 0;
     }
@@ -149,11 +164,11 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         Relationship relationship = Relationship(msg.sender);
         require(tx.origin == relationship.owner());
 
-        RelationshipEscrowDeteails escrowDetails = relationshipEscrowDetails[
+        RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[
             relationship.relationshipID()
         ];
 
-        if (relationship.contractOwnership != ContractOwnership.CLAIMED) {
+        if (uint256(relationship.contractOwnership()) != uint256(ContractOwnership.CLAIMED)) {
             revert InvalidStatus();
         }
 
@@ -161,7 +176,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
             revert NotPayer();
         }
 
-        if (escrowDetails.status == Status.Reclaimed) {
+        if (escrowDetails.status == EscrowStatus.Reclaimed) {
             if (
                 block.timestamp - escrowDetails.reclaimedAt <=
                 escrowDetails.arbitrationFeeDepositPeriod
@@ -174,9 +189,9 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
                 escrowDetails.value + escrowDetails.payerFeeDeposit
             );
             escrowDetails.value = 0;
-            escrowDetails.status = Status.Resolved;
+            escrowDetails.status = EscrowStatus.Resolved;
 
-            relationship.notifyClaimedContract(
+            relationship.notifyContract(
                 uint256(RelationshipLibrary.ContractStatus.Approved)
             );
         } else {
@@ -189,10 +204,10 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
 
             escrowDetails.payerFeeDeposit = msg.value;
             escrowDetails.reclaimedAt = block.timestamp;
-            escrowDetails.status = Status.Reclaimed;
+            escrowDetails.status = EscrowStatus.Reclaimed;
 
             //tell relationship it is disputed
-            relationship.notifyClaimedContract(
+            relationship.notifyContract(
                 uint256(RelationshipLibrary.ContractStatus.Disputed)
             );
         }
@@ -205,7 +220,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         RelationshipEscrowDetails
             storage escrowDetails = relationshipEscrowDetails[_relationshipID];
 
-        if (escrowDetails.status != Status.Reclaimed) {
+        if (escrowDetails.status != EscrowStatus.Reclaimed) {
             revert InvalidStatus();
         }
 
@@ -213,7 +228,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         escrowDetails.disputeID = escrowDetails.arbitrator.createDispute{
             value: msg.value
         }(numberOfRulingOptions, "");
-        escrowDetails.status = Status.Disputed;
+        escrowDetails.status = EscrowStatus.Disputed;
         disputeIDtoRelationshipID[escrowDetails.disputeID] = _relationshipID;
         emit Dispute(
             escrowDetails.arbitrator,
@@ -224,32 +239,32 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
     }
 
     function rule(uint256 _disputeID, uint256 _ruling) public override {
-        uint256 relationshipID = disputeIDtoRelationshipID[_relationshipID];
+        uint256 relationshipID = disputeIDtoRelationshipID[_disputeID];
         RelationshipEscrowDetails
             storage escrowDetails = relationshipEscrowDetails[relationshipID];
+
+        Relationship relationship = Relationship(escrowDetails.relationshipAddress);
 
         if (msg.sender != address(escrowDetails.arbitrator)) {
             revert NotArbitrator();
         }
-        if (escrowDetails.status != Status.Disputed) {
+        if (escrowDetails.status != EscrowStatus.Disputed) {
             revert InvalidStatus();
         }
         if (_ruling > numberOfRulingOptions) {
             revert InvalidRuling(_ruling, numberOfRulingOptions);
         }
-        escrowDetails.status = Status.Resolved;
+        escrowDetails.status = EscrowStatus.Resolved;
 
-        if (_ruling == uint256(RulingOptions.PayerWins))
-            escrowDetails.payer.send(
-                escrowDetails.value + escrowDetails.payerFeeDeposit
-            ); 
-        else
-            escrowDetails.payee.send(
-                escrowDetails.value + escrowDetails.payeeFeeDeposit
-            ); 
-        emit Ruling(escrowDetails.arbitrator, _disputeID, _ruling);
+        if (_ruling == uint256(RulingOptions.PayerWins)) {
+            daiToken.transfer(escrowDetails.payer, escrowDetails.value + escrowDetails.payerFeeDeposit);
+       } else {
+            daiToken.transfer(escrowDetails.payee, escrowDetails.value + escrowDetails.payeeFeeDeposit);
+       }
 
-        relationship.notifyClaimedContract(
+       emit Ruling(escrowDetails.arbitrator, _disputeID, _ruling);
+
+        relationship.notifyContract(
             uint256(RelationshipLibrary.ContractStatus.Approved)
         );
     }
@@ -260,7 +275,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         RelationshipEscrowDetails
             storage escrowDetails = relationshipEscrowDetails[_relationshipID];
 
-        if (escrowDetails.status == Status.Resolved) {
+        if (escrowDetails.status == EscrowStatus.Resolved) {
             revert InvalidStatus();
         }
 
@@ -287,7 +302,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         RelationshipEscrowDetails
             storage escrowDetails = relationshipEscrowDetails[_relationshipID];
 
-        if (escrowDetails.status != Status.Reclaimed) {
+        if (escrowDetails.status != EscrowStatus.Reclaimed) {
             revert InvalidStatus();
         }
         return

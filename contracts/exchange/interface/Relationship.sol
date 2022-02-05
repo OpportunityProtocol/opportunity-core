@@ -1,11 +1,10 @@
 pragma solidity 0.8.7;
 
 import "./IDaiToken.sol";
-import "../../user/UserSummary.sol";
-import "../../libraries/Evaluation.sol";
-import "../../libraries/RelationshipLibrary.sol";
 import "../../user/UserRegistration.sol";
+import "../../libraries/RelationshipLibrary.sol";
 import "hardhat/console.sol";
+import "../RelationshipEscrow.sol";
 
 
 abstract contract Relationship {
@@ -31,17 +30,16 @@ abstract contract Relationship {
     uint256 public acceptanceTimestamp;
     uint256 public relationshipID;
     string public taskMetadataPointer;
-    bytes32 public immutable domain_separator;
 
     DaiToken public daiToken;
 
     RelationshipLibrary.ContractStatus public contractStatus;
     ContractState public contractState;
     ContractOwnership public contractOwnership;
-    Evaluation.ContractType public contractType;
+    ContractType public contractType;
 
     UserRegistration registrar;
-    RelationshipEscrow relationshipEscrow;
+    address relationshipEscrow;
 
     enum ContractState {
         Uninitialized,
@@ -55,7 +53,13 @@ abstract contract Relationship {
         CLAIMED
     }
 
-    modifier onlyContractParticipants() virtual {
+    enum ContractType {
+        FlatRate,
+        Milestone,
+        Stream
+    }
+
+    modifier onlyContractParticipants() {
         require(
             msg.sender == worker || msg.sender == owner,
             "Only the contract participants may call this function."
@@ -79,6 +83,11 @@ abstract contract Relationship {
         _;
     }
 
+    modifier onlyFromRelationshipEscrow() {
+        require(msg.sender == relationshipEscrow, "Only the relationship escrow may call this function.");
+        _;
+    }
+
     modifier onlyWhenStatus(RelationshipLibrary.ContractStatus _statusOptionOne) {
         require(
             contractStatus == _statusOptionOne,
@@ -99,7 +108,7 @@ abstract contract Relationship {
         _;
     }
 
-    modifier onlyWhenType(Evaluation.ContractType _currentContractType) {
+    modifier onlyWhenType(ContractType _currentContractType) {
         require(
             contractType == _currentContractType,
             "This action cannot be carried out under this contract type"
@@ -125,8 +134,6 @@ abstract contract Relationship {
 
     function work(bool _accepted) external virtual;
     function resolve() external virtual;
-    function refundUnclaimedContract() external virtual;
-    function reclaimClaimedFunds() external virtual;
     function releaseJob() external virtual;
     function notifyContract(uint256 _data) external virtual;
 
@@ -152,7 +159,8 @@ abstract contract Relationship {
         bytes32 _sAllow,
         uint8 _vDeny,
         bytes32 _rDeny,
-        bytes32 _sDeny
+        bytes32 _sDeny,
+        string memory _extraData
     ) external virtual {
         require(
             _newWorker != address(0),
@@ -168,7 +176,7 @@ abstract contract Relationship {
         wad = _wad;
         worker = _newWorker;
         
-        initialize(_nonce, _expiry, _vAllow, _rAllow, _sAllow, _vDeny, _rDeny, _sDeny);
+        initialize(_nonce, _expiry, _vAllow, _rAllow, _sAllow, _vDeny, _rDeny, _sDeny, "");
 
         contractOwnership = ContractOwnership.PENDING;
         contractStatus = RelationshipLibrary
@@ -180,6 +188,7 @@ abstract contract Relationship {
     }
 
     function updateTaskMetadataPointer(string memory _newTaskPointerHash)
+        virtual
         external
         onlyOwner
         onlyWhenOwnership(ContractOwnership.UNCLAIMED)

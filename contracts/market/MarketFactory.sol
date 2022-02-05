@@ -1,9 +1,7 @@
 // SPDX-License-Identifier: MIT
-
 pragma solidity 0.8.7;
 
 import "./Market.sol";
-import "../libraries/MarketLib.sol";
 import "hardhat/console.sol";
 
 /**
@@ -18,14 +16,8 @@ contract MarketFactory {
     address[] public _createdMarkets;
     mapping(uint256 => address) idsToMarkets;
 
-    /**
-     * Creates a Market contract based on the market name and type.  The market contract will generate and assign
-     * a unique id to the market.
-     * @param _marketName The name of the market
-     * @param _marketType The type of the market
-     */
-     function createMarket(string memory _marketName, MarketLib.MarketType _marketType) external returns(uint256) {
-        Market createdMarket = new Market(_marketName, _marketType);
+     function createMarket(string memory _marketName) external returns(uint256) {
+        Market createdMarket = new Market(_marketName);
 
         console.log('Market created at address: ', address(createdMarket));
         _createdMarkets.push(address(createdMarket));

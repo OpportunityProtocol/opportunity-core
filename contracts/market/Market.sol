@@ -3,7 +3,6 @@ pragma solidity 0.8.7;
 
 import "../exchange/interface/Relationship.sol";
 import "../exchange/FlatRateRelationship.sol";
-import "../libraries/MarketLib.sol";
 
 contract Market {
     event RelationshipCreated(
@@ -17,14 +16,13 @@ contract Market {
     string public marketName;
     address[] public marketRelationships;
     mapping(address => address[]) public relationshipsToOwner;
-    MarketLib.MarketType public marketType;
 
     constructor(string memory _marketName) {
         marketName = _marketName;
     }
 
-    function recordJob(address relationship, address employer) internal {
-        marketRelationships.push(address(createdJob));
+    function _recordJob(address relationship, address employer) internal {
+        marketRelationships.push(address(relationship));
         relationshipsToOwner[employer].push(relationship);
 
         emit RelationshipCreated(
@@ -39,19 +37,18 @@ contract Market {
     function createFlatRateJob(
         address _daiTokenAddress,
         address _relationshipEscrow,
-        string memory _taskMetadataPointer,
+        string memory _taskMetadataPointer
     ) external {
         require(msg.sender != address(0), "The relationship employer cannot be set to a null address");
         
         Relationship createdJob = new FlatRateRelationship(
             marketRelationships.length, 
-            _registrar, 
             _daiTokenAddress,
             _relationshipEscrow,
             _taskMetadataPointer
         );
 
-        this.recordJob(address(createdJob), msg.sender);
+        _recordJob(address(createdJob), msg.sender);
     }
 
     function getNumRelationshipsCreated() public view returns (uint256) {

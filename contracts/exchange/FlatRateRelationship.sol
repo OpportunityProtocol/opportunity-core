@@ -1,20 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
+import "./interface/Relationship.sol";
 import "../libraries/RelationshipLibrary.sol";
 import "./interface/IDaiToken.sol";
 import "hardhat/console.sol";
 
 contract FlatRateRelationship is Relationship {
-    ContractType contractType = ContractType.FlatRate;
-
     error InvalidStatus();
+
+    bytes32 public immutable domain_separator;
 
     constructor(
         uint256 _relationshipID,
         address _daiTokenAddress,
         address _relationshipEscrow,
-        string memory _taskMetadataPointer,
+        string memory _taskMetadataPointer
     ) {
         require(
             _daiTokenAddress != address(0),
@@ -23,7 +24,7 @@ contract FlatRateRelationship is Relationship {
 
         relationshipID = _relationshipID;
         daiToken = DaiToken(_daiTokenAddress);
-        _relationshipEscrow = RelationshipEscrow(_relationshipEscrow);
+        relationshipEscrow = _relationshipEscrow;
         market = msg.sender;
         owner = tx.origin;
 
@@ -45,7 +46,7 @@ contract FlatRateRelationship is Relationship {
             )
         );
 
-        contractType = Evaluation.ContractType.FlatRate;
+        contractType = ContractType.FlatRate;
         contractOwnership = ContractOwnership.UNCLAIMED;
         contractState = ContractState.Uninitialized;
         contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
@@ -65,7 +66,8 @@ contract FlatRateRelationship is Relationship {
         bytes32 _sDeny,
         string memory _extraData
     ) internal override {
-        relationshipEscrow.initialize(
+        RelationshipEscrow escrow = RelationshipEscrow(relationshipEscrow);
+        escrow.initialize(
             owner,
             worker,
             _extraData,
@@ -93,8 +95,9 @@ contract FlatRateRelationship is Relationship {
         bytes32 _sAllow,
         uint8 _vDeny,
         bytes32 _rDeny,
-        bytes32 _sDeny
-    ) external virtual {
+        bytes32 _sDeny,
+        string memory _extraData
+    ) external override {
         require(
             _newWorker != address(0),
             "Worker address must not be 0 when assigning new worker."
@@ -110,14 +113,15 @@ contract FlatRateRelationship is Relationship {
         worker = _newWorker;
 
         initialize(
-            nonce,
-            expiry,
+            _nonce,
+            _expiry,
             _vAllow,
             _rAllow,
             _sAllow,
             _vDeny,
             _rDeny,
-            _sDeny
+            _sDeny,
+            _extraData
         );
 
         contractOwnership = ContractOwnership.PENDING;
@@ -143,7 +147,8 @@ contract FlatRateRelationship is Relationship {
         contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
         emit ContractStatusUpdated(address(this), uint8(contractStatus));
 
-        relationshipEscrow.reclaimUnclaimedFunds();
+        RelationshipEscrow escrow = RelationshipEscrow(relationshipEscrow);
+        escrow.surrenderFunds();
     }
 
     function resolve()
@@ -155,7 +160,8 @@ contract FlatRateRelationship is Relationship {
         require(owner != address(0));
         require(worker != address(0));
 
-        relationshipEscrow.releaseFunds(wad);
+        RelationshipEscrow escrow = RelationshipEscrow(relationshipEscrow);
+        escrow.releaseFunds(wad);
 
         contractStatus = RelationshipLibrary.ContractStatus.Approved;
         contractState = ContractState.Locked;
@@ -173,7 +179,7 @@ contract FlatRateRelationship is Relationship {
         taskMetadataPointer = _newTaskPointerHash;
     }
 
-    function notifyContract(uint256 _data) external onlyFromRelationshipEscrow {
+    function notifyContract(uint256 _data) external override onlyFromRelationshipEscrow {
         if (_data == 0) {
             contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
         } else if (_data == 1) {
@@ -190,11 +196,10 @@ contract FlatRateRelationship is Relationship {
             contractStatus = RelationshipLibrary.ContractStatus.Disputed;
         } else revert InvalidStatus();
     }
-}
 
 function work(bool _accepted)
+    override
     external
-    virtual
     onlyWorker
     onlyWhenState(ContractState.Initialized)
     onlyWhenStatus(RelationshipLibrary.ContractStatus.AwaitingWorkerApproval)
@@ -216,8 +221,12 @@ function work(bool _accepted)
         contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
 
         worker = address(0);
-        relationshipEscrow.reclaimUnclaimedFunds();
+
+        RelationshipEscrow escrow = RelationshipEscrow(relationshipEscrow);
+        escrow.surrenderFunds();
     }
 
     emit ContractStatusUpdated(address(this), uint8(contractStatus));
+}
+
 }
