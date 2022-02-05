@@ -1,5 +1,6 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
+const { smock } = require("@defi-wonderland/smock");
 
 describe("Opportunity User Functions", () => {
     let UserRegistrationContract, UserSummaryContract,
@@ -9,7 +10,6 @@ describe("Opportunity User Functions", () => {
     beforeEach(async () => {
         const signers = await ethers.getSigners()
         user = signers[0]
-        userTwo = signers[1]
 
         UserRegistrationContract = await ethers.getContractFactory("UserRegistration")
         UserSummaryContract = await ethers.getContractFactory("UserSummary")
