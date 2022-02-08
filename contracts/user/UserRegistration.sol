@@ -4,7 +4,9 @@ pragma solidity 0.8.7;
 import "./UserSummaryFactory.sol";
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 
-
+/**
+ * Deprecated
+ */
 contract UserRegistration is UserSummaryFactory {
     event UserRegistered(address indexed universalAddress);
     event UserAssignedTrueIdentification(address indexed universalAddress, address indexed userSummaryContractAddress);

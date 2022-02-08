@@ -26,13 +26,28 @@ if (!developmentMnemonic) {
 
 module.exports = {
   solidity: {
-    version: '0.8.7',
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200
+    compilers: [
+      {
+        version: '0.5.12',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200
+          },
       },
-  },
+      },
+      {
+        version: '0.8.7',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200
+          },
+      },
+      }
+
+
+    ],
   },
   defaultNetwork: 'hardhat',
   networks: {
@@ -78,14 +93,14 @@ module.exports = {
         accounts: {
           mnemonic: developmentMnemonic
         },
-        chainId: 4
+        chainId: 1
       },
       gasPrice: 0,
       initialBaseFeePerGas: 0,
       accounts: {
         mnemonic: developmentMnemonic,
       },
-      chainId: 4
+      chainId: 1
     },
     localhost: {
       chainId: CHAIN_ID,

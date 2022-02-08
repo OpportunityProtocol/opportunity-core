@@ -3,7 +3,9 @@ pragma solidity 0.8.7;
 
 import "./UserSummary.sol";
 
-
+/**
+ * Deprecated
+ */
 contract UserSummaryFactory {
     event UserSummaryCreated(address indexed _userSummary, uint256 indexed index, address indexed universalAddress);
     UserSummary[] public _userSummaries;

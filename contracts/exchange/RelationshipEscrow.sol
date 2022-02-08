@@ -5,12 +5,15 @@ import "../dispute/interface/IEvidence.sol";
 import "./interface/IDaiToken.sol";
 import "./interface/Relationship.sol";
 import "../libraries/RelationshipLibrary.sol";
+import "hardhat/console.sol";
 
 contract RelationshipEscrow is IArbitrable, IEvidence {
     IArbitrator immutable arbitrator;
+    DaiToken daiToken;
 
-    constructor(address _arbitrator) {
+    constructor(address _arbitrator, address _daiToken) {
         arbitrator = IArbitrator(_arbitrator);
+        daiToken = DaiToken(_daiToken);
     }
 
     enum RulingOptions {
@@ -65,28 +68,20 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
     uint256 constant numberOfRulingOptions = 2;
     uint256 public constant arbitrationFeeDepositPeriod = 3 minutes; // Timeframe is short on purpose to be able to test it quickly. Not for production use.
     mapping(uint256 => uint256) public disputeIDtoRelationshipID;
-    DaiToken daiToken;
-    RelationshipEscrowDetails[] public relationshipEscrowDetails;
+    mapping(uint256 => RelationshipEscrowDetails) public relationshipEscrowDetails;
 
     function initialize(
         address _payer,
         address _payee,
         string memory _metaevidence,
-        uint256 _wad,
-        uint256 _nonce,
-        uint256 _expiry,
-        uint8 _vAllow,
-        bytes32 _rAllow,
-        bytes32 _sAllow,
-        uint8 _vDeny,
-        bytes32 _rDeny,
-        bytes32 _sDeny
+        uint256 _wad
     ) external {
         Relationship relationship = Relationship(msg.sender);
+
         require(uint256(relationship.contractState()) == uint256(ContractState.Uninitialized));
 
-        emit MetaEvidence(relationshipEscrowDetails.length, _metaevidence);
-
+        emit MetaEvidence(relationship.relationshipID(), _metaevidence);
+ 
         relationshipEscrowDetails[
             relationship.relationshipID()
         ] = RelationshipEscrowDetails({
@@ -103,24 +98,9 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
             payeeFeeDeposit: 0,
             arbitrationFeeDepositPeriod: arbitrationFeeDepositPeriod
         });
-
-        // Unlock buyer's Dai balance to transfer `wad` to this contract.
-        daiToken.permit(_payer, address(this), _nonce, _expiry, true, _vAllow, _rAllow, _sAllow);
-
-        // Transfer Dai from `buyer` to this contract.
-        daiToken.pull(_payer, _wad);
-
-        // Relock Dai balance of `buyer`.
-        daiToken.permit(
-            _payer,
-            address(this),
-            _nonce + 1,
-            _expiry,
-            false,
-            _vDeny,
-            _rDeny,
-            _sDeny
-        );
+        console.log('Sender');
+        console.log(msg.sender);
+        daiToken.transferFrom(msg.sender, address(this), _wad);
     }
 
     function surrenderFunds() external {

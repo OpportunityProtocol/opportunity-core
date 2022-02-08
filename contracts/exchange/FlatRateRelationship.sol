@@ -9,8 +9,6 @@ import "hardhat/console.sol";
 contract FlatRateRelationship is Relationship {
     error InvalidStatus();
 
-    bytes32 public immutable domain_separator;
-
     constructor(
         uint256 _relationshipID,
         address _daiTokenAddress,
@@ -24,27 +22,11 @@ contract FlatRateRelationship is Relationship {
 
         relationshipID = _relationshipID;
         daiToken = DaiToken(_daiTokenAddress);
+        console.log(_daiTokenAddress);
         relationshipEscrow = _relationshipEscrow;
         market = msg.sender;
         owner = tx.origin;
 
-
-        uint8 chain_id;
-        assembly {
-            chain_id := chainid()
-        }
-
-        domain_separator = keccak256(
-            abi.encode(
-                keccak256(
-                    "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
-                ),
-                keccak256(bytes("FlatRateRelationship")),
-                keccak256(bytes("1")),
-                chain_id,
-                address(this)
-            )
-        );
 
         contractType = ContractType.FlatRate;
         contractOwnership = ContractOwnership.UNCLAIMED;
@@ -56,46 +38,24 @@ contract FlatRateRelationship is Relationship {
     }
 
     function initialize(
-        uint256 _nonce,
-        uint256 _expiry,
-        uint8 _vAllow,
-        bytes32 _rAllow,
-        bytes32 _sAllow,
-        uint8 _vDeny,
-        bytes32 _rDeny,
-        bytes32 _sDeny,
         string memory _extraData
     ) internal override {
+        console.log("O");
         RelationshipEscrow escrow = RelationshipEscrow(relationshipEscrow);
+                console.log("J");
         escrow.initialize(
             owner,
             worker,
             _extraData,
-            wad,
-            _nonce,
-            _expiry,
-            _vAllow,
-            _rAllow,
-            _sAllow,
-            _vDeny,
-            _rDeny,
-            _sDeny
+            wad
         );
-
+        console.log("S");
         contractState = ContractState.Initialized;
     }
 
     function assignNewWorker(
         address _newWorker,
         uint256 _wad,
-        uint256 _nonce,
-        uint256 _expiry,
-        uint8 _vAllow,
-        bytes32 _rAllow,
-        bytes32 _sAllow,
-        uint8 _vDeny,
-        bytes32 _rDeny,
-        bytes32 _sDeny,
         string memory _extraData
     ) external override {
         require(
@@ -112,18 +72,7 @@ contract FlatRateRelationship is Relationship {
         wad = _wad;
         worker = _newWorker;
 
-        initialize(
-            _nonce,
-            _expiry,
-            _vAllow,
-            _rAllow,
-            _sAllow,
-            _vDeny,
-            _rDeny,
-            _sDeny,
-            _extraData
-        );
-
+        initialize(_extraData);
         contractOwnership = ContractOwnership.PENDING;
         contractStatus = RelationshipLibrary
             .ContractStatus

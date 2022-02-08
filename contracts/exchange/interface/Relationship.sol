@@ -6,7 +6,6 @@ import "../../libraries/RelationshipLibrary.sol";
 import "hardhat/console.sol";
 import "../RelationshipEscrow.sol";
 
-
 abstract contract Relationship {
     event EnteredContract(
         address indexed owner,
@@ -84,11 +83,16 @@ abstract contract Relationship {
     }
 
     modifier onlyFromRelationshipEscrow() {
-        require(msg.sender == relationshipEscrow, "Only the relationship escrow may call this function.");
+        require(
+            msg.sender == relationshipEscrow,
+            "Only the relationship escrow may call this function."
+        );
         _;
     }
 
-    modifier onlyWhenStatus(RelationshipLibrary.ContractStatus _statusOptionOne) {
+    modifier onlyWhenStatus(
+        RelationshipLibrary.ContractStatus _statusOptionOne
+    ) {
         require(
             contractStatus == _statusOptionOne,
             "This action cannot be carried out under the current contract status."
@@ -133,33 +137,18 @@ abstract contract Relationship {
     }
 
     function work(bool _accepted) external virtual;
+
     function resolve() external virtual;
+
     function releaseJob() external virtual;
+
     function notifyContract(uint256 _data) external virtual;
 
-    function initialize(
-        uint256 _nonce,
-        uint256 _expiry,
-        uint8 _vAllow,
-        bytes32 _rAllow,
-        bytes32 _sAllow,
-        uint8 _vDeny,
-        bytes32 _rDeny,
-        bytes32 _sDeny,
-        string memory _extraData
-    ) internal virtual;
+    function initialize(string memory _extraData) internal virtual;
 
-        function assignNewWorker(
+    function assignNewWorker(
         address _newWorker,
         uint256 _wad,
-        uint256 _nonce,
-        uint256 _expiry,
-        uint8 _vAllow,
-        bytes32 _rAllow,
-        bytes32 _sAllow,
-        uint8 _vDeny,
-        bytes32 _rDeny,
-        bytes32 _sDeny,
         string memory _extraData
     ) external virtual {
         require(
@@ -175,8 +164,8 @@ abstract contract Relationship {
 
         wad = _wad;
         worker = _newWorker;
-        
-        initialize(_nonce, _expiry, _vAllow, _rAllow, _sAllow, _vDeny, _rDeny, _sDeny, "");
+
+        initialize("");
 
         contractOwnership = ContractOwnership.PENDING;
         contractStatus = RelationshipLibrary
@@ -188,8 +177,8 @@ abstract contract Relationship {
     }
 
     function updateTaskMetadataPointer(string memory _newTaskPointerHash)
-        virtual
         external
+        virtual
         onlyOwner
         onlyWhenOwnership(ContractOwnership.UNCLAIMED)
     {
