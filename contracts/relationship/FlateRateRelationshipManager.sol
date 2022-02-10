@@ -1,218 +1,161 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
-import "./interface/Relationship.sol";
 import "../libraries/RelationshipLibrary.sol";
-import "./interface/IDaiToken.sol";
+import "./AbstractRelationshipManager.sol";
+import "../interface/IFlatRateRelationshipManager.sol";
+import "../interface/IEscrow.sol";
 import "hardhat/console.sol";
 
-struct FlatRateRelationship {
-    address valuePtr;
-    address relationshipID;
-    address escrow;
-    address marketPtr;
-    address employer;
-    address worker;
-    string taskMetadataPtr;
-    RelationshipLibrary.ContractStatus contractStatus;
-    ContractState contractState;
-    ContractOwnership contractOwnership;
-    ContractType contractType;
-    uint256 wad;
-    uint256 acceptanceTimestamp;
 
-}
+contract FlatRateRelationshipManager is IRelationshipManager, IFlatRateRelationshipManager {
+    function initializeContract(
+        uint256 calldata _relationshipID,
+        address calldata _escrow,
+        address calldata _valuePtr,
+        address calldata _employer,
+        string calldata _taskMetadataPtr
+    ) 
+    external 
+    override
+    {
+        relationshipsIDToRelationship[_relationshipID] = RelationshipLibrary.FlatRateRelationship({
+        valuePtr: _valuePtr,
+        relationshipID: _relationshipID,
+        escrow: IEscrow(_escrow),
+        marketPtr: msg.sender,
+        employer: _employer,
+        worker: address(0),
+        taskMetadataPtr: _taskMetadataPtr,
+        contractStatus: RelationshipLibrary.ContractStatus.AwaitingWorker,
+        contractOwnership: RelationshipLibrary.ContractOwnership.Unclaimed,
+        wad: 0,
+        acceptanceTimestamp: 0
+        });
 
-contract FlatRateRelationship is Relationship {
-    error InvalidStatus();
-
-    constructor(
-        uint256 _relationshipID,
-        address _daiTokenAddress,
-        address _relationshipEscrow,
-        string memory _taskMetadataPointer;
-        
-    ) {
-        require(
-            _daiTokenAddress != address(0),
-            "Dai token address cannot be 0 when creating escrow."
-        );
-
-        relationshipID = _relationshipID;
-        daiToken = DaiToken(_daiTokenAddress);
-        console.log(_daiTokenAddress);
-        relationshipEscrow = _relationshipEscrow;
-        market = msg.sender;
-        owner = tx.origin;
-
-
-        contractType = ContractType.FlatRate;
-        contractOwnership = ContractOwnership.UNCLAIMED;
-        contractState = ContractState.Uninitialized;
-        contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
-        taskMetadataPointer = _taskMetadataPointer;
-
-        emit ContractStatusUpdated(address(this), uint8(contractStatus));
-    }
-
-    uint numRelationships;
-    mapping (uint => Campaign) relationships;
-
-    function initialize(
-        string memory _extraData
-    ) internal override {
         numRelationships++;
-
-        FlatRateRelationship storage relationship = FlatRateRelationship({
-            valuePtr: _valuePtr;
-            relationshipID: numRelationships;
-            escrow: _escrowPtr;
-            marketPtr: msg.sender;
-            employer: _employer;
-            worker: address(0);
-            taskMetadataPtr: _taskMetadataPtr;
-            contractStatus: RelationshipLibrary.ContractStatus.AwaitingWorker;
-            contractState: ContractState.Unitialized;
-            contractOwnership: ContractOwnership.UNCLAIMED;
-            wad: 0;
-            acceptanceTimestamp: 0
-        })
+        relationshipIDToRelationship[_relationshipID] = relationship;
     }
 
-    function assignNewWorker(
-        address _newWorker,
-        uint256 _wad,
+    function grantProposalRequest(
+        uint256 calldata _relationshipID,
+        address calldata _newWorker,
+        uint256 calldata _wad,
         string memory _extraData
-    ) external override {
-        require(
-            _newWorker != address(0),
-            "Worker address must not be 0 when assigning new worker."
-        );
-        require(_newWorker != owner, "You cannot work your own contract."); //COMMENTED FOR DEBUGGING
-        require(_wad != 0, "The payout amount for this contract cannot be 0.");
-        require(
-            daiToken.balanceOf(owner) >= _wad,
-            "You do not have enough DAI to pay the specified amount."
-        );
+    ) 
+    external 
+    override 
+    {
+        RelationshipLibrary.FlatRateRelationship storage relationship = relationshipIDToRelationship[_relationshipID];
 
-        wad = _wad;
-        worker = _newWorker;
+        require(msg.sender == relationship.employer);
+        require(relationship.worker == address(0));
+        require(relationship.contractOwnership == RelationshipLibrary.ContractOwnership.Unclaimed);
 
-                    console.log("O");
-        RelationshipEscrow escrow = RelationshipEscrow(relationshipEscrow);
-                console.log("J");
-        escrow.initialize(
-            owner,
-            worker,
-            _extraData,
-            wad
-        );
-        console.log("S");
-        contractState = ContractState.Initialized;
+        relationship.wad = _wad;
+        relationship.worker = _newWorker;
+        relationship.acceptanceTimestamp = block.timestamp;
 
-        contractOwnership = ContractOwnership.PENDING;
-        contractStatus = RelationshipLibrary
-            .ContractStatus
-            .AwaitingWorkerApproval;
-        acceptanceTimestamp = block.timestamp;
+        relationship.contractOwnership = RelationshipLibrary.ContractOwnership.Pending;
+        relationship.contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorkerApproval;
 
-        emit ContractStatusUpdated(address(this), uint8(contractStatus));
+        emit ContractStatusUpdated();
+        emit ContractOwnershipUpdated();
     }
 
-    function releaseJob()
-        external
-        override
-        onlyWorker
-        onlyWhenOwnership(ContractOwnership.CLAIMED)
+    function work(uint256 calldata _relationshipID, string memory _extraData)
+    override
+    external
     {
-        worker = address(0);
-        acceptanceTimestamp = 0;
+        RelationshipLibrary.FlatRateRelationship storage relationship = relationshipIDToRelationship[_relationshipID];
+        
+        require(msg.sender == relationship.worker);
+        require(relationship.contractOwnership == RelationshipLibrary.ContractOwnership.Pending);
+        require(relationship.contractStatus == RelationshipLibrary.ContractStatus.AwaitingWorkerApproval);
 
-        contractState = ContractState.Uninitialized;
-        contractOwnership = ContractOwnership.UNCLAIMED;
-        contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
-        emit ContractStatusUpdated(address(this), uint8(contractStatus));
+        relationship.escrow.initialize(owner, worker, _extradata, wad);
+        relationship.contractOwnership = RelationshipLibrary.ContractOwnership.Claimed;
+        relationship.contractStatus = RelationshipLibrary.ContractStatus.AwaitingResolution;
+        relationship.acceptanceTimestamp = block.timestamp;
 
-        RelationshipEscrow escrow = RelationshipEscrow(relationshipEscrow);
-        escrow.surrenderFunds();
+        emit EnteredContract();
+        emit ContractStatusUpdated();
+        emit ContractOnwershipUpdate();
     }
 
-    function resolve()
-        external
-        override
-        onlyOwner
-        onlyWhenStatus(RelationshipLibrary.ContractStatus.AwaitingReview)
+    function releaseJob(uint256 calldata _relationshipID)
+    external
+    override
     {
-        require(owner != address(0));
-        require(worker != address(0));
+        RelationshipLibrary.FlatRateRelationship storage relationship = relationshipIDToRelationship[_relationshipID];
 
-        RelationshipEscrow escrow = RelationshipEscrow(relationshipEscrow);
-        escrow.releaseFunds(wad);
+        require(relationship.contractOwnership == RelationshipLibrary.ContractOwnership.Claimed);
 
-        contractStatus = RelationshipLibrary.ContractStatus.Approved;
-        contractState = ContractState.Locked;
+        relationship.worker = address(0);
+        relationship.acceptanceTimestamp = 0;
+        relationship.wad = 0;
+        relationship.contractStatus = ContractStatus.AwaitingWorker;
+        relationship.contractOwnership = ContractOwnership.Unclaimed;
 
-        emit ContractCompleted(owner, worker, address(this));
-        emit ContractStatusUpdated(address(this), uint8(contractStatus));
+        relationship.escrow.surrenderFunds();
+
+        emit ContractStatusUpdated();
+        emit ContractOnwershipUpdate();
     }
 
-    function updateTaskMetadataPointer(string memory _newTaskPointerHash)
-        external
-        override
-        onlyOwner
-        onlyWhenOwnership(ContractOwnership.UNCLAIMED)
+    function resolve(uint256 calldata _relationshipID)
+    external
+    override
     {
+         RelationshipLibrary.FlatRateRelationship storage relationship = relationshipIDToRelationship[_relationshipID];
+
+        require(relationship.owner != address(0));
+        require(relationship.worker != address(0));
+        require(msg.sender == relationship.owner);
+        require(relationship.contractStatus == RelationshipLibrary.ContractStatus.AwaitingResolution);
+
+        relationship.escrow.releaseFunds(wad);
+
+        relationship.contractStatus = RelationshipLibrary.ContractStatus.Resolved;
+
+        emit ContractStatusUpdated();
+    }
+
+    function updateTaskMetadataPointer(uint256 calldata _relationshipID, string calldata _newTaskPointerHash)
+    external
+    override
+    {
+        RelationshipLibrary.FlatRateRelationship storage relationship = relationshipIDToRelationship[_relationshipID];
+
+        require(msg.sender == relationship.owner);
+        require(relationship.contractOwnership == RelationshipLibrary.ContractOwnership.Unclaimed);
+
         taskMetadataPointer = _newTaskPointerHash;
     }
 
-    function notifyContract(uint256 _data) external override onlyFromRelationshipEscrow {
+    function contractStatusNotification(uint256 _data) 
+    external 
+    override 
+    {
+        RelationshipLibrary.FlatRateRelationship storage relationship = relationshipIDToRelationship[_relationshipID];
+
+        require(msg.sender == address(relationship.escrow));
+
         if (_data == 0) {
-            contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
+            relationship.contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
         } else if (_data == 1) {
-            contractStatus = RelationshipLibrary
-                .ContractStatus
-                .AwaitingWorkerApproval;
+            relationship.contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorkerApproval;
         } else if (_data == 2) {
-            contractStatus = RelationshipLibrary.ContractStatus.AwaitingReview;
+            relationship.contractStatus = RelationshipLibrary.ContractStatus.AwaitingReview;
         } else if (_data == 3) {
-            contractStatus = RelationshipLibrary.ContractStatus.Approved;
+            relationship.contractStatus = RelationshipLibrary.ContractStatus.Approved;
         } else if (_data == 4) {
-            contractStatus = RelationshipLibrary.ContractStatus.Reclaimed;
+            relationship.contractStatus = RelationshipLibrary.ContractStatus.PendingDispute;
         } else if (_data == 5) {
-            contractStatus = RelationshipLibrary.ContractStatus.Disputed;
+            relationship.contractStatus = RelationshipLibrary.ContractStatus.Disputed;
         } else revert InvalidStatus();
+
+        emit ExternalStatusNotification()
     }
-
-function work(bool _accepted)
-    override
-    external
-    onlyWorker
-    onlyWhenState(ContractState.Initialized)
-    onlyWhenStatus(RelationshipLibrary.ContractStatus.AwaitingWorkerApproval)
-    onlyWhenOwnership(ContractOwnership.PENDING)
-{
-    require(
-        msg.sender == worker,
-        "Only the address designated to be the worker may call this function."
-    );
-
-    if (_accepted == true) {
-        //set contract to claimed
-        contractOwnership = ContractOwnership.CLAIMED;
-        contractStatus = RelationshipLibrary.ContractStatus.AwaitingReview;
-
-        emit EnteredContract(owner, worker, address(this));
-    } else {
-        contractOwnership = ContractOwnership.UNCLAIMED;
-        contractStatus = RelationshipLibrary.ContractStatus.AwaitingWorker;
-
-        worker = address(0);
-
-        RelationshipEscrow escrow = RelationshipEscrow(relationshipEscrow);
-        escrow.surrenderFunds();
-    }
-
-    emit ContractStatusUpdated(address(this), uint8(contractStatus));
-}
-
+    
 }

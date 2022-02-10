@@ -5,10 +5,6 @@ const path = require('path')
 const provider = new ethers.providers.JsonRpcProvider();
 const signer = provider.getSigner()
 
-const wallet = new ethers.Wallet('0x6cbed15c793ce57650b9877cf6fa156fbef513c4e6134f022a85b1ffdd59b2a1')
-console.log('Created wallet...')
-console.log(wallet)
-
 
 const COMPILED_MARKET_PATH = path.join(__dirname, '../bin/contracts/market/')
 const marketFactoryABI = JSON.parse(fs.readFileSync(COMPILED_MARKET_PATH + 'MarketFactory.abi'));

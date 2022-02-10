@@ -2,44 +2,16 @@
 pragma solidity 0.8.7;
 
 import "../libraries/RelationshipLibrary.sol";
-import "./AbstractRelationshipManager.sol";
-import "../interface/IDeadlineRelationshipManager.sol";
+import "../interface/IRelationshipManager.sol";
 import "../interface/IEscrow.sol";
 import "hardhat/console.sol";
 
 
-contract DeadlineRelationshipManager is IRelationshipManager, IDeadlineRelationshipManager {
-    mapping(uint256 => RelationshipLibrary.Deadline) public relationshipIDToDeadline;
+contract AbstractRelationshipManager  {
+    uint numRelationships;
+    mapping (uint256 => RelationshipLibrary.Relationship) public relationshipsIDToRelationship;
 
-    function initializeContract(
-        uint256 calldata _relationshipID,
-        address calldata _escrow,
-        address calldata _valuePtr,
-        address calldata _employer,
-        string calldata _taskMetadataPtr,
-        uint256 calldata _deadline
-    ) 
-    external 
-    override
-    {
-        relationshipsIDToRelationship[_relationshipID] = RelationshipLibrary.Relationship({
-        valuePtr: _valuePtr,
-        relationshipID: _relationshipID,
-        escrow: IEscrow(_escrow),
-        marketPtr: msg.sender,
-        employer: _employer,
-        worker: address(0),
-        taskMetadataPtr: _taskMetadataPtr,
-        contractStatus: RelationshipLibrary.ContractStatus.AwaitingWorker,
-        contractOwnership: RelationshipLibrary.ContractOwnership.Unclaimed,
-        wad: 0,
-        acceptanceTimestamp: 0
-        });
-
-        numRelationships++;
-        relationshipIDToRelationship[_relationshipID] = relationship;
-        relationshipIDToDeadline[_relationshipID] = deadline;
-    }
+    function resolve(uint256 calldata _relationshipID) external virtual;
 
     function grantProposalRequest(
         uint256 calldata _relationshipID,
@@ -48,7 +20,7 @@ contract DeadlineRelationshipManager is IRelationshipManager, IDeadlineRelations
         string memory _extraData
     ) 
     external 
-    override 
+    virtual
     {
         RelationshipLibrary.Relationship storage relationship = relationshipIDToRelationship[_relationshipID];
 
@@ -68,8 +40,8 @@ contract DeadlineRelationshipManager is IRelationshipManager, IDeadlineRelations
     }
 
     function work(uint256 calldata _relationshipID, string memory _extraData)
-    override
     external
+    virtual
     {
         RelationshipLibrary.Relationship storage relationship = relationshipIDToRelationship[_relationshipID];
         
@@ -89,7 +61,7 @@ contract DeadlineRelationshipManager is IRelationshipManager, IDeadlineRelations
 
     function releaseJob(uint256 calldata _relationshipID)
     external
-    override
+    virtual
     {
         RelationshipLibrary.Relationship storage relationship = relationshipIDToRelationship[_relationshipID];
 
@@ -107,27 +79,9 @@ contract DeadlineRelationshipManager is IRelationshipManager, IDeadlineRelations
         emit ContractOnwershipUpdate();
     }
 
-    function resolve(uint256 calldata _relationshipID)
-    external
-    override
-    {
-         RelationshipLibrary.Relationship storage relationship = relationshipIDToRelationship[_relationshipID];
-
-        require(relationship.owner != address(0));
-        require(relationship.worker != address(0));
-        require(msg.sender == relationship.owner);
-        require(relationship.contractStatus == RelationshipLibrary.ContractStatus.AwaitingResolution);
-
-        relationship.escrow.releaseFunds(wad / milestones.length);
-
-        relationship.contractStatus = RelationshipLibrary.ContractStatus.Resolved;
-
-        emit ContractStatusUpdated();
-    }
-
     function updateTaskMetadataPointer(uint256 calldata _relationshipID, string calldata _newTaskPointerHash)
     external
-    override
+    virtual
     {
         RelationshipLibrary.Relationship storage relationship = relationshipIDToRelationship[_relationshipID];
 
@@ -139,7 +93,7 @@ contract DeadlineRelationshipManager is IRelationshipManager, IDeadlineRelations
 
     function contractStatusNotification(uint256 _data) 
     external 
-    override 
+    virtual
     {
         RelationshipLibrary.Relationship storage relationship = relationshipIDToRelationship[_relationshipID];
 

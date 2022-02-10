@@ -8,16 +8,16 @@ contract MarketFactory {
     event MarketCreated(address indexed _market, uint256 indexed index, address owner, 
         string marketName);
 
-    address[] public createdMarkets;
+    address[] public markets;
     mapping(uint256 => address) idsToMarkets;
 
      function createMarket(string memory _marketName) external returns(uint256) {
-        Market createdMarket = new Market(_marketName);
+        Market market = new Market(_marketName);
 
-        createdMarkets.push(address(createdMarket));
-        uint256 marketId = createdMarkets.length - 1;
-        idsToMarkets[marketId] = address(createdMarket);
+        markets.push(address(market));
+        uint256 marketId = markets.length - 1;
+        idsToMarkets[marketId] = address(market);
 
-        emit MarketCreated(address(createdMarket), createdMarkets.length, msg.sender, _marketName);
+        emit MarketCreated(address(market), markets.length, msg.sender, _marketName);
     }
 }
