@@ -1,65 +1,44 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
-import "../exchange/interface/Relationship.sol";
-import "../exchange/FlatRateRelationship.sol";
+import "../libraries/RelationshipLibrary.sol";
+import "../interface/IMarket.sol";
+import "../relationship/DeadlineRelationshipManager.sol";
 
-contract Market {
-    event RelationshipCreated(
-        address indexed owner,
-        address indexed relationship,
-        address indexed marketAddress
-    );
+contract Market is IMarket {
+    string immutable marketName;
+    FlatRateRelationshipManager frManager;
+    MilestoneRelationshipManager mManager;
+    DeadlineRelationshipManager deadlineManager;
+    StreamRelationshipManager streamManager;
 
-    event NewMarketParticipant(address indexed participant);
-
-    string public marketName;
-    address[] public marketRelationships;
-    mapping(address => address[]) public relationshipsToOwner;
-
-    constructor(string memory _marketName) {
+    uint256[] public relationships;
+    mapping(uint256 => address) public flatRateRelationshipIDToAddress;
+    mapping(uint256 => address) public milestoneRelationshipIDToAddress;
+    mapping(uint256 => address) public deadlineRelationshipIDToAddress;
+    mapping(uint256 => address) public streamRelationshipIDToAddress;
+    constructor(
+        string calldata _marketName,
+        address _flatRateRelationshipManager,
+        address _milestoneRelationshipManager,
+        address _streamRelationshipManager,
+        address _deadlineRelationshipManager
+    ) {
         marketName = _marketName;
+        frManager = FlatRateRelationshipManager(_flatRateRelationshipManager);
+        mManager = MilestoneRelationshipManager(_milestoneRelationshipManager);
+        deadlineManager = DeadlineRelationshipManager(_streamRelationshipManager);
+        streamManager = StreamRelationshipManager(_deadlineRelationshipManager);
     }
 
-    function _recordJob(address relationship, address employer) internal {
-        marketRelationships.push(address(relationship));
-        relationshipsToOwner[employer].push(relationship);
-
-        emit RelationshipCreated(
-            employer,
-            relationship,
-            address(this)
-        );
-
-        emit NewMarketParticipant(msg.sender);
+    function createFlatRateContract(address _escrow, address _valuePtr, string calldata _taskMetadataPtr, string memory _extraData) external override {
+        frManager.initializeContract(_relationshipID, _escrow, _valuePtr, msg.sender, _taskMetadataPtr, _extraData);
     }
 
-    function createFlatRateJob(
-        address _daiTokenAddress,
-        address _relationshipEscrow,
-        string memory _taskMetadataPointer
-    ) external {
-        require(msg.sender != address(0), "The relationship employer cannot be set to a null address");
-        
-        Relationship createdJob = new FlatRateRelationship(
-            marketRelationships.length, 
-            _daiTokenAddress,
-            _relationshipEscrow,
-            _taskMetadataPointer
-        );
-
-        _recordJob(address(createdJob), msg.sender);
+    function createMilestoneContract() external override {
+        frManager.initializeContract(_relationshipID, _escrow, _valuePtr, msg.sender, _taskMetadataPtr, _milestones);
     }
-
-    function getNumRelationshipsCreated() public view returns (uint256) {
-        return marketRelationships.length;
-    }
-
-    function getRelationships() external view returns (address[] memory) {
-        return marketRelationships;
-    }
-
-    function getRelationshipsByOwner(address _owner) external view returns (address[] memory) {
-        return relationshipsToOwner[_owner];
+    function createDeadlineContract() external override {
+         frManager.initializeContract(_relationshipID, _escrow, _valuePtr, msg.sender, _taskMetadataPtr, _deadline);
     }
 }

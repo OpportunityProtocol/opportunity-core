@@ -4,6 +4,9 @@ pragma solidity 0.8.7;
 import "./interface/IUserSummary.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+/**
+ * Deprecated
+ */
 contract UserSummary is IUserSummary {
 
     event UserSummaryUpdate(address universalAddress);
