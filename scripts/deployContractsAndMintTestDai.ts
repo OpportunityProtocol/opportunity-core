@@ -1,11 +1,14 @@
-const hre = require('hardhat');
-const ethers = require('@nomiclabs/hardhat-ethers')
-const Compound = require('@compound-finance/compound-js');
-const { TASK_NODE_CREATE_SERVER } = require('hardhat/builtin-tasks/task-names');
-const { NETWORK, CHAIN_ID } = require('../config');
-require("@nomiclabs/hardhat-ganache");
 const jsonRpcUrl = 'http://localhost:8545'
 let provider;
+
+import hre from 'hardhat'
+import "@nomiclabs/hardhat-ganache"
+import Compound from '@compound-finance/compound-js'
+import { TASK_NODE_CREATE_SERVER } from 'hardhat/builtin-tasks/task-names'
+
+
+const NETWORK = 'mainnet'
+const CHAIN_ID = 1
 
 // Amount of tokens to seed in the 0th account on localhost
 // Uncomment a line below to seed the account with that asset
@@ -118,8 +121,6 @@ async function seed(asset, amount) {
       const tokens = +balanceOf / Math.pow(10, Compound.decimals[asset])
       console.log('account: ' + accounts[i] + '::::' + asset + ' amount in first localhost account wallet:', tokens)
     }
-
-
 
   } catch(error) {
     console.log(error)

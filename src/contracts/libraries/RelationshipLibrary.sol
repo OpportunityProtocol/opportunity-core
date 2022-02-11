@@ -1,25 +1,23 @@
+// SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
 library RelationshipLibrary {
     struct Relationship {
         address valuePtr;
-        address relationshipID;
+        uint256 relationshipID;
         address escrow;
         address marketPtr;
         address employer;
         address worker;
         string taskMetadataPtr;
         RelationshipLibrary.ContractStatus contractStatus;
-        ContractState contractState;
         ContractOwnership contractOwnership;
-        ContractType contractType;
         uint256 wad;
         uint256 acceptanceTimestamp;
     }
 
     struct Milestone {
-        string milestoneMetadataPtr;
-        bool completed;
+        string[] milestoneMetadataPtrs;
     }
 
     enum ContractOwnership {

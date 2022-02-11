@@ -1,19 +1,19 @@
 pragma solidity 0.8.7;
 
-import "../dispute/interface/IArbitrable.sol";
-import "../dispute/interface/IEvidence.sol";
-import "./interface/IDaiToken.sol";
-import "./interface/Relationship.sol";
+import "../interface/IArbitrable.sol";
+import "../interface/IEvidence.sol";
+import "../relationship/AbstractRelationshipManager.sol";
 import "../libraries/RelationshipLibrary.sol";
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract RelationshipEscrow is IArbitrable, IEvidence {
+
+contract RelationshipEscrow is IArbitrable, IEvidence, IEscrow {
     IArbitrator immutable arbitrator;
-    DaiToken daiToken;
+    IERC20 valueToken;
 
-    constructor(address _arbitrator, address _daiToken) {
+    constructor(address _arbitrator) {
         arbitrator = IArbitrator(_arbitrator);
-        daiToken = DaiToken(_daiToken);
     }
 
     enum RulingOptions {
@@ -55,7 +55,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         address payee;
         IArbitrator arbitrator;
         EscrowStatus status;
-        address relationshipAddress;
+        address relationshipManagerAddress;
         uint256 value;
         uint256 disputeID;
         uint256 createdAt;
@@ -71,84 +71,69 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
     mapping(uint256 => RelationshipEscrowDetails) public relationshipEscrowDetails;
 
     function initialize(
-        address _payer,
-        address _payee,
-        string memory _metaevidence,
-        uint256 _wad
-    ) external {
-        Relationship relationship = Relationship(msg.sender);
+        uint256 _relationshipID,
+        string calldata _metaevidence
+    ) external override {
+        AbstractRelationshipManager rManager = AbstractRelationshipManager(msg.sender);
+        RelationshipLibrary.Relationship memory relationship = rManager.getRelationshipData(_relationshipID);
 
-        require(uint256(relationship.contractState()) == uint256(ContractState.Uninitialized));
-
-        emit MetaEvidence(relationship.relationshipID(), _metaevidence);
+        emit MetaEvidence(_relationshipID, _metaevidence);
  
-        relationshipEscrowDetails[
-            relationship.relationshipID()
-        ] = RelationshipEscrowDetails({
-            payer: _payer,
-            payee: _payee,
+        relationshipEscrowDetails[_relationshipID] = RelationshipEscrowDetails({
+            payer: relationship.employer,
+            payee: relationship.worker,
             arbitrator: arbitrator,
             status: EscrowStatus.Initial,
-            relationshipAddress: msg.sender,
-            value: _wad,
-            disputeID: relationship.relationshipID(),
+            relationshipManagerAddress: msg.sender,
+            value: relationship.wad,
+            disputeID: _relationshipID,
             createdAt: block.timestamp,
             reclaimedAt: 0,
             payerFeeDeposit: 0,
             payeeFeeDeposit: 0,
             arbitrationFeeDepositPeriod: arbitrationFeeDepositPeriod
         });
-        console.log('Sender');
-        console.log(msg.sender);
-        daiToken.transferFrom(msg.sender, address(this), _wad);
+
+        IERC20(relationship.valuePtr).transferFrom(msg.sender, address(this), relationship.wad);
     }
 
-    function surrenderFunds() external {
-        Relationship relationship = Relationship(msg.sender);
-        require(tx.origin == relationship.worker());
+    function surrenderFunds(uint256 _relationshipID) external override {
+        AbstractRelationshipManager rManager = AbstractRelationshipManager(msg.sender);
+        RelationshipLibrary.Relationship memory relationship = rManager.getRelationshipData(_relationshipID);
 
-        RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[relationship.relationshipID()];
+        require(tx.origin == relationship.worker);
 
-        daiToken.transfer(escrowDetails.payer, escrowDetails.value);
+        RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[_relationshipID];
+
+        IERC20(relationship.valuePtr).transfer(escrowDetails.payer, escrowDetails.value);
     }
 
-    function releaseFunds(uint256 _amount) external {
-        Relationship relationship = Relationship(msg.sender);
-        require(tx.origin == relationship.owner());
+    function releaseFunds(uint256 _amount, uint256 _relationshipID) external override {
+        AbstractRelationshipManager rManager = AbstractRelationshipManager(msg.sender);
+        RelationshipLibrary.Relationship memory  relationship = rManager.getRelationshipData(_relationshipID);
+
+        require(tx.origin == relationship.employer);
 
         RelationshipEscrowDetails
-            storage escrowDetails = relationshipEscrowDetails[
-                relationship.relationshipID()
-            ];
+            storage escrowDetails = relationshipEscrowDetails[_relationshipID];
 
-        if (uint256(relationship.contractState()) != uint256(ContractState.Initialized)) {
+        if (relationship.contractStatus != RelationshipLibrary.ContractStatus.Resolved) {
             revert InvalidStatus();
         }
 
         escrowDetails.status = EscrowStatus.Resolved;
 
-        daiToken.transfer(escrowDetails.payee, _amount);
+        IERC20(relationship.valuePtr).transfer(escrowDetails.payee, _amount);
         escrowDetails.value = escrowDetails.value - _amount;
     }
 
-    function reclaimUnclaimedFunds() external {
-        Relationship relationship = Relationship(msg.sender);
-        require(uint256(relationship.contractOwnership()) == uint256(ContractOwnership.UNCLAIMED));
+    function disputeRelationship(uint256 _relationshipID) external payable {
+        AbstractRelationshipManager rManager = AbstractRelationshipManager(msg.sender);
+        RelationshipLibrary.Relationship memory relationship = rManager.getRelationshipData(_relationshipID);
 
-        RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[relationship.relationshipID()];
-        daiToken.transfer(escrowDetails.payer, escrowDetails.value);
-        escrowDetails.value = 0;
-    }
+        RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[_relationshipID];
 
-    function reclaimFunds() external payable {
-        Relationship relationship = Relationship(msg.sender);
-        require(tx.origin == relationship.owner());
-
-        RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[
-            relationship.relationshipID()
-        ];
-
-        if (uint256(relationship.contractOwnership()) != uint256(ContractOwnership.CLAIMED)) {
+        if (relationship.contractOwnership != RelationshipLibrary.ContractOwnership.Claimed) {
             revert InvalidStatus();
         }
 
@@ -164,16 +149,14 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
                 revert PayeeDepositStillPending();
             }
 
-            daiToken.transfer(
+            valueToken.transfer(
                 escrowDetails.payee,
                 escrowDetails.value + escrowDetails.payerFeeDeposit
             );
             escrowDetails.value = 0;
             escrowDetails.status = EscrowStatus.Resolved;
 
-            relationship.notifyContract(
-                uint256(RelationshipLibrary.ContractStatus.Approved)
-            );
+            rManager.contractStatusNotification(_relationshipID, RelationshipLibrary.ContractStatus.Resolved);
         } else {
             uint256 requiredAmount = escrowDetails.arbitrator.arbitrationCost(
                 ""
@@ -187,9 +170,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
             escrowDetails.status = EscrowStatus.Reclaimed;
 
             //tell relationship it is disputed
-            relationship.notifyContract(
-                uint256(RelationshipLibrary.ContractStatus.Disputed)
-            );
+            rManager.contractStatusNotification(_relationshipID, RelationshipLibrary.ContractStatus.Disputed);
         }
     }
 
@@ -219,11 +200,12 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
     }
 
     function rule(uint256 _disputeID, uint256 _ruling) public override {
-        uint256 relationshipID = disputeIDtoRelationshipID[_disputeID];
+        uint256 _relationshipID = disputeIDtoRelationshipID[_disputeID];
         RelationshipEscrowDetails
-            storage escrowDetails = relationshipEscrowDetails[relationshipID];
+            storage escrowDetails = relationshipEscrowDetails[_relationshipID];
 
-        Relationship relationship = Relationship(escrowDetails.relationshipAddress);
+        AbstractRelationshipManager rManager = AbstractRelationshipManager(escrowDetails.relationshipManagerAddress);
+        RelationshipLibrary.Relationship memory relationship = rManager.getRelationshipData(_relationshipID);
 
         if (msg.sender != address(escrowDetails.arbitrator)) {
             revert NotArbitrator();
@@ -237,16 +219,14 @@ contract RelationshipEscrow is IArbitrable, IEvidence {
         escrowDetails.status = EscrowStatus.Resolved;
 
         if (_ruling == uint256(RulingOptions.PayerWins)) {
-            daiToken.transfer(escrowDetails.payer, escrowDetails.value + escrowDetails.payerFeeDeposit);
-       } else {
-            daiToken.transfer(escrowDetails.payee, escrowDetails.value + escrowDetails.payeeFeeDeposit);
-       }
+            IERC20(relationship.valuePtr).transfer(escrowDetails.payer, escrowDetails.value + escrowDetails.payerFeeDeposit);
+        } else {
+            IERC20(relationship.valuePtr).transfer(escrowDetails.payee, escrowDetails.value + escrowDetails.payeeFeeDeposit);
+        }
 
-       emit Ruling(escrowDetails.arbitrator, _disputeID, _ruling);
+        emit Ruling(escrowDetails.arbitrator, _disputeID, _ruling);
 
-        relationship.notifyContract(
-            uint256(RelationshipLibrary.ContractStatus.Approved)
-        );
+        rManager.contractStatusNotification(_relationshipID, RelationshipLibrary.ContractStatus.Resolved);
     }
 
     function submitEvidence(uint256 _relationshipID, string memory _evidence)
