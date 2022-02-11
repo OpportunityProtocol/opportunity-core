@@ -7,3 +7,6 @@
 /bin
 /.env
 /src/types
+.vscode
+.DS_Store
+/.DS_Store
