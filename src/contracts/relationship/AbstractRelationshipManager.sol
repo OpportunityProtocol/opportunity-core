@@ -38,7 +38,7 @@ abstract contract AbstractRelationshipManager {
 
     /**
      * @notice Resolves a relationship between employer and worker based on the relationship id
-     * @param _relationship The id of the relationship to be resolved
+     * @param _relationshipID The id of the relationship to be resolved
      */
     function resolve(uint256 _relationshipID) public virtual;
 
@@ -110,7 +110,7 @@ abstract contract AbstractRelationshipManager {
 
     /**
      * @notice Assigns a worker to the relationship
-     * @param _relationship The id of the relationship to modify
+     * @param _relationshipID The id of the relationship to modify
      * @param _extraData Extra data to be used
      */
     function work(uint256 _relationshipID, string memory _extraData) external {
@@ -145,7 +145,7 @@ abstract contract AbstractRelationshipManager {
 
     /**
      * @notice Unassigns a worker from a relationship and returns funds to employer
-     * @param _relationship The id of the relationship to modify
+     * @param _relationshipID The id of the relationship to modify
      */
     function releaseJob(uint256 _relationshipID) external {
         RelationshipLibrary.Relationship

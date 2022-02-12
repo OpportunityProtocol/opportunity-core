@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
+import "../interface/IMarketMaker.sol";
 import "./Market.sol";
 import "hardhat/console.sol";
 
-contract MarketMaker {
+contract MarketMaker is IMarketMaker {
     /**
-     * @inheritdoc IMarket::MarketCreated
+     * @dev To be emitted upon deploying a market
      */
     event MarketCreated(
         address indexed _market,
@@ -19,14 +20,14 @@ contract MarketMaker {
     mapping(uint256 => address) idsToMarkets;
 
     /**
-     * @inheritdoc IMarketMaker::createMarket
+     * @inheritdoc IMarketMaker
      */
     function createMarket(
         string memory _marketName,
         address _flatRateRelationshipManager,
         address _milestoneRelationshipManager,
         address _deadlineRelationshipManager
-    ) public returns (uint256) {
+    ) public override returns (uint256) {
         Market market = new Market(
             _marketName,
             _flatRateRelationshipManager,

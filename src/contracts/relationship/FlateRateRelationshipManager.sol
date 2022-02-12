@@ -12,7 +12,7 @@ import "hardhat/console.sol";
  */
 contract FlatRateRelationshipManager is IFlatRateRelationshipManager {
     /**
-     * @inheritdoc IFlateRateRelationshipManager::initializeContract
+     * @inheritdoc IFlatRateRelationshipManager
      */
     function initializeContract(
         uint256 _relationshipID,
@@ -44,7 +44,7 @@ contract FlatRateRelationshipManager is IFlatRateRelationshipManager {
     }
 
     /**
-     * @inheritdoc AbstractContractManager::resolve
+     * @inheritdoc AbstractRelationshipManager
      */
     function resolve(uint256 _relationshipID) public override {
         RelationshipLibrary.Relationship

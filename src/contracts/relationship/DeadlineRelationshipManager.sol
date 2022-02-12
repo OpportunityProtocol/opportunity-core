@@ -14,7 +14,7 @@ contract DeadlineRelationshipManager is IDeadlineRelationshipManager {
     mapping(uint256 => uint256) public relationshipIDToDeadline;
 
     /**
-     * @inheritdoc IDeadlineRelationshipManager::initializeContract
+     * @inheritdoc IDeadlineRelationshipManager
      */
     function initializeContract(
         uint256 _relationshipID,
@@ -51,7 +51,7 @@ contract DeadlineRelationshipManager is IDeadlineRelationshipManager {
     }
 
     /**
-     * @inheritdoc AbstractContractManager::resolve
+     * @inheritdoc AbstractRelationshipManager
      */
     function resolve(uint256 _relationshipID) public override {
         RelationshipLibrary.Relationship

@@ -15,7 +15,7 @@ contract MilestoneRelationshipManager is IMilestoneRelationshipManager {
     mapping(uint256 => uint256) public relationshipIDToCurrentMilestoneIndex;
 
     /**
-     * @inheritdoc IMilestoneRelationshipManager::initializeContract
+     * @inheritdoc IMilestoneRelationshipManager
      */
     function initializeContract(
         uint256 _relationshipID,
@@ -50,7 +50,7 @@ contract MilestoneRelationshipManager is IMilestoneRelationshipManager {
     }
 
     /**
-     * @inheritdoc AbstractContractManager::resolve
+     * @inheritdoc AbstractRelationshipManager
      */
     function resolve(uint256 _relationshipID) public override {
         RelationshipLibrary.Relationship

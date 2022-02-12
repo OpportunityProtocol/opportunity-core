@@ -29,22 +29,4 @@ interface IUserSummary {
     struct WorkerDescription {
         mapping(address => int256) externalReputationModuleToReputation;
     }
-
-    /**
-     * @notice Allows or denies a reputation module to record reputation for a user
-     * @param _module Address of the module to allow or deny permissions
-     * @param _whitelisted Permission of the module
-     */
-    function modifyReputationModulePermissions(
-        address _module,
-        bool _whitelisted
-    ) external;
-
-    /**
-     * @notice Allows or denies a reputation module to record reputation for a user
-     * @param _module Address of the module to allow or deny permissions
-     * @param _whitelisted Permission of the module
-     */
-    function modifyExternalReputation(int256 _amount, Persona _persona)
-        external;
 }

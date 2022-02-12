@@ -33,7 +33,7 @@ contract Market is IMarket {
     }
 
     /**
-     * @inheritdoc IMarket::createFlatRateContract
+     * @inheritdoc IMarket
      */
     function createFlatRateContract(
         address _escrow,
@@ -51,7 +51,7 @@ contract Market is IMarket {
     }
 
     /**
-     * @inheritdoc IMarket::createMilestoneContract
+     * @inheritdoc IMarket
      */
     function createMilestoneContract(
         address _escrow,
@@ -71,7 +71,7 @@ contract Market is IMarket {
     }
 
     /**
-     * @inheritdoc IMarket::createDeadlineContract
+     * @inheritdoc IMarket
      */
     function createDeadlineContract(
         address _escrow,
