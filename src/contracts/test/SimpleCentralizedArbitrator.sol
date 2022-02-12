@@ -30,7 +30,7 @@ contract SimpleCentralizedArbitrator is IArbitrator {
     function arbitrationCost(bytes memory _extraData) public pure override returns (uint256) {
         return 0.1 ether;
     }
-
+    
     function appealCost(uint256 _disputeID, bytes memory _extraData) public pure override returns (uint256) {
         return 2**250; // An unaffordable amount which practically avoids appeals.
     }

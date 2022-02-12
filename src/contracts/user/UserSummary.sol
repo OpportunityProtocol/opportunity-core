@@ -2,12 +2,14 @@
 pragma solidity 0.8.7;
 
 import "../interface/IUserSummary.sol";
+import "../interface/IReputationModule.sol":
 import "../libraries/RelationshipLibrary.sol";
+
 
 /**
  * Deprecated
  */
-contract UserSummary is IUserSummary {
+contract UserSummary is IUserSummary, isIReputationModule {
     address immutable public owner;
     EmployerDescription employerDescription;
     WorkerDescription workerDescription;
@@ -29,16 +31,6 @@ contract UserSummary is IUserSummary {
 
     function modifyReputationModulePermissions(address _module, bool _whitelisted) onlyOwner external override {
         reputationModulePermissions[_module] = _whitelisted;
-    }
-
-    function modifyExternalReputation(int256 _amount, Persona _persona) external override onlyWhitelistedReputationModule {
-        require(uint256(_persona) == uint256(Persona.Employer) || uint256(_persona) == uint256(Persona.Worker));
-
-        if (_persona == Persona.Employer) {
-            employerDescription.externalReputationModuleToReputation[msg.sender] += _amount;
-        } else {
-            workerDescription.externalReputationModuleToReputation[msg.sender] += _amount;
-        }
     }
 }
 

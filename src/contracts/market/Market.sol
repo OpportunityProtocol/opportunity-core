@@ -17,7 +17,7 @@ contract Market is IMarket {
     mapping(uint256 => address) public flatRateRelationshipIDToAddress;
     mapping(uint256 => address) public milestoneRelationshipIDToAddress;
     mapping(uint256 => address) public deadlineRelationshipIDToAddress;
-    
+
     constructor(
         string memory _marketName,
         address _flatRateRelationshipManager,
@@ -27,20 +27,66 @@ contract Market is IMarket {
         marketName = _marketName;
         frManager = IFlatRateRelationshipManager(_flatRateRelationshipManager);
         mManager = IMilestoneRelationshipManager(_milestoneRelationshipManager);
-        deadlineManager = IDeadlineRelationshipManager(_deadlineRelationshipManager);
+        deadlineManager = IDeadlineRelationshipManager(
+            _deadlineRelationshipManager
+        );
     }
 
-    function createFlatRateContract(address _escrow, address _valuePtr, string calldata _taskMetadataPtr) external override {
+    /**
+     * @inheritdoc IMarket::createFlatRateContract
+     */
+    function createFlatRateContract(
+        address _escrow,
+        address _valuePtr,
+        string calldata _taskMetadataPtr
+    ) external override {
         relationships.push(relationships.length + 1);
-        frManager.initializeContract(relationships.length, _escrow, _valuePtr, msg.sender, _taskMetadataPtr);
+        frManager.initializeContract(
+            relationships.length,
+            _escrow,
+            _valuePtr,
+            msg.sender,
+            _taskMetadataPtr
+        );
     }
 
-    function createMilestoneContract(address _escrow, address _valuePtr, string calldata _taskMetadataPtr, string memory _milestoneMetadataPtr) external override {
+    /**
+     * @inheritdoc IMarket::createMilestoneContract
+     */
+    function createMilestoneContract(
+        address _escrow,
+        address _valuePtr,
+        string calldata _taskMetadataPtr,
+        string memory _milestoneMetadataPtr
+    ) external override {
         relationships.push(relationships.length + 1);
-        mManager.initializeContract(relationships.length, _escrow, _valuePtr, msg.sender, _taskMetadataPtr,  _milestoneMetadataPtr);
+        mManager.initializeContract(
+            relationships.length,
+            _escrow,
+            _valuePtr,
+            msg.sender,
+            _taskMetadataPtr,
+            _milestoneMetadataPtr
+        );
     }
-    function createDeadlineContract(address _escrow, address _valuePtr, string calldata _taskMetadataPtr, uint256 _deadline) external override {
+
+    /**
+     * @inheritdoc IMarket::createDeadlineContract
+     */
+    function createDeadlineContract(
+        address _escrow,
+        address _valuePtr,
+        string calldata _taskMetadataPtr,
+        uint256 _deadline
+    ) external override {
         relationships.push(relationships.length + 1);
-        deadlineManager.initializeContract(relationships.length, _escrow, _valuePtr, msg.sender, _taskMetadataPtr, _deadline);
+        deadlineManager.initializeContract(
+            relationships.length,
+            _escrow,
+            _valuePtr,
+            msg.sender,
+            _taskMetadataPtr,
+            _deadline
+        );
     }
 }

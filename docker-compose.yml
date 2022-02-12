@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  contracts-env:
+    env_file:
+      - .env
+    build:
+      context: ./
+    working_dir: /src
+    command: npm run compile
+    environment:
+      MAINNET_PROVIDER_URL: ${MAINNET_PROVIDER_URL}
+      DEV_ETH_MNEMONIC: ${DEV_ETH_MNEMONIC}
+      RINKEBY_PROVIDER_URL: ${RINKEBY_PROVIDER_URL}

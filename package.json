@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx hardhat test",
-    "compile": "npx hardhat compile",
+    "compile": "npx hardhat clean && npx hardhat compile",
     "clean": "npx hardhat clean",
     "postinstall":"typechain",
     "typechain": "npx hardhat typechain --target=ethers-v5"
@@ -14,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/OpportunityProtocol/opportunity-core.git"
   },
-  "author": "",
+  "author": "Elijah Hampton <hamptonelijahj@gmail.com",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/OpportunityProtocol/opportunity-core/issues"

@@ -2,6 +2,9 @@
 pragma solidity 0.8.7;
 
 library RelationshipLibrary {
+    /**
+     * @dev Structure of a Relationship
+     */
     struct Relationship {
         address valuePtr;
         uint256 relationshipID;
@@ -16,16 +19,18 @@ library RelationshipLibrary {
         uint256 acceptanceTimestamp;
     }
 
-    struct Milestone {
-        string[] milestoneMetadataPtrs;
-    }
-
+    /**
+     * @dev Enum representing the states ownership for a relationship
+     */
     enum ContractOwnership {
         Unclaimed,
         Pending,
         Claimed
     }
 
+    /**
+     * @dev Enum representing the states ownership for a relationship
+     */
     enum ContractStatus {
         AwaitingWorker,
         AwaitingWorkerApproval,

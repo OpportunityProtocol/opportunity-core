@@ -7,11 +7,13 @@ import "../libraries/RelationshipLibrary.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-
+/// @title RelationshipEscrow
+/// @author Elijah Hampton
+/// @notice This contract can be used as a escrow for Opportunity Relationship managers.
 contract RelationshipEscrow is IArbitrable, IEvidence, IEscrow {
     IArbitrator immutable arbitrator;
     IERC20 valueToken;
-
+    
     constructor(address _arbitrator) {
         arbitrator = IArbitrator(_arbitrator);
     }

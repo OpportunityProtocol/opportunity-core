@@ -1,5 +1,6 @@
 {
     "solidity.compileUsingRemoteVersion": "v0.87+commit.c7e474f2",
     "solidity.packageDefaultDependenciesContractsDirectory": "",
-    "solidity.packageDefaultDependenciesContractsDirectory": "node_modules"
+    "solidity.packageDefaultDependenciesContractsDirectory": "node_modules",
+    "doxdocgen.generic.authorTag": "@author {author}"
 }
