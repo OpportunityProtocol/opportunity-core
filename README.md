@@ -33,3 +33,6 @@ Run test with
 ```shell
 npx hardhat test
 ```
+
+## Contributing ##
+All contributions are welcome.  Please submit a PR and someone from the core team will review it as soon as possible.  Please send an email to hamptonelijahj@gmail.com to become a core member of the project.
