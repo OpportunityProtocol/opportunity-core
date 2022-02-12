@@ -34,9 +34,12 @@ abstract contract AbstractRelationshipManager  {
     {
         RelationshipLibrary.Relationship storage relationship =  relationshipIDToRelationship[_relationshipID];
 
-        require(msg.sender == relationship.employer);
-        require(relationship.worker == address(0));
-        require(relationship.contractOwnership == RelationshipLibrary.ContractOwnership.Unclaimed);
+        require(msg.sender == relationship.employer, "Only the employer of this relationship can grant the proposal.");
+        require(_newWorker != address(0), "You must grant this proposal to a valid worker.");
+        require(relationship.worker == address(0), "This job is already being worked.");
+        require(_valuePtr != address(0), "You must enter a valid address for the value pointer.");
+        require(_wad != uint256(0), "The payout amount must be greater than 0.");
+        require(relationship.contractOwnership == RelationshipLibrary.ContractOwnership.Unclaimed, "This relationship must not already be claimed.");
 
         relationship.wad = _wad;
         relationship.valuePtr = _valuePtr;

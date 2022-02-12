@@ -94,7 +94,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence, IEscrow {
             arbitrationFeeDepositPeriod: arbitrationFeeDepositPeriod
         });
 
-        IERC20(relationship.valuePtr).transferFrom(msg.sender, address(this), relationship.wad);
+        IERC20(relationship.valuePtr).transferFrom(relationship.employer, address(this), relationship.wad);
     }
 
     function surrenderFunds(uint256 _relationshipID) external override {

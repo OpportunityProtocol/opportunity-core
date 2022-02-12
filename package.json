@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "npx hardhat test",
-    "compile": "npx hardhat compile"
+    "compile": "npx hardhat compile",
+    "clean": "npx hardhat clean",
+    "postinstall":"typechain",
+    "typechain": "npx hardhat typechain --target=ethers-v5"
   },
   "repository": {
     "type": "git",
