@@ -1,5 +1,5 @@
 # Smart Contract Module for Opportunity.  (Decentralized labor markets)
-Opportunity is a decentralized protocol for labor markets.  Deploy any market and find work regardless of geographical location or social class.
+Opportunity is a decentralized protocol for labor markets focused on building structure for the gig economy on the blockchain.  Deploy any market and find work regardless of geographical location or social class.
 
 ## Getting started ##
 #### Motivation ####
@@ -33,3 +33,6 @@ Run test with
 ```shell
 npx hardhat test
 ```
+
+## Contributing ##
+All contributions are welcome.  Please submit a PR and someone from the core team will review it as soon as possible.  Please send an email to hamptonelijahj@gmail.com to become a core member of the project.
