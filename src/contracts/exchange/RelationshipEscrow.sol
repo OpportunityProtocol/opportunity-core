@@ -102,10 +102,9 @@ contract RelationshipEscrow is IArbitrable, IEvidence, IEscrow {
     function surrenderFunds(uint256 _relationshipID) external override {
         AbstractRelationshipManager rManager = AbstractRelationshipManager(msg.sender);
         RelationshipLibrary.Relationship memory relationship = rManager.getRelationshipData(_relationshipID);
-
-        require(tx.origin == relationship.worker);
-
         RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[_relationshipID];
+
+        require(msg.sender == escrowDetails.relationshipManagerAddress);
 
         IERC20(relationship.valuePtr).transfer(escrowDetails.payer, escrowDetails.value);
     }
@@ -114,7 +113,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence, IEscrow {
         AbstractRelationshipManager rManager = AbstractRelationshipManager(msg.sender);
         RelationshipLibrary.Relationship memory  relationship = rManager.getRelationshipData(_relationshipID);
 
-        require(tx.origin == relationship.employer);
+require(msg.sender == escrowDetails.relationshipManagerAddress);
 
         RelationshipEscrowDetails
             storage escrowDetails = relationshipEscrowDetails[_relationshipID];
@@ -139,7 +138,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence, IEscrow {
             revert InvalidStatus();
         }
 
-        if (tx.origin != escrowDetails.payer) {
+        if (msg.sender != escrowDetails.payer) {
             revert NotPayer();
         }
 
