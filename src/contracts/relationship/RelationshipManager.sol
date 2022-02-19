@@ -9,7 +9,7 @@ import "hardhat/console.sol";
  * @title Abstract relationship manager template.
  * @author Elijah Hampton
  */
-abstract contract AbstractRelationshipManager {
+contract RelationshipManager {
     /**
      * @dev To be emitted upon employer and worker entering contract.
      */
@@ -35,23 +35,86 @@ abstract contract AbstractRelationshipManager {
     uint256 numRelationships;
     mapping(uint256 => RelationshipLibrary.Relationship)
         public relationshipIDToRelationship;
+    mapping(uint256 => uint256) public relationshipIDToMilestones;
+    mapping(uint256 => uint256) public relationshipIDToCurrentMilestoneIndex;
+    mapping(uint256 => uint256) public relationshipIDToDeadline;
 
-    /**
-     * @notice Resolves a relationship between employer and worker based on the relationship id
-     * @param _relationshipID The id of the relationship to be resolved
-     */
-    function resolve(uint256 _relationshipID) public virtual;
+    function initializeContract(
+        uint256 _relationshipID,
+        uint256 _deadline,
+        address _escrow,
+        address _valuePtr,
+        address _employer,
+        address _marketID,
+        string memory _taskMetadataPtr
+    ) external {
+        relationshipIDToRelationship[_relationshipID] = RelationshipLibrary
+            .Relationship({
+                valuePtr: _valuePtr,
+                relationshipID: _relationshipID,
+                escrow: _escrow,
+                marketPtr: _marketID,
+                employer: _employer,
+                worker: address(0),
+                taskMetadataPtr: _taskMetadataPtr,
+                contractStatus: RelationshipLibrary
+                    .ContractStatus
+                    .AwaitingWorker,
+                contractOwnership: RelationshipLibrary
+                    .ContractOwnership
+                    .Unclaimed,
+                contractPayoutType: RelationshipLibrary.ContractPayoutType.Flat,
+                wad: 0,
+                acceptanceTimestamp: 0,
+                resolutionTimestamp: 0
+            });
 
-    /**
-     * @notice Returns the data for a relationship
-     * @param _relationshipID The id of the relationship to return
-     * @return The relationship data
-     */
-    function getRelationshipData(uint256 _relationshipID)
-        public
-        returns (RelationshipLibrary.Relationship memory)
-    {
-        return relationshipIDToRelationship[_relationshipID];
+        relationshipIDToRelationship[
+            _relationshipID
+        ] = relationshipIDToRelationship[_relationshipID];
+
+        if (_deadline != 0) {
+            relationshipIDToDeadline[_relationshipID] = _deadline;
+        }
+        numRelationships++;
+    }
+
+    function initializeContract(
+        uint256 _relationshipID,
+        uint256 _deadline,
+        address _escrow,
+        address _valuePtr,
+        address _employer,
+        address _marketID,
+        string memory _taskMetadataPtr,
+        uint256 _numMilestones
+    ) external {
+        relationshipIDToRelationship[_relationshipID] = RelationshipLibrary
+            .Relationship({
+                valuePtr: _valuePtr,
+                relationshipID: _relationshipID,
+                escrow: _escrow,
+                marketPtr: _marketID,
+                employer: _employer,
+                worker: address(0),
+                taskMetadataPtr: _taskMetadataPtr,
+                contractStatus: RelationshipLibrary
+                    .ContractStatus
+                    .AwaitingWorker,
+                contractOwnership: RelationshipLibrary
+                    .ContractOwnership
+                    .Unclaimed,
+                contractPayoutType: RelationshipLibrary.ContractPayoutType.Flat,
+                wad: 0,
+                acceptanceTimestamp: 0,
+                resolutionTimestamp: 0
+            });
+
+        relationshipIDToMilestones[_relationshipID] = _numMilestones;
+        if (_deadline != 0) {
+            relationshipIDToDeadline[_relationshipID] = _deadline;
+        }
+        numRelationships++;
     }
 
     function grantProposalRequest(
@@ -108,11 +171,6 @@ abstract contract AbstractRelationshipManager {
         emit ContractOwnershipUpdate();
     }
 
-    /**
-     * @notice Assigns a worker to the relationship
-     * @param _relationshipID The id of the relationship to modify
-     * @param _extraData Extra data to be used
-     */
     function work(uint256 _relationshipID, string memory _extraData) external {
         RelationshipLibrary.Relationship
             storage relationship = relationshipIDToRelationship[
@@ -143,10 +201,6 @@ abstract contract AbstractRelationshipManager {
         emit ContractOwnershipUpdate();
     }
 
-    /**
-     * @notice Unassigns a worker from a relationship and returns funds to employer
-     * @param _relationshipID The id of the relationship to modify
-     */
     function releaseJob(uint256 _relationshipID) external {
         RelationshipLibrary.Relationship
             storage relationship = relationshipIDToRelationship[
@@ -174,11 +228,6 @@ abstract contract AbstractRelationshipManager {
         emit ContractOwnershipUpdate();
     }
 
-    /**
-     * @notice Updates the task metadata IPFS hash
-     * @dev This should only be allowed while the contract ownership is in the UNCLAIMED state
-     * @param _newTaskPointerHash The new IPFS hash of the metadata
-     */
     function updateTaskMetadataPointer(
         uint256 _relationshipID,
         string calldata _newTaskPointerHash
@@ -197,11 +246,6 @@ abstract contract AbstractRelationshipManager {
         relationship.taskMetadataPtr = _newTaskPointerHash;
     }
 
-    /**
-     * @notice A notification from the relationship escrow to update the relationship status
-     * @dev This can be used in the case of the escrow having extra functionality such as dispute interface
-     * @param _status The status the relationship should be updated to
-     */
     function contractStatusNotification(
         uint256 _relationshipID,
         RelationshipLibrary.ContractStatus _status
@@ -216,5 +260,49 @@ abstract contract AbstractRelationshipManager {
         relationship.contractStatus = _status;
 
         emit ExternalStatusNotification();
+    }
+
+    function resolve(uint256 _relationshipID) external {
+        RelationshipLibrary.Relationship
+            storage relationship = relationshipIDToRelationship[
+                _relationshipID
+            ];
+
+        require(relationship.employer != address(0));
+        require(relationship.worker != address(0));
+        require(relationship.wad != uint256(0));
+        require(msg.sender == relationship.employer);
+        require(
+            relationship.contractStatus ==
+                RelationshipLibrary.ContractStatus.AwaitingResolution
+        );
+
+        relationship.contractStatus = RelationshipLibrary
+            .ContractStatus
+            .Resolved;
+
+        if (
+            relationship.contractPayoutType ==
+            RelationshipLibrary.ContractPayoutType.Flat
+        ) {
+            IEscrow(relationship.escrow).releaseFunds(
+                relationship.wad,
+                _relationshipID
+            );
+        } else {
+            IEscrow(relationship.escrow).releaseFunds(
+                relationship.wad /
+                    relationshipIDToMilestones[_relationshipID],
+                _relationshipID
+            );
+        }
+        emit ContractStatusUpdate();
+    }
+
+    function getRelationshipData(uint256 _relationshipID)
+        external
+        returns (RelationshipLibrary.Relationship memory)
+    {
+        return relationshipIDToRelationship[_relationshipID];
     }
 }

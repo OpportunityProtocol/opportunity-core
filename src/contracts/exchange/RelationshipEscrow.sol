@@ -2,7 +2,7 @@ pragma solidity 0.8.7;
 
 import "../interface/IArbitrable.sol";
 import "../interface/IEvidence.sol";
-import "../relationship/AbstractRelationshipManager.sol";
+import "../relationship/RelationshipManager.sol";
 import "../libraries/RelationshipLibrary.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -76,7 +76,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence, IEscrow {
         uint256 _relationshipID,
         string calldata _metaevidence
     ) external override {
-        AbstractRelationshipManager rManager = AbstractRelationshipManager(msg.sender);
+        RelationshipManager rManager = RelationshipManager(msg.sender);
         RelationshipLibrary.Relationship memory relationship = rManager.getRelationshipData(_relationshipID);
 
         emit MetaEvidence(_relationshipID, _metaevidence);
@@ -100,7 +100,7 @@ contract RelationshipEscrow is IArbitrable, IEvidence, IEscrow {
     }
 
     function surrenderFunds(uint256 _relationshipID) external override {
-        AbstractRelationshipManager rManager = AbstractRelationshipManager(msg.sender);
+        RelationshipManager rManager = RelationshipManager(msg.sender);
         RelationshipLibrary.Relationship memory relationship = rManager.getRelationshipData(_relationshipID);
         RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[_relationshipID];
 
@@ -110,13 +110,13 @@ contract RelationshipEscrow is IArbitrable, IEvidence, IEscrow {
     }
 
     function releaseFunds(uint256 _amount, uint256 _relationshipID) external override {
-        AbstractRelationshipManager rManager = AbstractRelationshipManager(msg.sender);
+        RelationshipManager rManager = RelationshipManager(msg.sender);
         RelationshipLibrary.Relationship memory  relationship = rManager.getRelationshipData(_relationshipID);
-
-require(msg.sender == escrowDetails.relationshipManagerAddress);
-
         RelationshipEscrowDetails
             storage escrowDetails = relationshipEscrowDetails[_relationshipID];
+            
+        require(msg.sender == escrowDetails.relationshipManagerAddress);
+
 
         if (relationship.contractStatus != RelationshipLibrary.ContractStatus.Resolved) {
             revert InvalidStatus();
@@ -129,7 +129,7 @@ require(msg.sender == escrowDetails.relationshipManagerAddress);
     }
 
     function disputeRelationship(uint256 _relationshipID) external payable {
-        AbstractRelationshipManager rManager = AbstractRelationshipManager(msg.sender);
+        RelationshipManager rManager = RelationshipManager(msg.sender);
         RelationshipLibrary.Relationship memory relationship = rManager.getRelationshipData(_relationshipID);
 
         RelationshipEscrowDetails storage escrowDetails = relationshipEscrowDetails[_relationshipID];
@@ -205,7 +205,7 @@ require(msg.sender == escrowDetails.relationshipManagerAddress);
         RelationshipEscrowDetails
             storage escrowDetails = relationshipEscrowDetails[_relationshipID];
 
-        AbstractRelationshipManager rManager = AbstractRelationshipManager(escrowDetails.relationshipManagerAddress);
+        RelationshipManager rManager = RelationshipManager(escrowDetails.relationshipManagerAddress);
         RelationshipLibrary.Relationship memory relationship = rManager.getRelationshipData(_relationshipID);
 
         if (msg.sender != address(escrowDetails.arbitrator)) {

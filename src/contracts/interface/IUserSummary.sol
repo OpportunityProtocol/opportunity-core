@@ -20,13 +20,13 @@ interface IUserSummary {
      * @notice Holds data for a user's employer behavior
      */
     struct EmployerDescription {
-        mapping(address => int256) externalReputationModuleToReputation;
+        mapping(uint256 => mapping(uint256 => bytes32)) marketsToRelationshipsToReviews;
     }
 
     /**
      * @notice Holds data for a user's worker behavior
      */
     struct WorkerDescription {
-        mapping(address => int256) externalReputationModuleToReputation;
+        mapping(uint256 => mapping(uint256 => bytes32)) marketsToRelationshipsToReviews;
     }
 }

@@ -10,10 +10,16 @@ contract UserRegistration is UserSummaryFactory {
 
     mapping(address => address) public universalToUserSummary;
 
+    address immutable governor;
+
+    constructor(address _governor) {
+        governor = _governor;
+    }
+
     function register() external returns(address) {
         require(universalToUserSummary[msg.sender] == address(0), "A user has already been registered with this address.");
 
-        address userSummaryContractAddress = _createUserSummary(msg.sender);
+        address userSummaryContractAddress = _createUserSummary(msg.sender, governor);
 
         _assignTrueUserIdentification(msg.sender, userSummaryContractAddress);
         emit UserRegistered(msg.sender);
