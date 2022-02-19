@@ -124,7 +124,7 @@ describe("Markets", function () {
           BigNumber.from(0)
         )
 
-       /* await relationshipManagerInstance.connect(employer).grantProposalRequest(1, worker.address, testDaiInstance.address, 1000, "")
+        await relationshipManagerInstance.connect(employer).grantProposalRequest(1, worker.address, testDaiInstance.address, 1000, "")
         
         await testDaiInstance.connect(employer).approve(relationshipEscrowInstance.address, 1000);
 
@@ -133,7 +133,7 @@ describe("Markets", function () {
         await relationshipManagerInstance.connect(employer).resolve(1)
 
         expect(await testDaiInstance.balanceOf(employer.address)).to.equal(BigNumber.from(0))
-        expect(await testDaiInstance.balanceOf(worker.address)).to.equal(BigNumber.from(2000))*/
+        expect(await testDaiInstance.balanceOf(worker.address)).to.equal(BigNumber.from(2000))
     })
   })
 });

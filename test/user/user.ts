@@ -2,6 +2,7 @@
 import { expect } from 'chai'
 import { ContractReceipt, BigNumber, Event } from 'ethers';
 import { ethers } from 'hardhat'
+import { OpportunityGovernor } from '../../src/types/OpportunityGovernor';
 import { UserRegistration } from '../../src/types/UserRegistration'
 
 describe("User Registration", function () {
@@ -10,6 +11,10 @@ describe("User Registration", function () {
 
   let UserRegistration
   let userRegistrationInstance : UserRegistration
+
+  let OpportunityGovernor
+  let opportunityGovernorInstance : OpportunityGovernor
+
   let user
 
   // `beforeEach` will run before each test, re-deploying the contract every
@@ -17,9 +22,12 @@ describe("User Registration", function () {
   beforeEach(async function () {
     // Get the ContractFactory and Signers here.
     UserRegistration = await ethers.getContractFactory("UserRegistration");
+    OpportunityGovernor = await ethers.getContractFactory('OpportunityGovernor');
+
     [user] = await ethers.getSigners();
 
-    userRegistrationInstance  = await UserRegistration.deploy()
+    opportunityGovernorInstance = await OpportunityGovernor.deploy()
+    userRegistrationInstance  = await UserRegistration.deploy(opportunityGovernorInstance.address)
   });
 
   it("happy path - should register a user and assign a user summary address", async () => {
