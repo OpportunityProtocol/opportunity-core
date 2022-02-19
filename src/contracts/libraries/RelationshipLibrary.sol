@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
+import "../interface/IRelationshipManager.sol";
+
 library RelationshipLibrary {
     /**
      * @dev Structure of a Relationship
@@ -13,10 +15,20 @@ library RelationshipLibrary {
         address employer;
         address worker;
         string taskMetadataPtr;
-        RelationshipLibrary.ContractStatus contractStatus;
+        ContractStatus contractStatus;
         ContractOwnership contractOwnership;
+        ContractPayoutType contractPayoutType;
         uint256 wad;
         uint256 acceptanceTimestamp;
+        uint256 resolutionTimestamp;
+    }
+
+    struct Market {
+        string marketName;
+        uint256 marketID;
+        address relationshipManager;
+        uint256[] relationships;
+        address valuePtr;
     }
 
     /**
@@ -38,5 +50,11 @@ library RelationshipLibrary {
         Resolved,
         PendingDispute,
         Disputed
+    }
+
+    enum ContractPayoutType {
+        Flat,
+        Milestone,
+        Deadline
     }
 }

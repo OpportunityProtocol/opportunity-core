@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
-import "../interface/IUserSummary.sol";
-import "../interface/IReputationModule.sol";
+import "../interface/IUserSummary.sol"; 
 import "../libraries/RelationshipLibrary.sol";
 
 
@@ -11,6 +10,8 @@ import "../libraries/RelationshipLibrary.sol";
  */
 contract UserSummary is IUserSummary {
     address immutable public owner;
+    address immutable public coordinator;
+    
     EmployerDescription employerDescription;
     WorkerDescription workerDescription;
 
@@ -19,8 +20,18 @@ contract UserSummary is IUserSummary {
         _;
     }
 
-    constructor(address universalAddress) {
-        owner = universalAddress;
+    modifier onlyGovernor() {
+        require(msg.sender == coordinator, "Only the OpportunityGovernor can invoke this function.");
+        _;
+    }
+
+    constructor(address _universalAddress, address _coordinator) {
+        owner = _universalAddress;
+        coordinator = _coordinator;
+    }
+
+    function recordReview(bytes32 _reviewHash) onlyGovernor external {
+        //
     }
 }
 
