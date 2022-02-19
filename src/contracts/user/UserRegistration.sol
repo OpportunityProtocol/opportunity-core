@@ -25,7 +25,7 @@ contract UserRegistration is UserSummaryFactory {
         emit UserRegistered(msg.sender);
 
         return userSummaryContractAddress;
-     }
+    }
 
     function _assignTrueUserIdentification(address _universalAddress, address _summaryContractAddress) internal {
         universalToUserSummary[_universalAddress] = _summaryContractAddress;

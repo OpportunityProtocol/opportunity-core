@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
-import "hardhat/console.sol";
 import "./libraries/RelationshipLibrary.sol";
 import "./interface/IRelationshipManager.sol";
 
@@ -25,25 +24,25 @@ contract OpportunityGovernor {
         address _relationshipManager,
         address _valuePtr
     ) public returns (uint256) {
-        uint256 marketId = markets.length - 1;
+        uint256 marketID = markets.length + 1;
 
-        marketIDToMarket[marketId] = RelationshipLibrary.Market({
+        RelationshipLibrary.Market memory newMarket = RelationshipLibrary.Market({
             marketName: _marketName,
-            marketID: marketId,
+            marketID: marketID,
             relationshipManager: _relationshipManager,
             relationships: new uint256[](0),
             valuePtr: _valuePtr
         });
 
-        markets.push(marketIDToMarket[marketId]);
+        markets.push(newMarket);
+        marketIDToMarket[marketID] = newMarket;
 
-            emit MarketCreated(
-            markets.length,
+        emit MarketCreated(
+            marketID,
             msg.sender,
             _marketName
         );
         
-
         return markets.length;
     }
 
@@ -61,6 +60,7 @@ contract OpportunityGovernor {
     ) external {
         RelationshipLibrary.Market storage market = marketIDToMarket[_marketID];
         uint256 relationshipID = market.relationships.length + 1;
+        market.relationships.push(relationshipID);
 
         IRelationshipManager(market.relationshipManager).initializeContract(
             relationshipID,
@@ -71,9 +71,6 @@ contract OpportunityGovernor {
             _marketID,
             _taskMetadataPtr
         );
-
-
-        market.relationships.push(relationshipID);
     }
 
     /**
@@ -92,6 +89,8 @@ contract OpportunityGovernor {
     ) external {
         RelationshipLibrary.Market storage market = marketIDToMarket[_marketID];
         uint256 relationshipID = market.relationships.length + 1;
+        market.relationships.push(relationshipID);
+
 
         IRelationshipManager(market.relationshipManager).initializeContract(
             relationshipID,
@@ -104,7 +103,6 @@ contract OpportunityGovernor {
             _numMilestones
         );
 
-        market.relationships.push(relationshipID);
     }
 
     function submitReview(uint256 _marketID, uint _relationshipID) external {

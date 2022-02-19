@@ -3,10 +3,9 @@ pragma solidity 0.8.7;
 
 import "../libraries/RelationshipLibrary.sol";
 import "../interface/IEscrow.sol";
-import "hardhat/console.sol";
 
 /**
- * @title Abstract relationship manager template.
+ * @title RelationshipManager Interface
  * @author Elijah Hampton
  */
 interface IRelationshipManager {
@@ -37,7 +36,7 @@ interface IRelationshipManager {
      * @param _employer Address of employer (The tx sender)
      * @param _taskMetadataPtr IPFS hash of the relationship metadata
      */
-        function initializeContract(
+    function initializeContract(
         uint256 _relationshipID,
         uint256 _deadline,
         address _escrow,

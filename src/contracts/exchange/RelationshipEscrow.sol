@@ -4,7 +4,6 @@ import "../interface/IArbitrable.sol";
 import "../interface/IEvidence.sol";
 import "../relationship/RelationshipManager.sol";
 import "../libraries/RelationshipLibrary.sol";
-import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /// @title RelationshipEscrow
