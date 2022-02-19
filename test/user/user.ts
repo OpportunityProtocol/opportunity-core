@@ -6,9 +6,6 @@ import { OpportunityGovernor } from '../../src/types/OpportunityGovernor';
 import { UserRegistration } from '../../src/types/UserRegistration'
 
 describe("User Registration", function () {
-  // Mocha has four functions that let you hook into the the test runner's
-  // lifecyle. These are: `before`, `beforeEach`, `after`, `afterEach`.
-
   let UserRegistration
   let userRegistrationInstance : UserRegistration
 

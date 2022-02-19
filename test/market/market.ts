@@ -8,9 +8,6 @@ import { OpportunityGovernor } from '../../src/types/OpportunityGovernor'
 import { RelationshipEscrow } from '../../src/types/RelationshipEscrow'
 import { SimpleCentralizedArbitrator } from '../../src/types/SimpleCentralizedArbitrator'
 describe("Markets", function () {
-  // Mocha has four functions that let you hook into the the test runner's
-  // lifecyle. These are: `before`, `beforeEach`, `after`, `afterEach`.
-
   let marketDeployer, employer, worker
 
   let OpportunityGovernor
