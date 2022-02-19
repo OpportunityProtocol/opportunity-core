@@ -1,9 +1,9 @@
 # Smart Contract Module for Opportunity.  (Decentralized labor markets)
-Opportunity is a decentralized protocol for labor markets focused on building structure for the gig economy on the blockchain.  Deploy any market and find work regardless of geographical location or social class.
+Opportunity is a decentralized protocol for labor markets focused on building infrastructure for the gig economy on Ethereum.  Deploy any market and find work regardless of geographical location or social class.
 
 ## Getting started ##
 #### Motivation ####
-The Opportunity platform provides global and permission-less access for anyone to find work and earn money regardless of geographical location or social class.  It is not a labor market platform itself, but allows user’s to deploy their own labor markets.  Anyone can participate in labor markets on Opportunity and instantly begin earning money.
+Opportunity is a protocol for permission-less labor markets where users can find work and earn money in the simplest manner.  Anyone in the world can access and use Opportunity regardless of geographical location or social class.  User’s can deploy their own labor markets and all market payouts are settled in a decentralized currency known as DAI.  Disputes on the Opportunity platform are settled through Kleros, a decentralized arbitration platform.
 
 Read the whitepaper: https://humble-penalty-bba.notion.site/Opportunity-de5af9fb928f47288055c6c4ac2064ec
 
