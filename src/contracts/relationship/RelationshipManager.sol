@@ -4,7 +4,6 @@ pragma solidity 0.8.7;
 import "../interface/IRelationshipManager.sol";
 import "../libraries/RelationshipLibrary.sol";
 import "../interface/IEscrow.sol";
-import "hardhat/console.sol";
 
 /**
  * @title Abstract relationship manager template.
