@@ -11,7 +11,7 @@ library RelationshipLibrary {
         address valuePtr;
         uint256 relationshipID;
         address escrow;
-        address marketPtr;
+        uint256 marketPtr;
         address employer;
         address worker;
         string taskMetadataPtr;

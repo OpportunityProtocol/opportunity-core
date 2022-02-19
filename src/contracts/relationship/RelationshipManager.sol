@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
+import "../interface/IRelationshipManager.sol";
 import "../libraries/RelationshipLibrary.sol";
 import "../interface/IEscrow.sol";
 import "hardhat/console.sol";
@@ -9,7 +10,7 @@ import "hardhat/console.sol";
  * @title Abstract relationship manager template.
  * @author Elijah Hampton
  */
-contract RelationshipManager {
+contract RelationshipManager is IRelationshipManager {
     /**
      * @dev To be emitted upon employer and worker entering contract.
      */
@@ -39,15 +40,18 @@ contract RelationshipManager {
     mapping(uint256 => uint256) public relationshipIDToCurrentMilestoneIndex;
     mapping(uint256 => uint256) public relationshipIDToDeadline;
 
+    /**
+     * @inheritdoc IRelationshipManager
+     */
     function initializeContract(
         uint256 _relationshipID,
         uint256 _deadline,
         address _escrow,
         address _valuePtr,
         address _employer,
-        address _marketID,
-        string memory _taskMetadataPtr
-    ) external {
+        uint256 _marketID,
+        string calldata _taskMetadataPtr
+    ) external override {
         relationshipIDToRelationship[_relationshipID] = RelationshipLibrary
             .Relationship({
                 valuePtr: _valuePtr,
@@ -79,16 +83,19 @@ contract RelationshipManager {
         numRelationships++;
     }
 
+    /**
+     * @inheritdoc IRelationshipManager
+     */
     function initializeContract(
         uint256 _relationshipID,
         uint256 _deadline,
         address _escrow,
         address _valuePtr,
         address _employer,
-        address _marketID,
-        string memory _taskMetadataPtr,
+        uint256 _marketID,
+        string calldata _taskMetadataPtr,
         uint256 _numMilestones
-    ) external {
+    ) external override {
         relationshipIDToRelationship[_relationshipID] = RelationshipLibrary
             .Relationship({
                 valuePtr: _valuePtr,
@@ -117,13 +124,16 @@ contract RelationshipManager {
         numRelationships++;
     }
 
+    /**
+     * @inheritdoc IRelationshipManager
+     */
     function grantProposalRequest(
         uint256 _relationshipID,
         address _newWorker,
         address _valuePtr,
         uint256 _wad,
         string memory _extraData
-    ) external {
+    ) external override {
         RelationshipLibrary.Relationship
             storage relationship = relationshipIDToRelationship[
                 _relationshipID
@@ -171,7 +181,10 @@ contract RelationshipManager {
         emit ContractOwnershipUpdate();
     }
 
-    function work(uint256 _relationshipID, string memory _extraData) external {
+    /**
+     * @inheritdoc IRelationshipManager
+     */
+    function work(uint256 _relationshipID, string memory _extraData) external override {
         RelationshipLibrary.Relationship
             storage relationship = relationshipIDToRelationship[
                 _relationshipID
@@ -201,7 +214,10 @@ contract RelationshipManager {
         emit ContractOwnershipUpdate();
     }
 
-    function releaseJob(uint256 _relationshipID) external {
+    /**
+     * @inheritdoc IRelationshipManager
+     */
+    function releaseJob(uint256 _relationshipID) external override {
         RelationshipLibrary.Relationship
             storage relationship = relationshipIDToRelationship[
                 _relationshipID
@@ -228,10 +244,13 @@ contract RelationshipManager {
         emit ContractOwnershipUpdate();
     }
 
+    /**
+     * @inheritdoc IRelationshipManager
+     */
     function updateTaskMetadataPointer(
         uint256 _relationshipID,
         string calldata _newTaskPointerHash
-    ) external {
+    ) external override {
         RelationshipLibrary.Relationship
             storage relationship = relationshipIDToRelationship[
                 _relationshipID
@@ -246,10 +265,13 @@ contract RelationshipManager {
         relationship.taskMetadataPtr = _newTaskPointerHash;
     }
 
+    /**
+     * @inheritdoc IRelationshipManager
+     */
     function contractStatusNotification(
         uint256 _relationshipID,
         RelationshipLibrary.ContractStatus _status
-    ) external {
+    ) external override {
         RelationshipLibrary.Relationship
             storage relationship = relationshipIDToRelationship[
                 _relationshipID
@@ -262,7 +284,10 @@ contract RelationshipManager {
         emit ExternalStatusNotification();
     }
 
-    function resolve(uint256 _relationshipID) external {
+    /**
+     * @inheritdoc IRelationshipManager
+     */
+    function resolve(uint256 _relationshipID) external override {
         RelationshipLibrary.Relationship
             storage relationship = relationshipIDToRelationship[
                 _relationshipID
@@ -299,8 +324,11 @@ contract RelationshipManager {
         emit ContractStatusUpdate();
     }
 
+    /**
+     * @inheritdoc IRelationshipManager
+     */
     function getRelationshipData(uint256 _relationshipID)
-        external
+        external override
         returns (RelationshipLibrary.Relationship memory)
     {
         return relationshipIDToRelationship[_relationshipID];
