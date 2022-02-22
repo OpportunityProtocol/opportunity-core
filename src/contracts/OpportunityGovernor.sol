@@ -6,6 +6,18 @@ import "./interface/IRelationshipManager.sol";
 
 contract OpportunityGovernor {
     /**
+     */
+    event UserRegistered(address indexed universalAddress);
+
+    /**
+     */
+    event UserAssignedTrueIdentification(address indexed universalAddress, address indexed userID);
+    
+    /**
+     */
+    event UserSummaryCreated(uint256 indexed registrationTimestamp, uint256 indexed index, address indexed universalAddress);
+
+    /**
      * @dev To be emitted upon deploying a market
      */
     event MarketCreated(
@@ -14,11 +26,83 @@ contract OpportunityGovernor {
         string indexed marketName
     );
 
+    UserLibrary.UserSummary[] public userSummaries;
+    mapping(address => UserLibrary.UserSummary) public universalAddressToSummary;
+
     RelationshipLibrary.Market[] public markets;
+
     mapping(uint256 => RelationshipLibrary.Market) public marketIDToMarket;
+    mapping(address => uint256) public universalAddressToUserID;
+    
+    // User Functions
+    /**
+    */
+    function register() external returns(uint256) {
+        if (isRegisteredUser(msg.sender)) revert()
+
+        universalAddressToSummary[msg.sender] = _createUserSummary(msg.sender);
+        userSummaries.push(userSummary);
+
+        _assignTrueUserIdentification(msg.sender, universalAddressToSummary[msg.sender].userID);
+        emit UserRegistered(msg.sender);
+        
+        return userSummaries.length - 1;
+    }
+
+    /**
+    */
+    function submitReview(
+        address _relationshipManager,
+        uint256  _relationshipID, 
+        bytes32 _reviewHash
+    ) external {
+        IRelationshipManager manager = IRelationshipManager(_relationshipManager);
+        RelationshipLibrary.Relationship memory relationship = manager.getRelationshipData(_relationshipID);
+
+        require(universalAddressToSummary[msg.sender].isRegistered == true);
+        require(relationship.resolutionTimestamp >= block.timestamp);
+        require(block.timestamp < relationship.resolutionTimestamp + 30 days);
+        
+        UserLibrary.UserSummary storage summary;
+        if (relationship.employer() == msg.sender) {
+            summary = universalAddressToSummary[relationship.worker()];
+        } else if (relationship.worker() == msg.sender) {
+             summary = universalAddressToSummary[relationship.employer()];
+        } else revert()
+
+        summary.reviews.push(_reviewHash);
+    }
 
     /**
      */
+    function _createUserSummary(address _universalAddress) internal returns(UserLibrary.UserSummary memory) {
+        UserLibrary.UserSummary userSummary = UserLibrary.UserSummary({
+            userID: userSummaries.length + 1,
+            registrationTimestamp: block.timestamp,
+            trueIdentification: _universalAddress,
+            isRegistered: true,
+            reviews: new bytes32[]
+        });
+
+        emit UserSummaryCreated(userSummary.registrationTimestamp, userSummaries.length, _universalAddress);
+        return userSummary;
+    }
+
+    function isRegisteredUser(address _userAddress) public constant view returns(bool isIndeed) {
+        return universalAddressToSummary[_userAddress].isRegistered;
+    }
+
+    /**
+    */
+    function _assignTrueUserIdentification(address _universalAddress, address _userID) internal {
+        universalToUserSummary[_universalAddress] = _userID;
+        assert(universalAddressToUserID[_universalAddress] == _userID);
+        emit UserAssignedTrueIdentification(_universalAddress, _userID);
+    }
+
+    // Market Functions
+        /**
+    */
     function createMarket(
         string memory _marketName,
         address _relationshipManager,
@@ -105,7 +189,14 @@ contract OpportunityGovernor {
 
     }
 
-    function submitReview(uint256 _marketID, uint _relationshipID) external {
-        
+    // Getters
+    function getUserCount() public constant view returns(uint) {
+        return userSummaries.length;
+    }
+
+    /**
+    */
+    function getTrueIdentification(address _user) public constant view {
+        return universalAddressToUserID[_user];
     }
 }

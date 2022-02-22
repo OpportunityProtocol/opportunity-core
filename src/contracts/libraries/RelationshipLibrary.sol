@@ -22,13 +22,17 @@ library RelationshipLibrary {
         uint256 acceptanceTimestamp;
         uint256 resolutionTimestamp;
     }
-
     struct Market {
         string marketName;
         uint256 marketID;
         address relationshipManager;
         uint256[] relationships;
         address valuePtr;
+    }
+
+    enum Persona {
+        Employer,
+        Worker
     }
 
     /**
