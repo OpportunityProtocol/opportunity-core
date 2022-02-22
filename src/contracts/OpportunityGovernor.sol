@@ -42,9 +42,12 @@ contract OpportunityGovernor {
         uint256 registrationTimestamp;
         address trueIdentification;
         bytes32[] reviews;
+        uint256 primaryMarketID;
         EmployerDescription employerDescription;
         WorkerDescription workerDescription;
         bool isRegistered;
+        bool isVerified;
+        uint256 lastPrimaryMarketRegistration;
     }
 
     UserSummary[] public userSummaries;
@@ -109,8 +112,12 @@ contract OpportunityGovernor {
         return userSummary;
     }
 
-    function isRegisteredUser(address _userAddress) public constant view returns(bool isIndeed) {
+    function isRegisteredUser(address _userAddress) public view returns(bool) {
         return universalAddressToSummary[_userAddress].isRegistered;
+    }
+
+    function isVerified(address _userAddress) public view returns(bool) {
+        return universalAddressToSummary[_userAddress].isVerified;
     }
 
     /**
@@ -207,17 +214,20 @@ contract OpportunityGovernor {
             _taskMetadataPtr,
             _numMilestones
         );
+    }
 
+    function withdrawFromTreasury(address _tipToken, uint256 _amount) external {
+        ITipToken(_tipToken).withdrawToPayee(msg.sender, _amount);
     }
 
     // Getters
-    function getUserCount() public constant view returns(uint) {
+    function getUserCount() public view returns(uint) {
         return userSummaries.length;
     }
 
     /**
     */
-    function getTrueIdentification(address _user) public constant view {
-        return universalAddressToUserID[_user];
+    function getTrueIdentification(address _user) public view {
+        return universalAddressToUserSummary[_user].userID;
     }
 }
