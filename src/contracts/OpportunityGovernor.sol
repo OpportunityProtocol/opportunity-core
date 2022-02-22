@@ -26,8 +26,29 @@ contract OpportunityGovernor {
         string indexed marketName
     );
 
-    UserLibrary.UserSummary[] public userSummaries;
-    mapping(address => UserLibrary.UserSummary) public universalAddressToSummary;
+    struct EmployerDescription {
+        mapping(uint256 => mapping(uint256 => bytes32)) marketsToRelationshipsToReviews;
+    }
+
+    /**
+     * @notice Holds data for a user's worker behavior
+     */
+    struct WorkerDescription {
+        mapping(uint256 => mapping(uint256 => bytes32)) marketsToRelationshipsToReviews;
+    }
+
+    struct UserSummary {
+        uint256 userID;
+        uint256 registrationTimestamp;
+        address trueIdentification;
+        bytes32[] reviews;
+        EmployerDescription employerDescription;
+        WorkerDescription workerDescription;
+        bool isRegistered;
+    }
+
+    UserSummary[] public userSummaries;
+    mapping(address => UserSummary) public universalAddressToSummary;
 
     RelationshipLibrary.Market[] public markets;
 
@@ -63,7 +84,7 @@ contract OpportunityGovernor {
         require(relationship.resolutionTimestamp >= block.timestamp);
         require(block.timestamp < relationship.resolutionTimestamp + 30 days);
         
-        UserLibrary.UserSummary storage summary;
+        UserSummary storage summary;
         if (relationship.employer() == msg.sender) {
             summary = universalAddressToSummary[relationship.worker()];
         } else if (relationship.worker() == msg.sender) {
@@ -75,8 +96,8 @@ contract OpportunityGovernor {
 
     /**
      */
-    function _createUserSummary(address _universalAddress) internal returns(UserLibrary.UserSummary memory) {
-        UserLibrary.UserSummary userSummary = UserLibrary.UserSummary({
+    function _createUserSummary(address _universalAddress) internal returns(UserSummary memory) {
+        UserSummary storage userSummary = UserSummary({
             userID: userSummaries.length + 1,
             registrationTimestamp: block.timestamp,
             trueIdentification: _universalAddress,
