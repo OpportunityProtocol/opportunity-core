@@ -2,7 +2,6 @@
 pragma solidity 0.8.7;
 
 import "../libraries/RelationshipLibrary.sol";
-import "../interface/IEscrow.sol";
 
 /**
  * @title RelationshipManager Interface

@@ -28,6 +28,12 @@ library RelationshipLibrary {
         address relationshipManager;
         uint256[] relationships;
         address valuePtr;
+        address[] participants;
+    }
+
+    struct RelationshipReviewBlacklistCheck {
+        bool employerReviewed;
+        bool workerReviewed;
     }
 
     enum Persona {

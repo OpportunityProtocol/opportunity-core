@@ -3,6 +3,7 @@ pragma solidity 0.8.7;
 
 import "./libraries/RelationshipLibrary.sol";
 import "./interface/IRelationshipManager.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract OpportunityGovernor {
     /**
@@ -46,7 +47,6 @@ contract OpportunityGovernor {
         EmployerDescription employerDescription;
         WorkerDescription workerDescription;
         bool isRegistered;
-        bool isVerified;
         uint256 lastPrimaryMarketRegistration;
     }
 
@@ -57,15 +57,17 @@ contract OpportunityGovernor {
 
     mapping(uint256 => RelationshipLibrary.Market) public marketIDToMarket;
     mapping(address => uint256) public universalAddressToUserID;
-    
+    mapping(uint256 => RelationshipLibrary.RelationshipReviewBlacklistCheck) public relationshipReviewBlacklist;
     // User Functions
     /**
     */
     function register() external returns(uint256) {
-        if (isRegisteredUser(msg.sender)) revert()
+        if (isRegisteredUser(msg.sender)) {
+            revert();
+        }
 
         universalAddressToSummary[msg.sender] = _createUserSummary(msg.sender);
-        userSummaries.push(userSummary);
+        userSummaries.push(universalAddressToSummary[msg.sender]);
 
         _assignTrueUserIdentification(msg.sender, universalAddressToSummary[msg.sender].userID);
         emit UserRegistered(msg.sender);
@@ -77,22 +79,27 @@ contract OpportunityGovernor {
     */
     function submitReview(
         address _relationshipManager,
-        uint256  _relationshipID, 
+        uint256 _relationshipID, 
         bytes32 _reviewHash
     ) external {
         IRelationshipManager manager = IRelationshipManager(_relationshipManager);
         RelationshipLibrary.Relationship memory relationship = manager.getRelationshipData(_relationshipID);
 
-        require(universalAddressToSummary[msg.sender].isRegistered == true);
-        require(relationship.resolutionTimestamp >= block.timestamp);
+        require(relationship.contractStatus == RelationshipLibrary.ContractStatus.Resolved);
         require(block.timestamp < relationship.resolutionTimestamp + 30 days);
         
         UserSummary storage summary;
-        if (relationship.employer() == msg.sender) {
+        if (relationship.worker() == msg.sender) {
+            RelationshipLibrary.RelationshipReviewBlacklistCheck storage checklist = relationshipReviewBlacklist[_relationshipID];
+            require(checklist.worker == 0);
             summary = universalAddressToSummary[relationship.worker()];
-        } else if (relationship.worker() == msg.sender) {
-             summary = universalAddressToSummary[relationship.employer()];
-        } else revert()
+            checklist.worker = 1;
+        } else if (relationship.employer() == msg.sender) {
+            RelationshipLibrary.RelationshipReviewBlacklistCheck storage checklist = relationshipReviewBlacklist[_relationshipID];
+            require(checklist.employer == 0);
+            summary = universalAddressToSummary[relationship.employer()];
+            checklist.employer = 1;
+        } else revert();
 
         summary.reviews.push(_reviewHash);
     }
@@ -116,14 +123,10 @@ contract OpportunityGovernor {
         return universalAddressToSummary[_userAddress].isRegistered;
     }
 
-    function isVerified(address _userAddress) public view returns(bool) {
-        return universalAddressToSummary[_userAddress].isVerified;
-    }
-
     /**
     */
     function _assignTrueUserIdentification(address _universalAddress, address _userID) internal {
-        universalToUserSummary[_universalAddress] = _userID;
+        universalAddressToSummary[_universalAddress] = _userID;
         assert(universalAddressToUserID[_universalAddress] == _userID);
         emit UserAssignedTrueIdentification(_universalAddress, _userID);
     }
@@ -143,7 +146,8 @@ contract OpportunityGovernor {
             marketID: marketID,
             relationshipManager: _relationshipManager,
             relationships: new uint256[](0),
-            valuePtr: _valuePtr
+            valuePtr: _valuePtr,
+            participants: [msg.sender]
         });
 
         markets.push(newMarket);
@@ -216,18 +220,34 @@ contract OpportunityGovernor {
         );
     }
 
-    function withdrawFromTreasury(address _tipToken, uint256 _amount) external {
-        ITipToken(_tipToken).withdrawToPayee(msg.sender, _amount);
-    }
-
     // Getters
     function getUserCount() public view returns(uint) {
         return userSummaries.length;
     }
 
+    function getMarketParticipants(uint256 _marketID) public view returns(uint) {
+
+    }
+
+    function getMarketParticipantsCount(uint256 _marketID) public view returns(uint) {
+        
+    }
+
+    /**
+     * What value will this return and in what relation will it be to the normalized value?
+     */
+    function getLocalPeerScore(address _observer, address _observed) public view returns(uint) {
+        UserSummary storage observer = universalAddressToSummary[_observer];
+        return observer.peerScores[_observed];
+    }
+
+    function getMarketPeerScore(address _observed, uint256 _marketID) public view returns(uint) {
+        
+    }
+
     /**
     */
-    function getTrueIdentification(address _user) public view {
-        return universalAddressToUserSummary[_user].userID;
+    function getTrueIdentification(address _user) public view returns(uint) {
+        return universalAddressToSummary[_user].userID;
     }
 }
