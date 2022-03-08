@@ -1,17 +1,34 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.7;
 
-import "./interface/IRelationshipManager.sol";
 import "./libraries/RelationshipLibrary.sol";
 import "./interface/IArbitrable.sol";
 import "./interface/IEvidence.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-/**
- * @title RelationshipManager
- * @author Elijah Hampton
- */
-contract RelationshipManager is IRelationshipManager, IArbitrable, IEvidence {
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract GigEarth is IArbitrable, IEvidence {
     /**
+     */
+    event UserRegistered(address indexed universalAddress);
+
+    /**
+     */
+    event UserAssignedTrueIdentification(address indexed universalAddress, address indexed userID);
+    
+    /**
+     */
+    event UserSummaryCreated(uint256 indexed registrationTimestamp, uint256 indexed index, address indexed universalAddress);
+
+    /**
+     * @dev To be emitted upon deploying a market
+     */
+    event MarketCreated(
+        uint256 indexed index,
+        address indexed creator,
+        string indexed marketName
+    );
+
+     /**
      * @dev To be emitted upon employer and worker entering contract.
      */
     event EnteredContract();
@@ -34,25 +51,58 @@ contract RelationshipManager is IRelationshipManager, IArbitrable, IEvidence {
     error PayeeDepositStillPending();
     error ReclaimedTooLate();
     error InsufficientPayment(uint256 _available, uint256 _required);
-    error InvalidRuling(uint256 _ruling, uint256 _numberOfChoices);
+    error InvalidRuling(uint256 _ruling, uint256 _numberOfChoices)
 
-    uint256 numRelationships;
-    uint256 constant numberOfRulingOptions = 2;
-    uint256 public constant arbitrationFeeDepositPeriod = 1 minutes; // Timeframe is short on purpose to be able to test it quickly. Not for production use.
+    struct Relationship {
+        address valuePtr;
+        uint256 relationshipID;
+        address escrow;
+        uint256 marketPtr;
+        address employer;
+        address worker;
+        string taskMetadataPtr;
+        ContractStatus contractStatus;
+        ContractOwnership contractOwnership;
+        ContractPayoutType contractPayoutType;
+        uint256 wad;
+        uint256 acceptanceTimestamp;
+        uint256 resolutionTimestamp;
+    }
+    struct Market {
+        string marketName;
+        uint256 marketID;
+        address relationshipManager;
+        uint256[] relationships;
+        address valuePtr;
+        address[] participants;
+    }
 
-    address constant governor;
+    struct RelationshipReviewBlacklistCheck {
+        bool employerReviewed;
+        bool workerReviewed;
+    }
+    struct EmployerDescription {
+        mapping(uint256 => mapping(uint256 => bytes32)) marketsToRelationshipsToReviews;
+    }
 
-    IArbitrator immutable arbitrator;
-    address immutable deployer;
-    uint8 public constant OPPORTUNITY_WITHDRAWAL_FEE = 10;
+    /**
+     * @notice Holds data for a user's worker behavior
+     */
+    struct WorkerDescription {
+        mapping(uint256 => mapping(uint256 => bytes32)) marketsToRelationshipsToReviews;
+    }
 
-    mapping(uint256 => RelationshipLibrary.Relationship)
-        public relationshipIDToRelationship;
-    mapping(uint256 => uint256) public relationshipIDToMilestones;
-    mapping(uint256 => uint256) public relationshipIDToCurrentMilestoneIndex;
-    mapping(uint256 => uint256) public relationshipIDToDeadline;
-    mapping(uint256 => uint256) public disputeIDtoRelationshipID;
-    mapping(uint256 => RelationshipEscrowDetails) public relationshipIDToEscrowDetails;
+    struct UserSummary {
+        uint256 userID;
+        uint256 registrationTimestamp;
+        address trueIdentification;
+        bytes32[] reviews;
+        uint256 primaryMarketID;
+        EmployerDescription employerDescription;
+        WorkerDescription workerDescription;
+        bool isRegistered;
+        uint256 lastPrimaryMarketRegistration;
+    }
 
     enum RulingOptions {
         PayerWins,
@@ -66,6 +116,37 @@ contract RelationshipManager is IRelationshipManager, IArbitrable, IEvidence {
         Resolved
     }
 
+        enum Persona {
+        Employer,
+        Worker
+    }
+
+    /**
+     * @dev Enum representing the states ownership for a relationship
+     */
+    enum ContractOwnership {
+        Unclaimed,
+        Pending,
+        Claimed
+    }
+
+    /**
+     * @dev Enum representing the states ownership for a relationship
+     */
+    enum ContractStatus {
+        AwaitingWorker,
+        AwaitingWorkerApproval,
+        AwaitingResolution,
+        Resolved,
+        PendingDispute,
+        Disputed
+    }
+
+    enum ContractPayoutType {
+        Flat,
+        Milestone,
+        Deadline
+    }
     struct RelationshipEscrowDetails {
         EscrowStatus status;
         uint256 valuePtr;
@@ -77,24 +158,34 @@ contract RelationshipManager is IRelationshipManager, IArbitrable, IEvidence {
         uint256 arbitrationFeeDepositPeriod;
     }
 
-    modifier onlyGovernor() {
-        _;
-    }
+    UserSummary[] public userSummaries;
+    RelationshipLibrary.Market[] public markets;
+    IArbitrator immutable arbitrator;
 
-    constructor(address _arbitrator, address _governor, address) {
+    address immutable deployer;
+
+    uint256 numRelationships;
+    uint256 constant numberOfRulingOptions = 2;
+    uint256 public constant arbitrationFeeDepositPeriod = 1 minutes; // Timeframe is short on purpose to be able to test it quickly. Not for production use.
+    uint8 public constant OPPORTUNITY_WITHDRAWAL_FEE = 10;
+
+    mapping(address => UserSummary) public universalAddressToSummary;
+    mapping(uint256 => RelationshipLibrary.Market) public marketIDToMarket;
+    mapping(address => uint256) public universalAddressToUserID;
+    mapping(uint256 => RelationshipLibrary.RelationshipReviewBlacklistCheck) public relationshipReviewBlacklist;
+    mapping(uint256 => RelationshipLibrary.Relationship)
+        public relationshipIDToRelationship;
+    mapping(uint256 => uint256) public relationshipIDToMilestones;
+    mapping(uint256 => uint256) public relationshipIDToCurrentMilestoneIndex;
+    mapping(uint256 => uint256) public relationshipIDToDeadline;
+    mapping(uint256 => uint256) public disputeIDtoRelationshipID;
+    mapping(uint256 => RelationshipEscrowDetails) public relationshipIDToEscrowDetails;
+
+    constructor(address _arbitrator) {
         arbitrator = IArbitrator(_arbitrator);
-        _initialize(_governor);
     }
 
-    /**
-     * @notice Initializes the contract with the address to the governor contract.
-     * @param _governor The address of the governor smart contract
-     */
-    function _initialize(address _governor) internal {
-        governor = _governor;
-    }
-
-    /**
+        /**
      * @inheritdoc IRelationshipManager
      */
     function initializeContract(uint256 _relationshipID, uint256 _deadline, address _escrow, address _valuePtr, address _employer, uint256 _marketID, string calldata _taskMetadataPtr) external override onlyGovernor {
@@ -123,38 +214,6 @@ contract RelationshipManager is IRelationshipManager, IArbitrable, IEvidence {
             _relationshipID
         ] = relationshipIDToRelationship[_relationshipID];
 
-        if (_deadline != 0) {
-            relationshipIDToDeadline[_relationshipID] = _deadline;
-        }
-        numRelationships++;
-    }
-
-    /**
-     * @inheritdoc IRelationshipManager
-     */
-    function initializeContract(uint256 _relationshipID, uint256 _deadline, address _escrow, address _valuePtr, address _employer, uint256 _marketID, string calldata _taskMetadataPtr, uint256 _numMilestones) external override onlyGovernor {
-        relationshipIDToRelationship[_relationshipID] = 
-            RelationshipLibrary.Relationship({
-                valuePtr: _valuePtr,
-                relationshipID: _relationshipID,
-                escrow: _escrow,
-                marketPtr: _marketID,
-                employer: _employer,
-                worker: address(0),
-                taskMetadataPtr: _taskMetadataPtr,
-                contractStatus: RelationshipLibrary
-                    .ContractStatus
-                    .AwaitingWorker,
-                contractOwnership: RelationshipLibrary
-                    .ContractOwnership
-                    .Unclaimed,
-                contractPayoutType: RelationshipLibrary.ContractPayoutType.Flat,
-                wad: 0,
-                acceptanceTimestamp: 0,
-                resolutionTimestamp: 0
-            });
-
-        relationshipIDToMilestones[_relationshipID] = _numMilestones;
         if (_deadline != 0) {
             relationshipIDToDeadline[_relationshipID] = _deadline;
         }
@@ -241,7 +300,7 @@ contract RelationshipManager is IRelationshipManager, IArbitrable, IEvidence {
     /**
      * @inheritdoc IRelationshipManager
      */
-    function resolve(uint256 _relationshipID) external override {
+    function resolveTraditional(uint256 _relationshipID) external override {
         RelationshipLibrary.Relationship storage relationship = relationshipIDToRelationship[_relationshipID];
 
         require(msg.sender == relationship.employer);
@@ -261,6 +320,8 @@ contract RelationshipManager is IRelationshipManager, IArbitrable, IEvidence {
         
         emit ContractStatusUpdate();
     }
+
+    function resolveBounty(uint256 _relationshipID, address _worker) external {}
 
     /**
      * @notice Sets the contract status to resolved and releases the funds to the appropriate user.
@@ -498,4 +559,199 @@ contract RelationshipManager is IRelationshipManager, IArbitrable, IEvidence {
         IERC20(relationship.valuePtr).transfer(escrowDetails.payee, payout);
         escrowDetails.value = 0;
     }
+
+    // User Functions
+    /**
+    */
+    function register() external returns(uint256) {
+        if (isRegisteredUser(msg.sender)) {
+            revert();
+        }
+
+        universalAddressToSummary[msg.sender] = _createUserSummary(msg.sender);
+        userSummaries.push(universalAddressToSummary[msg.sender]);
+
+        _assignTrueUserIdentification(msg.sender, universalAddressToSummary[msg.sender].userID);
+        emit UserRegistered(msg.sender);
+        
+        return userSummaries.length - 1;
+    }
+
+    /**
+    */
+    function submitReview(
+        address _relationshipManager,
+        uint256 _relationshipID, 
+        bytes32 _reviewHash
+    ) external {
+        IRelationshipManager manager = IRelationshipManager(_relationshipManager);
+        RelationshipLibrary.Relationship memory relationship = manager.getRelationshipData(_relationshipID);
+
+        require(relationship.contractStatus == RelationshipLibrary.ContractStatus.Resolved);
+        require(block.timestamp < relationship.resolutionTimestamp + 30 days);
+        
+        UserSummary storage summary;
+        if (relationship.worker() == msg.sender) {
+            RelationshipLibrary.RelationshipReviewBlacklistCheck storage checklist = relationshipReviewBlacklist[_relationshipID];
+            require(checklist.worker == 0);
+            summary = universalAddressToSummary[relationship.worker()];
+            checklist.worker = 1;
+        } else if (relationship.employer() == msg.sender) {
+            RelationshipLibrary.RelationshipReviewBlacklistCheck storage checklist = relationshipReviewBlacklist[_relationshipID];
+            require(checklist.employer == 0);
+            summary = universalAddressToSummary[relationship.employer()];
+            checklist.employer = 1;
+        } else revert();
+
+        summary.reviews.push(_reviewHash);
+    }
+
+    /**
+     */
+    function _createUserSummary(address _universalAddress) internal returns(UserSummary memory) {
+        UserSummary storage userSummary = UserSummary({
+            userID: userSummaries.length + 1,
+            registrationTimestamp: block.timestamp,
+            trueIdentification: _universalAddress,
+            isRegistered: true,
+            reviews: new bytes32[]
+        });
+
+        emit UserSummaryCreated(userSummary.registrationTimestamp, userSummaries.length, _universalAddress);
+        return userSummary;
+    }
+
+    function isRegisteredUser(address _userAddress) public view returns(bool) {
+        return universalAddressToSummary[_userAddress].isRegistered;
+    }
+
+    /**
+    */
+    function _assignTrueUserIdentification(address _universalAddress, address _userID) internal {
+        universalAddressToSummary[_universalAddress] = _userID;
+        assert(universalAddressToUserID[_universalAddress] == _userID);
+        emit UserAssignedTrueIdentification(_universalAddress, _userID);
+    }
+
+    // Market Functions
+        /**
+    */
+    function createMarket(
+        string memory _marketName,
+        address _relationshipManager,
+        address _valuePtr
+    ) public returns (uint256) {
+        uint256 marketID = markets.length + 1;
+
+        RelationshipLibrary.Market memory newMarket = RelationshipLibrary.Market({
+            marketName: _marketName,
+            marketID: marketID,
+            relationshipManager: _relationshipManager,
+            relationships: new uint256[](0),
+            valuePtr: _valuePtr,
+            participants: [msg.sender]
+        });
+
+        markets.push(newMarket);
+        marketIDToMarket[marketID] = newMarket;
+
+        emit MarketCreated(
+            marketID,
+            msg.sender,
+            _marketName
+        );
+        
+        return markets.length;
+    }
+
+    /**
+     * @param _marketID The id of the market to create the relationship
+     * @param _escrow The address of the escrow for this relationship
+     * @param _taskMetadataPtr The hash on IPFS for the relationship metadata
+     * @param _deadline The deadline for the worker to complete the relationship
+     */
+    function createFlatRateRelationship(
+        uint256 _marketID, 
+        address _escrow, 
+        string calldata _taskMetadataPtr, 
+        uint256 _deadline
+    ) external {
+        RelationshipLibrary.Market storage market = marketIDToMarket[_marketID];
+        uint256 relationshipID = market.relationships.length + 1;
+        market.relationships.push(relationshipID);
+
+        IRelationshipManager(market.relationshipManager).initializeContract(
+            relationshipID,
+            _deadline,
+            _escrow,
+            market.valuePtr,
+            msg.sender,
+            _marketID,
+            _taskMetadataPtr
+        );
+    }
+
+    /**
+     * @param _marketID The id of the market to create the relationship
+     * @param _escrow The address of the escrow for this relationship
+     * @param _taskMetadataPtr The hash on IPFS for the relationship metadata
+     * @param _deadline The deadline for the worker to complete the relationship
+     * @param _numMilestones The number of milestones in this relationship
+     */
+    function createMilestoneRelationship(
+        uint256 _marketID, 
+        address _escrow, 
+        string calldata _taskMetadataPtr, 
+        uint256 _deadline, 
+        uint256 _numMilestones
+    ) external {
+        RelationshipLibrary.Market storage market = marketIDToMarket[_marketID];
+        uint256 relationshipID = market.relationships.length + 1;
+        market.relationships.push(relationshipID);
+
+
+        IRelationshipManager(market.relationshipManager).initializeContract(
+            relationshipID,
+            _deadline,
+            _escrow,
+            market.valuePtr,
+            msg.sender,
+            _marketID,
+            _taskMetadataPtr,
+            _numMilestones
+        );
+    }
+
+    // Getters
+    function getUserCount() public view returns(uint) {
+        return userSummaries.length;
+    }
+
+    function getMarketParticipants(uint256 _marketID) public view returns(uint) {
+
+    }
+
+    function getMarketParticipantsCount(uint256 _marketID) public view returns(uint) {
+        
+    }
+
+    /**
+     * What value will this return and in what relation will it be to the normalized value?
+     */
+    function getLocalPeerScore(address _observer, address _observed) public view returns(uint) {
+        UserSummary storage observer = universalAddressToSummary[_observer];
+        return observer.peerScores[_observed];
+    }
+
+    function getMarketPeerScore(address _observed, uint256 _marketID) public view returns(uint) {
+        
+    }
+
+    /**
+    */
+    function getTrueIdentification(address _user) public view returns(uint) {
+        return universalAddressToSummary[_user].userID;
+    }
+
+
 }
