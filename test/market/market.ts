@@ -1,67 +1,59 @@
 // We import Chai to use its asserting functions here.
 import { expect } from 'chai'
 import { ContractReceipt, BigNumber, Event, Signer } from 'ethers';
-import { ethers } from 'hardhat'
+import {ethers} from 'hardhat'
 import { TestDai } from '../../src/types/TestDai'
-import { RelationshipManager } from '../../src/types/RelationshipManager'
-import { OpportunityGovernor } from '../../src/types/OpportunityGovernor'
-import { RelationshipEscrow } from '../../src/types/RelationshipEscrow'
 import { SimpleCentralizedArbitrator } from '../../src/types/SimpleCentralizedArbitrator'
+
+import { task } from 'hardhat/config';
+import { LensHub__factory } from '../../src/lens-protocol/typechain-types';
+import { CreateProfileDataStruct } from '../../src/lens-protocol/typechain-types/LensHub';
+import { waitForTx, initEnv, getAddrs, ZERO_ADDRESS } from '../../src/lens-protocol/tasks/helpers/utils';
+
 describe("Markets", function () {
-  let marketDeployer, employer, worker
+  let marketDeployer, employer, worker, governance, treasury
 
-  let OpportunityGovernor
-  let opportunityGovernorInstance : OpportunityGovernor
-
-  let RelationshipManager
-  let relationshipManagerInstance : RelationshipManager
+  let GigEarth
+  let gigEarthInstance
 
   let CentralizedArbitrator
   let centralizedArbitratorInstance: SimpleCentralizedArbitrator
 
-  let RelationshipEscrow
-  let relationshipEscrowInstance : RelationshipEscrow
-
   let TestDai
   let testDaiInstance : TestDai
-
-  const DAI_MAINNET = '0x6b175474e89094c44da98b954eedeac495271d0f'
-  const DAI_RINKEBY = '0xc7ad46e0b8a400bb3c915120d284aafba8fc4735'
-  const DAI_KOVAN = '0xff795577d9ac8bd7d90ee22b6c1703490b6512fd'
 
   const FLATE_RATE_CONTRACT_INIT_DATA = { escrow: '0', valuePtr: '0', _taskMetadataPtr: '8dj39Dks8' }
   const MILESTONE_CONTRACT_INIT_DATA = { escrow: '0', valuePtr: '0', taskMetadataPtr: '8js82kd0f', numMilstones: 5}
 
+  const LENS_HUB_ADDRESS = "0x038B86d9d8FAFdd0a02ebd1A476432877b0107C8"
+
   beforeEach(async function () {
     //get appropriate signers
-    [marketDeployer, employer, worker ] = await ethers.getSigners();
+    [marketDeployer, employer, worker, governance, treasury] = await ethers.getSigners();
 
-    //deploy governor
-    OpportunityGovernor = await ethers.getContractFactory('OpportunityGovernor')
-    opportunityGovernorInstance = await OpportunityGovernor.deploy()
-
-    RelationshipManager = await ethers.getContractFactory('RelationshipManager')
-    relationshipManagerInstance = await RelationshipManager.deploy()
-
+    // Deploy smart contracts
     CentralizedArbitrator = await ethers.getContractFactory("SimpleCentralizedArbitrator")
     centralizedArbitratorInstance = await CentralizedArbitrator.deploy()
-
-    RelationshipEscrow = await ethers.getContractFactory("RelationshipEscrow")
-    relationshipEscrowInstance = await RelationshipEscrow.deploy(centralizedArbitratorInstance.address)
 
     TestDai = await ethers.getContractFactory("TestDai")
     testDaiInstance  = await TestDai.deploy(1)
 
-    FLATE_RATE_CONTRACT_INIT_DATA.escrow = relationshipEscrowInstance.address
+    //deploy governor
+    GigEarth = await ethers.getContractFactory('')
+    gigEarthInstance = await GigEarth.deploy(governance, treasury, centralizedArbitratorInstance.address, LENS_HUB_ADDRESS)
+
+    //set gig earth reference and follow modules
+    gigEarthInstance.setLensFollowModule()
+    gigEarthInstance.setLensContentReferenceModule()
+
+    // Set default values for contracts to deploy
+    FLATE_RATE_CONTRACT_INIT_DATA.escrow = '0'
     FLATE_RATE_CONTRACT_INIT_DATA.valuePtr = testDaiInstance.address
 
     MILESTONE_CONTRACT_INIT_DATA.escrow = FLATE_RATE_CONTRACT_INIT_DATA.escrow
     MILESTONE_CONTRACT_INIT_DATA.valuePtr = FLATE_RATE_CONTRACT_INIT_DATA.valuePtr
 
-    //deploy relationship managers
-    RelationshipManager = await ethers.getContractFactory('RelationshipManager')
-    relationshipManagerInstance = await RelationshipManager.deploy()
-
+    // mint test dai to employer and worker
     await testDaiInstance.mint(employer.address, 1000)
     await testDaiInstance.mint(worker.address, 1000)
 
@@ -72,12 +64,10 @@ describe("Markets", function () {
   describe("Market Creation", async () => {
     it("happy path - should deploy a new market and record relationship manager addresses", async () => {
         //create a new market
-
-        const marketDeploymentTx = await opportunityGovernorInstance
+        const marketDeploymentTx = await gigEarthInstance
         .connect(marketDeployer)
         .createMarket(
             "Test Market One", 
-            relationshipManagerInstance.address,
             testDaiInstance.address
         )
 
@@ -87,24 +77,22 @@ describe("Markets", function () {
         const deployedMarketID = marketDeploymentTxEvents?.args?.[0]
         const deployedMarketDeployer = marketDeploymentTxEvents?.args?.[1]
         const deployedMarketName = marketDeploymentTxEvents?.args?.[2]
-        const marketsListEntry  = await opportunityGovernorInstance.markets(0)
+        const marketsListEntry  = await gigEarthInstance.markets(0)
 
         expect(deployedMarketID).to.equal(1)
         expect(deployedMarketDeployer).to.equal(marketDeployer.address)
         //expect(deployedMarketName).to.equal('Test Market One')
-        expect(marketDeploymentTx).to.emit(opportunityGovernorInstance, 'MarketCreated').withArgs(deployedMarketID, deployedMarketDeployer, deployedMarketName.hash)
+        expect(marketDeploymentTx).to.emit(gigEarthInstance, 'MarketCreated').withArgs(deployedMarketID, deployedMarketDeployer, deployedMarketName.hash)
         expect(marketsListEntry[0]).to.equal('Test Market One')
     })
   })
 
   describe("Relationship Functionality", async () => {
     it("happy path - flat rate relationship - employer should create relationship and successfully complete with a worker", async () => {
-      console.log(relationshipManagerInstance.address) 
-      const marketDeploymentTx = await opportunityGovernorInstance
+      const marketDeploymentTx = await gigEarthInstance
         .connect(marketDeployer)
         .createMarket(
           "Test Market One", 
-          relationshipManagerInstance.address,
           testDaiInstance.address
         )
 
@@ -112,22 +100,21 @@ describe("Markets", function () {
         const marketDeploymentTxEvents = marketDeploymentTxReceipt.events?.find(event => event.event == 'MarketCreated')
         const deployedMarketAddress = marketDeploymentTxEvents?.args?.[0]
 
-        await opportunityGovernorInstance
+        await gigEarthInstance
         .connect(employer)
         .createFlatRateRelationship(
           BigNumber.from(1), 
-          relationshipEscrowInstance.address, 
           FLATE_RATE_CONTRACT_INIT_DATA._taskMetadataPtr, 
           BigNumber.from(0)
         )
 
-        await relationshipManagerInstance.connect(employer).grantProposalRequest(1, worker.address, testDaiInstance.address, 1000, "")
+        await gigEarthInstance.connect(employer).grantProposalRequest(1, worker.address, testDaiInstance.address, 1000, "")
         
-        await testDaiInstance.connect(employer).approve(relationshipEscrowInstance.address, 1000);
+        await testDaiInstance.connect(employer).approve(gigEarthInstance.address, 1000);
 
-        await relationshipManagerInstance.connect(worker).work(1, "")
+        await gigEarthInstance.connect(worker).work(1, "")
 
-        await relationshipManagerInstance.connect(employer).resolve(1)
+        await gigEarthInstance.connect(employer).resolve(1)
 
         expect(await testDaiInstance.balanceOf(employer.address)).to.equal(BigNumber.from(0))
         expect(await testDaiInstance.balanceOf(worker.address)).to.equal(BigNumber.from(2000))
